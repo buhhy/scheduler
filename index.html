@@ -3,6 +3,8 @@
 <html>
     <header>
         <link type="text/css" rel="stylesheet" href="css/reset.css" />
+        <link type="text/css" rel="stylesheet" href="lib/fullcalendar/fullcalendar.css" media="screen" />
+        <link type="text/css" rel="stylesheet" href="lib/fullcalendar/fullcalendar.print.css" media="print" />
         <link type="text/css" rel="stylesheet" href="css/style.css" />
         <title>Project Pinecone</title>
     </header>
@@ -14,7 +16,7 @@
 		    		<li>Customize</li>
 		    		<li>Print schedule</li>
 		    	</ol>
-	    	</div>	
+	    	</div>
 
 	    	<section class="classes">
 	    		<article class="classes-search">
@@ -46,12 +48,19 @@
 	    			</tr>
 	    				<td>11 AM</td>
 	    			<tr>
-	    			
+
 	    		</table>
 	    	</section>
+            <section id="scheduleContainer"></section>
 
         <script type="text/javascript" src="lib/jquery-2.0.3.min.js"></script>
         <script type="text/javascript" src="lib/underscore.min.js"></script>
         <script type="text/javascript" src="lib/backbone.min.js"></script>
+        <script type="text/javascript" src="lib/fullcalendar/fullcalendar.js"></script>
+
+        <script type="text/javascript" src="js/scheduler.js"></script>
+        <script type="text/javascript" src="js/views/calendar.js"></script>
+        <script type="text/javascript" src="js/models.js"></script>
+        <script type="text/javascript" src="js/entrypoint.js"></script>
     </body>
 </html>

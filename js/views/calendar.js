@@ -14,13 +14,13 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
             "axisFormat": "h(:mm) TT",
             "columnFormat": "dddd",
             "dayNames": [
-                "<b>Sun</b>day",
-                "<b>Mon</b>day",
-                "<b>Tue</b>sday",
-                "<b>Wed</b>nesday",
-                "<b>Thu</b>rsday",
-                "<b>Fri</b>day",
-                "<b>Sat</b>urday"
+                "<b>SUN</b>day",
+                "<b>MON</b>day",
+                "<b>TUE</b>sday",
+                "<b>WED</b>nesday",
+                "<b>THU</b>rsday",
+                "<b>FRI</b>day",
+                "<b>SAT</b>urday"
             ],
             "defaultView": "agendaWeek",
             "firstDay": 0,

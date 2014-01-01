@@ -1,0 +1,72 @@
+.box-sizing (@arg: border-box) {
+	box-sizing: @arg;
+	-o-box-sizing: @arg;
+	-ms-box-sizing: @arg;
+	-moz-box-sizing: @arg;
+	-webkit-box-sizing: @arg;
+}
+
+.border-radius (@arg: 0) {
+	border-radius: @arg;
+	-o-border-radius: @arg;
+	-ms-border-radius: @arg;
+	-moz-border-radius: @arg;
+	-webkit-border-radius: @arg;
+}
+
+.box-shadow (@arg: none) {
+	box-shadow: @arg;
+	-o-box-shadow: @arg;
+	-ms-box-shadow: @arg;
+	-moz-box-shadow: @arg;
+	-webkit-box-shadow: @arg;
+}
+
+.transition (@arg: none) {
+	transition: @arg;
+	-o-transition: @arg;
+	-ms-transition: @arg;
+	-moz-transition: @arg;
+	-webkit-transition: @arg;
+}
+
+.user-select (@arg: none) {
+	-webkit-touch-callout: @arg;
+	-webkit-user-select: @arg;
+	-khtml-user-select: @arg;
+	-moz-user-select: @arg;
+	-ms-user-select: @arg;
+	user-select: @arg;
+}
+
+.linear-gradient (vertical, @startColor: #eee, @endColor: white) {
+	background-color: @startColor;
+	background: -webkit-gradient(linear, left top, left bottom, from(@startColor), to(@endColor));
+	background: -webkit-linear-gradient(top, @startColor, @endColor);
+	background: -moz-linear-gradient(top, @startColor, @endColor);
+	background: -ms-linear-gradient(top, @startColor, @endColor);
+	background: -o-linear-gradient(top, @startColor, @endColor);
+}
+
+.linear-gradient (horizontal, @startColor: #eee, @endColor: white) {
+	background-color: @startColor;
+	background-image: -webkit-gradient(linear, left top, right top, from(@startColor), to(@endColor));
+	background-image: -webkit-linear-gradient(left, @startColor, @endColor);
+	background-image: -moz-linear-gradient(left, @startColor, @endColor);
+	background-image: -ms-linear-gradient(left, @startColor, @endColor);
+	background-image: -o-linear-gradient(left, @startColor, @endColor);
+}
+
+.bg-image (@arg) {
+	@root: "chrome-extension://__MSG_@@extension_id__/imgs/";
+	@url: "@{root}@{arg}";
+	background-image: url("@{url}");
+}
+
+.user-select (@arg) {
+	-webkit-user-select: @arg;
+	-moz-user-select: @arg;
+	-ms-user-select: @arg;
+	-o-user-select: @arg;
+	user-select: @arg;
+}

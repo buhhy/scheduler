@@ -1,4 +1,0 @@
-var scheduler = {
-    "views": {},
-    "models": {}
-};

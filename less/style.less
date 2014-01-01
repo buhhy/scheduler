@@ -58,7 +58,9 @@ ol.steps li {
 }
 
 div.classes {
-	float: left;
+	position: absolute;
+	left: 0;
+	top: 42px;
 	width: 255px;
 	height: 100%;
 	.box-sizing(border-box);
@@ -78,8 +80,12 @@ article.classes-results {
 }
 
 div.preview {
+	position: absolute;
 	padding: 35px 0 0 20px;
-	float: left;
+	width: 960px;
+	height: 605px;
+	top: 42px;
+	left: 255px;
 	.box-sizing(border-box);
 }
 
@@ -88,6 +94,9 @@ div.preview h1 {
 	letter-spacing: 1px;
 }
 
-table {
+section#scheduleContainer {
+	display: inline-block;
 	margin-top: 10px;
+	width: 960px;
+	.box-sizing(border-box);
 }

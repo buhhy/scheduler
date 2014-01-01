@@ -6,52 +6,33 @@
         <link type="text/css" rel="stylesheet" href="lib/fullcalendar/fullcalendar.css" media="screen" />
         <link type="text/css" rel="stylesheet" href="lib/fullcalendar/fullcalendar.print.css" media="print" />
         <link type="text/css" rel="stylesheet" href="css/style.css" />
+        <link type="text/css" rel="stylesheet" href="css/calendar.css" />
         <title>Project Pinecone</title>
     </header>
-	    <body>
-		    <div class="topbar">
-		    	<span class="logo">Project Pinecone</div>
-		    	<ol class="steps">
-		    		<li>Add classes</li>
-		    		<li>Customize</li>
-		    		<li>Print schedule</li>
-		    	</ol>
-	    	</div>
+	<body>
+		<div class="topbar">
+			<span class="logo"><a href="#">PROJECT PINECONE</a></span>
+			<ol class="steps">
+				<li>1. ADD</li>
+				<li>2. CUSTOMIZE</li>
+				<li>3. PRINT</li>
+			</ol>
+		</div>	
+		<div class="content">
+			<div class="classes">
+				<article class="classes-search">
+				<!--insert search engine stuffs--> Search
+				</article>
+				<article class="classes-results">
+				<!--insert search engine stuffs--> Results
+				</article>
+			</div>
 
-	    	<section class="classes">
-	    		<article class="classes-search">
-	    		<!--insert search engine stuffs-->
-	    		</article>
-	    		<article class="classes-results">
-	    		<!--insert search engine stuffs-->
-	    		</article>
-	    	</section>
-
-	    	<section class="preview">
-	    		<h1>PREVIEW</h1>
-	    		<table class="schedule">
-	    			<tr>
-	    				<th> </th>
-	    				<th>Sunday</th>
-	    				<th>Monday</th>
-	    				<th>Tuesday</th>
-	    				<th>Wednesday</th>
-	    				<th>Thursday</th>
-	    				<th>Friday</th>
-	    				<th>Saturday</th>
-	    			</tr>
-	    				<td>9 AM</td>
-	    			<tr>
-	    			</tr>
-	    				<td>10 AM</td>
-	    			<tr>
-	    			</tr>
-	    				<td>11 AM</td>
-	    			<tr>
-
-	    		</table>
-	    	</section>
-            <section id="scheduleContainer"></section>
+			<div class="preview">
+				<h1>PREVIEW</h1>
+				<section id="scheduleContainer"></section>
+			</div>
+		</div>
 
         <script type="text/javascript" src="lib/jquery-2.0.3.min.js"></script>
         <script type="text/javascript" src="lib/underscore.min.js"></script>

@@ -11,6 +11,10 @@ body {
 	color: #727272;
 }
 
+div, article, nav, ul, li, ol {
+	.box-sizing(border-box);
+}
+
 .position-container {
 	width: 100%;
 	height: 100%;
@@ -26,7 +30,7 @@ body {
 	padding: 15px 20px;
 	background-color: #E2E2E2;
 	font-size: 12px;
-	.box-sizing(border-box);
+
 	.divider
 }
 
@@ -34,8 +38,6 @@ body {
 	padding-top: 42px;
 	height: 100%;
 	width: 100%;
-
-	.box-sizing(border-box);
 }
 
 .divider {
@@ -72,14 +74,12 @@ div.classes {
 	height: 100%;
 	background-color: #EFEFEF;
 	border-right: 1px solid #D8D8D8;
-
-	.box-sizing(border-box);
 }
 
 article.classes-search {
 	padding: 28px 17px;
 	height: 74px;
-	.box-sizing(border-box);
+
 	.divider
 }
 
@@ -88,12 +88,25 @@ article.classes-results {
 }
 
 div.preview {
-	padding: 35px 0 0 275px;
+	padding: 2.5em 1em 1em 275px;
 
-	.box-sizing(border-box);
+	height: 100%;
 
-	h1 {
+	.preview-container {
+		width: 100%;
+		height: 100%;
+
+		position: relative;
+
+		padding-top: 2em;
+	}
+
+	.preview-title {
 		font-weight: 300;
 		letter-spacing: 1px;
+
+		position: absolute;
+		left: 0;
+		top: 0;
 	}
 }

@@ -1,33 +1,6 @@
 @import "mixins.less";
 
-@font-face {
-    font-family: 'Gotham';
-    src: url('fonts/gotham-book.otf') format('opentype');
-    font-weight: 400;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Gotham';
-    src: url('fonts/gotham-medium.otf') format('opentype');
-    font-weight: 500;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Gotham';
-    src: url('fonts/gotham-bold.otf') format('opentype');
-    font-weight: 700;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Gotham';
-    src: url('fonts/gotham-light.otf') format('opentype');
-    font-weight: 200;
-    font-style: normal;
-}
-
+@import url(http://fonts.googleapis.com/css?family=Lato:300,400,700);
 
 html, body {
 	width: 100%;
@@ -35,8 +8,8 @@ html, body {
 }
 
 body {
-	font-family: 'Gotham';
-	font-size: 12.5px;
+	font-family: 'Lato';
+	font-size: 13px;
 	color: #727272;
 }
 
@@ -56,9 +29,9 @@ div, article, nav, ul, li, ol {
 	top: 0;
 	height: 42px;
 	width: 100%;
-	padding: 15px 20px;
+	padding: 14px 20px;
 	background-color: #E2E2E2;
-	font-size: 12px;
+	font-size: 1em;
 	min-width: 675px;
 	.divider
 }
@@ -103,6 +76,7 @@ div.classes {
 	height: 100%;
 	background-color: #EFEFEF;
 	border-right: 1px solid #D8D8D8;
+	font-weight: 300;
 }
 
 article.classes-search {

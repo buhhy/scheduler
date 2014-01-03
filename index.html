@@ -7,6 +7,8 @@
         <link type="text/css" rel="stylesheet" href="lib/fullcalendar/fullcalendar.print.css" media="print" />
         <link type="text/css" rel="stylesheet" href="css/style.css" />
         <link type="text/css" rel="stylesheet" href="css/calendar.css" />
+        <link type="text/css" rel="stylesheet" href="css/dropdown.css" />
+
         <title>Project Pinecone</title>
     </header>
 	<body>
@@ -22,7 +24,22 @@
 	        <div class="position-container">
 				<div class="classes">
 					<article class="classes-search">
-					<!--insert search engine stuffs--> Search
+					<!--insert search engine stuffs--> 
+
+						<div class="dropdown">
+							<span>SELECT TERM</span>
+							<span> > </span>
+							<ul class="terms">
+								<li>WINTER 2014</li> 
+								<li>SPRING 2014</li>
+								<li>FALL 2014</li>
+							</ul>
+						</div>
+
+						<div class="searchbox">
+						<span>Course Code</span>
+						</div>
+
 					</article>
 					<article class="classes-results">
 					<!--insert search engine stuffs--> Results
@@ -82,6 +99,7 @@
 			</section>
 		</script>
 
+
         <script type="text/javascript" src="lib/jquery-2.0.3.min.js"></script>
         <script type="text/javascript" src="lib/underscore.min.js"></script>
         <script type="text/javascript" src="lib/backbone.min.js"></script>
@@ -91,5 +109,8 @@
         <script type="text/javascript" src="js/views/calendar.js"></script>
         <script type="text/javascript" src="js/models.js"></script>
         <script type="text/javascript" src="js/entrypoint.js"></script>
+         <script type="text/javascript" src="js/dropdown.js"></script>
+
+    
     </body>
 </html>

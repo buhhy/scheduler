@@ -9,8 +9,9 @@ html, body {
 
 body {
 	font-family: 'Lato';
-	font-size: 13px;
+	font-size: 14px;
 	color: #727272;
+	font-weight: 400;
 }
 
 div, article, nav, ul, li, ol {
@@ -27,17 +28,17 @@ div, article, nav, ul, li, ol {
 	position: absolute;
 	left: 0;
 	top: 0;
-	height: 42px;
+	height: 50px;
 	width: 100%;
-	padding: 14px 20px;
+	padding: 16px 20px;
 	background-color: #E2E2E2;
-	font-size: 1em;
+	font-size: 1.1em;
 	min-width: 675px;
 	.divider
 }
 
 .content {
-	padding-top: 42px;
+	padding-top: 50px;
 	height: 100%;
 	width: 100%;
 }
@@ -48,31 +49,47 @@ div, article, nav, ul, li, ol {
 
 a, .logo {
 	color: #5B5B5B;
- 	letter-spacing: 2px;
- 	text-decoration:none;
+ 	letter-spacing: 4px;
+ 	text-decoration: none;
 }
 
 ol.steps {
 	font-weight: 300;
 	letter-spacing: 1px;
-	font-size: 0.9em;
+	font-size: 0.85em;
 	color: #848484;
 	display: inline;
 	list-style: decimal;
-	margin-left: 20px;
+	margin-left: 210px;
+
+	li {
+		display: inline;
+		list-style: decimal;
+		margin-left: 60px;
+	}
 
 }
 
-ol.steps li {
+// SEARCH BOX
+
+div.searchbox {
+	background-color: #FFFFFF;
+	padding: 6px ;
+	width: 103px;9px
+	font-size: 0.9em;
+	letter-spacing: 1px;
+	font-weight: 300;
 	display: inline;
-	list-style: decimal;
-	margin-left: 50px;
+	margin-left: 100px;
 }
+
+// END SEARCH BOX
+
 
 div.classes {
 	position: absolute;
 	left: 0;
-	width: 255px;
+	width: 325px;
 	height: 100%;
 	background-color: #EFEFEF;
 	border-right: 1px solid #D8D8D8;
@@ -91,7 +108,7 @@ article.classes-results {
 }
 
 div.preview {
-	padding: 2.5em 1em 1em 275px;
+	padding: 2.5em 1em 1em 350px;
 
 	height: 100%;
 

@@ -41,30 +41,6 @@
 
 		<script id="templateCalendar" type="text/template">
 			<section id="scheduleContainer" class="calendar">
-				<div class="cl-grid">
-					<table>
-						<tr class="cl-header-row">
-							<th class="cl-header-cell cl-left-spacer"></th>
-							<th class="cl-header-cell"><b>SUN</b>DAY</th>
-							<th class="cl-header-cell"><b>MON</b>DAY</th>
-							<th class="cl-header-cell"><b>TUE</b>SDAY</th>
-							<th class="cl-header-cell"><b>WED</b>NESDAY</th>
-							<th class="cl-header-cell"><b>THU</b>RSDAY</th>
-							<th class="cl-header-cell"><b>FRI</b>DAY</th>
-							<th class="cl-header-cell"><b>SAT</b>URDAY</th>
-						</tr>
-						<tr class="cl-content-row">
-							<td></td>
-							<td class="cl-content-cell"></td>
-							<td class="cl-content-cell"></td>
-							<td class="cl-content-cell"></td>
-							<td class="cl-content-cell"></td>
-							<td class="cl-content-cell"></td>
-							<td class="cl-content-cell"></td>
-							<td class="cl-content-cell"></td>
-						</tr>
-					</table>
-				</div>
 				<div class="cl-horizontal-lines">
 					<table id="lineTable">
 						<tr class="cl-header-row">
@@ -79,7 +55,39 @@
 						<% } %>
 					</table>
 				</div>
+				<div class="cl-grid">
+					<table>
+						<tr class="cl-header-row">
+							<th class="cl-header-cell cl-left-spacer"></th>
+							<th class="cl-header-cell"><b>SUN</b>DAY</th>
+							<th class="cl-header-cell"><b>MON</b>DAY</th>
+							<th class="cl-header-cell"><b>TUE</b>SDAY</th>
+							<th class="cl-header-cell"><b>WED</b>NESDAY</th>
+							<th class="cl-header-cell"><b>THU</b>RSDAY</th>
+							<th class="cl-header-cell"><b>FRI</b>DAY</th>
+							<th class="cl-header-cell"><b>SAT</b>URDAY</th>
+						</tr>
+						<tr class="cl-content-row">
+							<td></td>
+							<td class="cl-content-cell"><div class="position-container"></div></td>
+							<td class="cl-content-cell"><div class="position-container"></div></td>
+							<td class="cl-content-cell"><div class="position-container"></div></td>
+							<td class="cl-content-cell"><div class="position-container"></div></td>
+							<td class="cl-content-cell"><div class="position-container"></div></td>
+							<td class="cl-content-cell"><div class="position-container"></div></td>
+							<td class="cl-content-cell"><div class="position-container"></div></td>
+						</tr>
+					</table>
+				</div>
 			</section>
+		</script>
+
+		<script id="templateCalendarEntry" type="text/template">
+			<article class="cl-entry">
+				<h1 class="cl-title"><%= name %></h1>
+				<h2 class="cl-desc"><%= subject %> <%= catalog %> - <%= section %> <%= type %></h2>
+				<h2 class="cl-desc"><%= location["building"] %> <%= location["room"] %></h2>
+			</article>
 		</script>
 
         <script type="text/javascript" src="lib/jquery-2.0.3.min.js"></script>

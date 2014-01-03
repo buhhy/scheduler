@@ -8,7 +8,7 @@
 		width: 100%;
 
 		td, th {
-			border-left: 1px #d8d8d9 solid;
+			border-left: 1px #f7f7f7 solid;
 
 			&:first-child {
 				border-left: none;
@@ -41,13 +41,18 @@
 
 		.cl-header-row {
 			height: 2.5em;
+			letter-spacing: 2px;
 
 			.cl-header-cell {
 				background-color: #c9c9ca;
 				color: #fff;
-				font-weight: normal;
+				font-weight: 300;
 				padding-right: 1.2em;
 				text-align: right;
+
+					b {
+						font-weight: 400;
+					}
 			}
 		}
 
@@ -56,10 +61,13 @@
 		}
 
 		.cl-time-label {
-			font-size: 1.2em;
+			font-size: 1em;
+			letter-spacing: 1px;
 			width: 4em;
 			padding-right: 1em;
 			text-align: right;
+			font-weight: 300;
+			color: #939292;
 		}
 
 		.cl-time-divider {

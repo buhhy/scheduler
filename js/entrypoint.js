@@ -1,7 +1,7 @@
 $(function () {
 	new Scheduler.views.Calendar({
 		"el": "#scheduleContainer",
-		"startTime": 9 * 60,
+		"startTime": 8 * 60 + 30,
 		"endTime": 22 * 60 + 30,
 		"sectionList": new Scheduler.models.SectionCollection([
 			{

@@ -82,8 +82,10 @@ section.searchbox {
 
 // END SEARCH BOX
 
+// Sidebar styles
 
-section.classes {
+.sidebar-group {
+	overflow: hidden;
 	position: absolute;
 	left: 0;
 	width: 325px;
@@ -91,6 +93,22 @@ section.classes {
 	background-color: #EFEFEF;
 	border-right: 1px solid #D8D8D8;
 	font-weight: 300;
+
+	.sidebar-slider {
+		position: relative;
+		width: 100%;
+		height: 100%;
+
+		.sidebar {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			top: 0;
+
+			display: none;
+			opacity: 0;
+		}
+	}
 }
 
 article.classes-search {

@@ -45,6 +45,11 @@ $(function () {
 		}
 	]);
 
+	sidebar = new Scheduler.views.Sidebar({
+		"el": "#sidebarGroup",
+		"indicatorGroup": "#sectionIndicatorGroup"
+	});
+
 	var calendar = new Scheduler.views.Calendar({
 		"el": "#scheduleContainer",
 		"startTime": 8 * 60 + 30,
@@ -66,8 +71,7 @@ $(function () {
 				if (aResult && aResult.data && aResult.data.length) {
 					var sections = new Scheduler.models.SectionCollection(aResult.data);
 					sections.forEach(function (aSection) {
-						console.log(aSection);
-						calendar.addSection(aSection);
+						sectionList.addSection(aSection);
 					});
 				}
 			});

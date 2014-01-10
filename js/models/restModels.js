@@ -97,7 +97,23 @@ Scheduler.models.Section = Scheduler.models.Model.extend({
 });
 
 Scheduler.models.SectionCollection = Scheduler.models.Collection.extend({
-	"model": Scheduler.models.Section
+	"model": Scheduler.models.Section,
+
+	"findSection": function (aClassNumber) {
+		return this.find(function (aSection) {
+			return aSection.get("class_number") === aClassNumber;
+		});
+	},
+
+	"addSection": function (aSection) {
+		if (!this.findSection(aSection.get("class_number")))
+			this.push(aSection);
+	},
+
+	"removeSection": function (aClassNumber) {
+		var item = this.findSection(aClassNumber);
+		this.remove(item);
+	}
 });
 
 /*

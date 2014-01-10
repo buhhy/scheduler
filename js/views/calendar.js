@@ -87,21 +87,5 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 	"padZeroes": function (aInt, aLength) {
 		var str = aInt + "";
 		return str.length >= aLength ? str : (new Array(aLength - str.length + 1)).join("0") + str;
-	},
-
-	"findSection": function (aClassNumber) {
-		return this.sectionList.find(function (aSection) {
-			return aSection.get("class_number") === aClassNumber;
-		});
-	},
-
-	"addSection": function (aSection) {
-		if (!this.findSection(aSection.get("class_number")))
-			this.sectionList.push(aSection);
-	},
-
-	"removeSection": function (aClassNumber) {
-		var item = this.findSection(aClassNumber);
-		this.sectionList.remove(item);
 	}
 });

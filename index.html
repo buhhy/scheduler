@@ -12,36 +12,46 @@
 	<body>
 		<section class="topbar">
 			<span class="logo"><a href="#">PROJECT PINECONE</a></span>
-			<ol class="steps">
-				<li>1. ADD</li>
-				<li>2. CUSTOMIZE</li>
-				<li>3. PRINT</li>
+			<ol id="sectionIndicatorGroup" class="steps">
+				<li class="indicator">1. ADD</li>
+				<li class="indicator">2. CUSTOMIZE</li>
+				<li class="indicator">3. PRINT</li>
 			</ol>
 		</section>
 		<section class="content">
 	        <div class="position-container">
-				<section class="classes">
-					<article class="classes-search">
-					<!--insert search engine stuffs-->
+	        	<nav id="sidebarGroup" class="sidebar-group">
+	        		<section id="sidebarSlider" class="sidebar-slider">
+						<section class="sidebar classes">
+							<article class="classes-search">
+							<!--insert search engine stuffs-->
 
-						<div class="dropdown">
-							<span>SELECT TERM</span>
-							<span> > </span>
-							<ul class="terms">
-								<li>WINTER 2014</li>
-								<li>SPRING 2014</li>
-								<li>FALL 2014</li>
-							</ul>
-						</div>
+								<div class="dropdown">
+									<span>SELECT TERM</span>
+									<span> > </span>
+									<ul class="terms">
+										<li>WINTER 2014</li>
+										<li>SPRING 2014</li>
+										<li>FALL 2014</li>
+									</ul>
+								</div>
 
-						<input id="sectionSearchBox" class="searchbox" placeholder="Find courses">
-						<input id="sectionSearchButton" type="button" value="Go">
+								<input id="sectionSearchBox" class="searchbox" placeholder="Find courses">
+								<input id="sectionSearchButton" type="button" value="Go">
 
-					</article>
-					<article class="classes-results">
-					<!--insert search engine stuffs--> Results
-					</article>
-				</section>
+							</article>
+							<article class="classes-results">
+							<!--insert search engine stuffs--> Results
+							</article>
+						</section>
+						<section class="sidebar customize">
+							<article>customization stuff</article>
+						</section>
+						<section class="sidebar print">
+							<article>print stuff</article>
+						</section>
+					</section>
+				</nav>
 
 				<section class="preview">
 					<div class="preview-container">
@@ -119,6 +129,7 @@
 		<script type="text/javascript" src="lib/backbone.min.js"></script>
 
 		<script type="text/javascript" src="js/scheduler.js"></script>
+		<script type="text/javascript" src="js/views/Sidebar.js"></script>
 		<script type="text/javascript" src="js/views/AddSectionList.js"></script>
 		<script type="text/javascript" src="js/views/CalendarEntry.js"></script>
 		<script type="text/javascript" src="js/views/CalendarEntryGroup.js"></script>

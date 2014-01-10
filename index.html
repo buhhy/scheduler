@@ -34,10 +34,8 @@
 							</ul>
 						</div>
 
-						<section class="searchbox">
-						<span>Find courses</span>
-						</section>
-						<div>Go</div>
+						<input id="sectionSearchBox" class="searchbox" placeholder="Find courses">
+						<input id="sectionSearchButton" type="button" value="Go">
 
 					</article>
 					<article class="classes-results">
@@ -98,6 +96,16 @@
 			</section>
 		</script>
 
+		<!-- <ul class="add-section-list">
+			<% for (var i = 0; i < sections.length; i++) { %>
+			<li class="sl-entry">
+				<span><%= sections[i].
+			</li>
+			<% } %>
+		</ul> -->
+		<script id="templateAddSectionSidebar" type="text/template">
+		</script>
+
 		<script id="templateCalendarEntry" type="text/template">
 			<article class="cl-entry">
 				<h1 class="cl-title"><%= name %></h1>
@@ -111,8 +119,11 @@
 		<script type="text/javascript" src="lib/backbone.min.js"></script>
 
 		<script type="text/javascript" src="js/scheduler.js"></script>
+		<script type="text/javascript" src="js/views/AddSectionList.js"></script>
+		<script type="text/javascript" src="js/views/CalendarEntry.js"></script>
+		<script type="text/javascript" src="js/views/CalendarEntryGroup.js"></script>
 		<script type="text/javascript" src="js/views/Calendar.js"></script>
-		<script type="text/javascript" src="js/models/restModels.js"></script>
+		<script type="text/javascript" src="js/models/RestModels.js"></script>
 		<script type="text/javascript" src="js/entrypoint.js"></script>
 		<script type="text/javascript" src="js/dropdown.js"></script>
 

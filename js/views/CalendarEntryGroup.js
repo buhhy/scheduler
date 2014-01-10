@@ -36,7 +36,9 @@ Scheduler.views.CalendarEntryGroup = Scheduler.views.View.extend({
 		});
 		var self = this;
 
-		return _.flatten(_.map(baseClasses, function (aClassModel) {
+		return _.flatten(_.map(_.filter(baseClasses, function (aClassModel) {
+			return aClassModel.get("dates").weekdays;
+		}), function (aClassModel) {
 			/*
 			This will return a list of matched strings using regex in this format, assuming the
 			following input string "TThF":
@@ -73,5 +75,13 @@ Scheduler.views.CalendarEntryGroup = Scheduler.views.View.extend({
 			aElem.reposition();
 			target.append(aElem.$el);
 		});
+	},
+
+	"detachElements": function () {
+		var self = this;
+
+		_.each(this.elementList, function (aElem) {
+			aElem.detachFromView();
+		})
 	}
 });

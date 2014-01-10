@@ -3,13 +3,14 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 		"startTime": 0,				// Calendar start time in minutes
 		"endTime": 24 * 60,			// Calendar end time in minutes
 		"interval": 60,				// Intervals between time lines in minutes
-		"sectionList": undefined
+		"sectionList": undefined	// Default data model
 	},
 
 	// The calendar displays an extra 30 minutes at the top.
 	"CALENDAR_START_TIME_OFFSET": 30,
 
 	"options": undefined,
+	"sectionList": undefined,
 
 	// A hashmap of elements mapped by the class id.
 	"sectionViewList": undefined,
@@ -37,6 +38,8 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 
 		this.$el.append(this.$calendar);
 
+		this.sectionList = opts.sectionList || new Scheduler.models.SectionCollection();
+
 		// Find the table columns which will be containing all the event views, then wrap them all
 		// inside jQuery wrapper objects, because accessing each element of a jQuery selector
 		// returns not the jQuery-ized element, but the bare element.
@@ -45,17 +48,21 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 		});
 
 		// Sets event listener for data collection.
-		opts.sectionList.on("all", function (aModel, aResponse) {
-			self.refreshData(aModel);
+		this.sectionList.on("all", function (aModel, aResponse) {
+			self.refreshData();
 		});
 
-		this.refreshData(opts.sectionList);
+		this.refreshData();
 	},
 
-	"refreshData": function (aData) {
+	"refreshData": function () {
 		var self = this;
 
-		this.sectionViewList = this.options.sectionList.map(function (aSectionModel) {
+		_.each(this.sectionViewList, function (aView) {
+			aView.detachElements();
+		});
+
+		this.sectionViewList = this.sectionList.map(function (aSectionModel) {
 			return new Scheduler.views.CalendarEntryGroup({
 				"sectionModel": aSectionModel,
 				"calendarColumns": self.columnList,
@@ -69,7 +76,7 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 		});
 	},
 
-	"minutesToStringFormat": function(aMin) {
+	"minutesToStringFormat": function (aMin) {
 		var pastNoon = aMin >= 12 * 60;
 		var hour = Math.floor(aMin / 60) % 12 || 12;
 		var min = aMin % 60;
@@ -77,8 +84,24 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 		return hour + (pastNoon ? " PM" : " AM");
 	},
 
-	"padZeroes": function(aInt, aLength) {
+	"padZeroes": function (aInt, aLength) {
 		var str = aInt + "";
 		return str.length >= aLength ? str : (new Array(aLength - str.length + 1)).join("0") + str;
+	},
+
+	"findSection": function (aClassNumber) {
+		return this.sectionList.find(function (aSection) {
+			return aSection.get("class_number") === aClassNumber;
+		});
+	},
+
+	"addSection": function (aSection) {
+		if (!this.findSection(aSection.get("class_number")))
+			this.sectionList.push(aSection);
+	},
+
+	"removeSection": function (aClassNumber) {
+		var item = this.findSection(aClassNumber);
+		this.sectionList.remove(item);
 	}
 });

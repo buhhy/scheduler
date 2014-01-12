@@ -70,6 +70,8 @@ ol.steps {
 	white-space: nowrap;
 	overflow: hidden;
 	width: 100%;
+	position: relative;
+	bottom: 3px;
 
 	li {
 		display: inline;
@@ -106,7 +108,7 @@ input.searchbox {
 	letter-spacing: 0.5px;
 	padding-left: 10px;
 	width: 123px;
-	margin: 35px 0 0 35px;
+	margin: 35px 0 0 33px;
 }
 
 input.searchbutton {
@@ -119,7 +121,12 @@ input.searchbutton {
 	letter-spacing: 0.7px;
 	color: #727272;
 	padding: 6px 9px;
+	cursor: pointer;
+	margin-left: 5px;
 
+	&:hover {
+		background-color: #d3d3d3;
+	}
 }
 
 
@@ -163,6 +170,14 @@ article.classes-search {
 
 article.classes-results {
 	padding: 17px 18px;
+	min-height: 200px;
+
+	.divider
+}
+
+article.classes-added {
+	padding: 17px 18px;
+	max-height: 300px;
 }
 
 section.preview {

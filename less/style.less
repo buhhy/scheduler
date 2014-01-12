@@ -1,5 +1,5 @@
 @import "mixins.less";
-
+@import "dropdown.less";
 @import url(http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900);
 
 html, body {
@@ -165,14 +165,62 @@ article.classes-search {
 	padding: 17px 18px;
 	height: 130px;
 
-	.divider
+	.divider;
+
+	div {
+		.dropdown;
+	}
+
+	.dropdown {
+		margin-left: 125px;
+
+		ul.terms {
+			top: 26px;
+			left: 0;
+		}
+	}
 }
 
 article.classes-results {
 	padding: 22px 18px;
 	min-height: 200px;
 
-	.divider
+	.divider;
+
+	div.course {
+		background-color: #d1d1d1;
+		width: 275px;
+		padding: 10px;
+		font-weight: 400;
+		font-size: 0.85em;
+		margin-top: 20px;
+
+		.arrow {
+			left: 260px;
+			top: 13px;
+		}
+	}
+
+	> ul {
+		font-size: 0.85em;
+		font-weight: 500;
+		margin-top: 30px;
+
+		& > span {
+			background-color: #d1d1d1;
+			padding: 12px;
+			width: 270px;
+			display: block;
+		}
+
+		& > ul {
+			background-color: #e2e2e2;
+
+			& > li {
+				background-color: white;
+			}
+		}
+	}
 }
 
 article.classes-added {

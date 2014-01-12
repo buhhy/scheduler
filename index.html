@@ -13,16 +13,16 @@
 		<section class="topbar">
 			<span class="logo"><a href="#">PROJECT PINECONE</a></span>
 			<ol id="sectionIndicatorGroup" class="steps">
-				<li class="indicator">1. ADD</li>
-				<li class="indicator">2. CUSTOMIZE</li>
-				<li class="indicator">3. PRINT</li>
+				<li id="addSectionIndicator" class="indicator">1. ADD</li>
+				<li id="customizeIndicator" class="indicator">2. CUSTOMIZE</li>
+				<li id="printIndicator" class="indicator">3. PRINT</li>
 			</ol>
 		</section>
 		<section class="content">
 	        <div class="position-container">
 	        	<nav id="sidebarGroup" class="sidebar-group">
 	        		<section id="sidebarSlider" class="sidebar-slider">
-						<section class="sidebar classes">
+						<section id="addSectionSidebar" class="sidebar classes">
 							<article class="classes-search">
 							<!--insert search engine stuffs-->
 
@@ -44,10 +44,10 @@
 							<!--insert search engine stuffs--> Results
 							</article>
 						</section>
-						<section class="sidebar customize">
+						<section id="customizeSidebar" class="sidebar customize">
 							<article>customization stuff</article>
 						</section>
-						<section class="sidebar print">
+						<section id="printSidebar" class="sidebar print">
 							<article>print stuff</article>
 						</section>
 					</section>
@@ -127,9 +127,12 @@
 		<script type="text/javascript" src="lib/jquery-2.0.3.min.js"></script>
 		<script type="text/javascript" src="lib/underscore.min.js"></script>
 		<script type="text/javascript" src="lib/backbone.min.js"></script>
+		<script type="text/javascript" src="lib/fullproof.min.js"></script>
 
 		<script type="text/javascript" src="js/scheduler.js"></script>
 		<script type="text/javascript" src="js/views/Sidebar.js"></script>
+		<script type="text/javascript" src="js/views/SidebarGroup.js"></script>
+		<script type="text/javascript" src="js/views/AddSectionSidebar.js"></script>
 		<script type="text/javascript" src="js/views/AddSectionList.js"></script>
 		<script type="text/javascript" src="js/views/CalendarEntry.js"></script>
 		<script type="text/javascript" src="js/views/CalendarEntryGroup.js"></script>

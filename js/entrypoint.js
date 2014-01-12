@@ -45,9 +45,22 @@ $(function () {
 		}
 	]);
 
-	sidebar = new Scheduler.views.Sidebar({
+	var sidebar = new Scheduler.views.SidebarGroup({
 		"el": "#sidebarGroup",
-		"indicatorGroup": "#sectionIndicatorGroup"
+		"sidebars": [
+			new Scheduler.views.AddSectionSidebar({
+				"el": "#addSectionSidebar",
+				"indicator": "#addSectionIndicator"
+			}),
+			new Scheduler.views.Sidebar({
+				"el": "#customizeSidebar",
+				"indicator": "#customizeIndicator"
+			}),
+			new Scheduler.views.Sidebar({
+				"el": "#printSidebar",
+				"indicator": "#printIndicator"
+			})
+		]
 	});
 
 	var calendar = new Scheduler.views.Calendar({

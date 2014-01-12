@@ -7,6 +7,15 @@ var TERM_LIST_API_URL = "/v2/terms/list";
 var SUBJECT_LIST_API_URL = "/v2/codes/subjects";
 var TERM_SUBJECT_API_URL = "/v2/terms/%d/%s/schedule";
 
+// Since Array.find isn't standardised yet...
+Array.prototype.find = function (aIterator) {
+	for (var i = 0; i < this.length; i++) {
+		if (aIterator(this[i], i, this))
+			return this[i];
+	}
+	return null;
+};
+
 var buildApiUrl = function (aUrl, aArgs) {
 	var args = aArgs || [];
 	var url = sprintf.vsprintf(aUrl, args);
@@ -43,8 +52,38 @@ var resultValid = function (aResult) {
 	return null;
 };
 
+exports.currentTerms = function (aOnFinish) {
+	// Fetch the 3 current terms.
+	request(buildApiUrl(TERM_LIST_API_URL), function (aResult) {
+		var result = resultValid(aResult);
+
+		if (result) {
+			var flattened = [];
+			var keys = Object.keys(result.listings);
+
+			for (var i = 0; i < keys.length; i++)
+				flattened = flattened.concat(result.listings[keys[i]]);
+
+			// Massage the retarded data format into something for usable.
+			var retJson = {
+				"currentTerm": flattened.find(function (aElem) {
+					return aElem.id === result.current_term;
+				}),
+				"previousTerm": flattened.find(function (aElem) {
+					return aElem.id === result.previous_term;
+				}),
+				"nextTerm": flattened.find(function (aElem) {
+					return aElem.id === result.next_term;
+				})
+			};
+
+			aOnFinish(retJson);
+		}
+	});
+};
+
 exports.currentTerm = function (aOnFinish) {
-	// Fetch current term.
+	// Fetch current term ID.
 	request(buildApiUrl(TERM_LIST_API_URL), function (aResult) {
 		var result = resultValid(aResult);
 
@@ -65,7 +104,8 @@ exports.reloadClassData = function (aCurrentTerm, aOnFinish) {
 		// Fetch all classes.
 		// subjects.splice(3, subjects.length - 3);
 		var classCountdown = subjects.length;
-		console.log(sprintf.sprintf("Fetching %d subject courses.", classCountdown));
+		console.log(sprintf.sprintf(
+			"Fetching %d subject courses for term %d.", classCountdown, aCurrentTerm));
 
 		subjects.forEach(function (aElem) {
 			var subject = aElem.subject;
@@ -81,7 +121,7 @@ exports.reloadClassData = function (aCurrentTerm, aOnFinish) {
 					classList = classList.concat(result);
 
 					if (!classCountdown && aOnFinish)
-						aOnFinish(classList, aCurrentTerm, subjects);
+						aOnFinish(aCurrentTerm, classList, subjects);
 				}
 			});
 		});
@@ -95,7 +135,8 @@ exports.reloadClassData = function (aCurrentTerm, aOnFinish) {
 
 		if (result) {
 			subjects = result;
-			console.log(sprintf.sprintf("%d subjects were found.", result.length));
+			console.log(sprintf.sprintf(
+				"%d subjects were found for term %d.", result.length, aCurrentTerm));
 
 			fetchClasses();
 		}

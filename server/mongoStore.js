@@ -14,7 +14,7 @@ mongo.MongoClient.connect("mongodb://localhost:27017/pinecone", function (aError
 	classData = db.collection("classData");
 });
 
-var storeClasses = function (aClasses, aTerm) {
+var storeClasses = function (aTerm, aClasses) {
 	if (db) {
 		findClasses(aTerm, function (existingSet) {
 			var data = {
@@ -57,7 +57,7 @@ var findClasses = function (aTerm, aCallback) {
 							"Retrieved %s entries from database.", aItems[0].classes.length));
 					aCallback(aItems[0].classes);
 				} else {
-					console.log("No entries found.");
+					console.log(sprintf.sprintf("No entries found for term %d.", aTerm));
 					aCallback(null);
 				}
 			}

@@ -6,7 +6,6 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 	"SEARCH_ENGINE_DB_NAME": "class_list",
 
 	"classData": undefined,
-	"fullproofEngine": undefined,
 
 	"initialize": function (aOpts) {
 		Scheduler.views.Sidebar.prototype.initialize.call(this, aOpts);
@@ -28,7 +27,7 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 
 			if (input && input.length) {
 				// Display data here.
-				console.log(self.classData.search(input));
+				console.log(self.classData.search(input).toJSON());
 			}
 		});
 	}

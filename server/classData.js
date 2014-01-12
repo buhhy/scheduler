@@ -54,7 +54,7 @@ exports.reloadClassData = function (aOnFinish) {
 
 		// Fetch all classes.
 		if (!countdown) {
-			subjects.splice(3, subjects.length - 3);
+			// subjects.splice(3, subjects.length - 3);
 			var classCountdown = subjects.length;
 			console.log(sprintf.sprintf("Fetching %d subject courses.", classCountdown));
 

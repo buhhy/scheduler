@@ -88,6 +88,8 @@ Sample:
 */
 
 Scheduler.models.Section = Scheduler.models.Model.extend({
+	"idAttribute": "class_number",
+
 	"initialize": function () {
 		Scheduler.models.Model.prototype.initialize.call(this);
 		var collection = new Scheduler.models.ClassCollection();
@@ -98,6 +100,14 @@ Scheduler.models.Section = Scheduler.models.Model.extend({
 
 Scheduler.models.SectionCollection = Scheduler.models.Collection.extend({
 	"model": Scheduler.models.Section,
+	"lunroptions": {
+		"fields": [
+			{ "name": "subject", "boost": 4 },
+			{ "name": "catalog_number", "boost": 3 },
+			{ "name": "title", "boost": 1 },
+			{ "name": "class_number", "boost": 6}
+		]
+	},
 
 	"findSection": function (aClassNumber) {
 		return this.find(function (aSection) {

@@ -1,27 +1,34 @@
 Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 	"defaults": {
-		"data": undefined
+		"classData": undefined
 	},
+
+	"SEARCH_ENGINE_DB_NAME": "class_list",
+
+	"classData": undefined,
+	"fullproofEngine": undefined,
 
 	"initialize": function (aOpts) {
 		Scheduler.views.Sidebar.prototype.initialize.call(this, aOpts);
+		var opts = _.defaults(aOpts, this.defaults);
+		var self = this;
 
-		$("#sectionSearchButton").click(function (aEvent) {
+		this.classData = opts.classData;
+
+		this.classData.on("change:classList", function () {
+			console.log("changed!");
+		});
+
+		this.$searchBox = $("#sectionSearchBox");
+		this.$searchButton = $("#sectionSearchButton");
+
+		this.$searchButton.click(function (aEvent) {
 			aEvent.preventDefault();
-			var input = parseInt($searchBox.val());
+			var input = self.$searchBox.val();
 
-			if (input) {
-				$.ajax({
-					"url": "https://api.uwaterloo.ca/v2/courses/" + input + "/schedule.json?key=fa310af514876676292c421cf7673a49",
-					"method": "get",
-				}).done(function (aResult) {
-					if (aResult && aResult.data && aResult.data.length) {
-						var sections = new Scheduler.models.SectionCollection(aResult.data);
-						sections.forEach(function (aSection) {
-							sectionList.addSection(aSection);
-						});
-					}
-				});
+			if (input && input.length) {
+				// Display data here.
+				console.log(self.classData.search(input));
 			}
 		});
 	}

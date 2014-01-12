@@ -34,72 +34,68 @@ var request = function (aUrl, aCallback) {
 	}).on("error", function (e) {
 		console.log("Request error: " + e.message);
 	});
-}
+};
 
-exports.reloadClassData = function (aOnFinish) {
-	var countdown = 2;		// Synchronizes 2 asynchronous calls
-	var currentTerm = undefined;
-	var subjects = undefined;
-	var classList = [];
+var resultValid = function (aResult) {
+	var result = JSON.parse(aResult);
+	if (result && result.data)
+		return result.data;
+	return null;
+};
 
-	var resultValid = function (aResult) {
-		var result = JSON.parse(aResult);
-		if (result && result.data)
-			return result.data;
-		return null;
-	};
-
-	var fetchClasses = function () {
-		countdown --;
-
-		// Fetch all classes.
-		if (!countdown) {
-			// subjects.splice(3, subjects.length - 3);
-			var classCountdown = subjects.length;
-			console.log(sprintf.sprintf("Fetching %d subject courses.", classCountdown));
-
-			subjects.forEach(function (aElem) {
-				var subject = aElem.subject;
-				var url = buildApiUrl(
-					TERM_SUBJECT_API_URL, [ currentTerm, subject ]);
-
-				request(url, function (aResult) {
-					var result = resultValid(aResult);
-
-					if (result) {
-						classCountdown --;
-
-						classList = classList.concat(result);
-
-						if (!classCountdown && aOnFinish)
-							aOnFinish(classList, currentTerm, subjects);
-					}
-				});
-			});
-		}
-	}
-
-	console.log("Starting to fetch data from UWaterloo public API...");
-
-	// Fetch list of all subjects.
-	request(buildApiUrl(SUBJECT_LIST_API_URL, [ currentTerm ]), function (aResult) {
-		var result = resultValid(aResult);
-
-		if (result) {
-			subjects = result;
-			console.log(sprintf.sprintf("%d subjects were found.", result.length));
-
-			fetchClasses();
-		}
-	});
-
+exports.currentTerm = function (aOnFinish) {
 	// Fetch current term.
 	request(buildApiUrl(TERM_LIST_API_URL), function (aResult) {
 		var result = resultValid(aResult);
 
 		if (result) {
-			currentTerm = result.current_term;
+			var currentTerm = result.current_term;
 			console.log(sprintf.sprintf("The current term code is %d.", currentTerm));
+
+			aOnFinish(currentTerm);
+		}
+	});
+};
+
+exports.reloadClassData = function (aCurrentTerm, aOnFinish) {
+	var subjects = undefined;
+	var classList = [];
+
+	var fetchClasses = function () {
+		// Fetch all classes.
+		// subjects.splice(3, subjects.length - 3);
+		var classCountdown = subjects.length;
+		console.log(sprintf.sprintf("Fetching %d subject courses.", classCountdown));
+
+		subjects.forEach(function (aElem) {
+			var subject = aElem.subject;
+			var url = buildApiUrl(
+				TERM_SUBJECT_API_URL, [ aCurrentTerm, subject ]);
+
+			request(url, function (aResult) {
+				var result = resultValid(aResult);
+
+				if (result) {
+					classCountdown --;
+
+					classList = classList.concat(result);
+
+					if (!classCountdown && aOnFinish)
+						aOnFinish(classList, aCurrentTerm, subjects);
+				}
+			});
+		});
+	}
+
+	console.log("Starting to fetch data from UWaterloo public API...");
+
+	// Fetch list of all subjects.
+	request(buildApiUrl(SUBJECT_LIST_API_URL, [ aCurrentTerm ]), function (aResult) {
+		var result = resultValid(aResult);
+
+		if (result) {
+			subjects = result;
+			console.log(sprintf.sprintf("%d subjects were found.", result.length));
 
 			fetchClasses();
 		}

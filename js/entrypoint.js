@@ -53,7 +53,8 @@ $(function () {
 		"sidebars": [
 			new Scheduler.views.AddSectionSidebar({
 				"el": "#addSectionSidebar",
-				"indicator": "#addSectionIndicator"
+				"indicator": "#addSectionIndicator",
+				"classData": classData
 			}),
 			new Scheduler.views.Sidebar({
 				"el": "#customizeSidebar",
@@ -73,28 +74,5 @@ $(function () {
 		"sectionList": sectionList
 	});
 
-	var $searchBox = $("#sectionSearchBox");
-
-	classData.fetchTermClassList(function (aData) {
-		console.log(aData);
-	});
-
-	$("#sectionSearchButton").click(function (aEvent) {
-		aEvent.preventDefault();
-		var input = parseInt($searchBox.val());
-
-		if (input) {
-			$.ajax({
-				"url": "https://api.uwaterloo.ca/v2/courses/" + input + "/schedule.json?key=fa310af514876676292c421cf7673a49",
-				"method": "get",
-			}).done(function (aResult) {
-				if (aResult && aResult.data && aResult.data.length) {
-					var sections = new Scheduler.models.SectionCollection(aResult.data);
-					sections.forEach(function (aSection) {
-						sectionList.addSection(aSection);
-					});
-				}
-			});
-		}
-	});
+	classData.fetchTermClassList(function (aData) { });
 });

@@ -19,6 +19,7 @@ h1 {
 	font-size: 0.89em;
 	letter-spacing: 0.7px;
 	display: inline;
+	margin-bottom: 30px;
 }
 
 .position-container {
@@ -183,7 +184,7 @@ article.classes-search {
 
 article.classes-results {
 	padding: 22px 18px;
-	min-height: 200px;
+	min-height: 300px;
 
 	.divider;
 
@@ -204,7 +205,7 @@ article.classes-results {
 	> ul {
 		font-size: 0.85em;
 		font-weight: 500;
-		margin-top: 30px;
+		margin-top: 20px;
 
 		& > span {
 			background-color: #d1d1d1;
@@ -305,6 +306,34 @@ article.classes-results {
 article.classes-added {
 	padding: 22px 18px;
 	max-height: 300px;
+
+	& > span {
+		display: block;
+		background-color: #d1d1d1;
+		padding: 12px;
+		width: 270px;
+		display: block;
+		cursor: pointer;
+		font-size: 0.85em;
+		font-weight: 500;
+		margin-top: 20px;
+
+		& > span {
+			padding-right: 20px;
+		}
+
+		&:hover {
+			background-color: #c4c4c4;
+		}
+
+		& > .add {
+			float: right;
+			left: 20px;
+			position: relative;
+			font-size: 1.2em;
+			font-weight: 900;
+		}
+	}
 }
 
 section.preview {

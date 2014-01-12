@@ -54,8 +54,8 @@ exports.reloadClassData = function (aOnFinish) {
 
 		// Fetch all classes.
 		if (!countdown) {
-			subjects.splice(0, 3);
-			var classCountdown = 5;
+			subjects.splice(3, subjects.length - 3);
+			var classCountdown = subjects.length;
 			console.log(sprintf.sprintf("Fetching %d subject courses.", classCountdown));
 
 			subjects.forEach(function (aElem) {
@@ -69,10 +69,10 @@ exports.reloadClassData = function (aOnFinish) {
 					if (result) {
 						classCountdown --;
 
-						classList.push(result);
+						classList = classList.concat(result);
 
 						if (!classCountdown && aOnFinish)
-							aOnFinish(classList);
+							aOnFinish(classList, currentTerm, subjects);
 					}
 				});
 			});

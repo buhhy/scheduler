@@ -1,4 +1,7 @@
 $(function () {
+
+	var classData = new Scheduler.models.ClassData();
+
 	var sectionList = new Scheduler.models.SectionCollection([
 		{
 			"subject": "STV",
@@ -71,6 +74,10 @@ $(function () {
 	});
 
 	var $searchBox = $("#sectionSearchBox");
+
+	classData.fetchTermClassList(function (aData) {
+		console.log(aData);
+	});
 
 	$("#sectionSearchButton").click(function (aEvent) {
 		aEvent.preventDefault();

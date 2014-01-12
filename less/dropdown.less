@@ -4,11 +4,12 @@ div.dropdown {
 	display: inline-block;
 	background-color: #e2e2e2;
 	padding: 6px 9px;
-	width: 120px;
-	font-size: 0.8em;
+	width: 108px;
+	font-size: 0.7em;
 	letter-spacing: 1px;
-	font-weight: 300;
+	font-weight: 400;
 	position: relative;
+	cursor: pointer;
 
 	&.active {
 		span {
@@ -21,12 +22,30 @@ div.dropdown {
 		}
 
 		.arrow {
-			// pointing down styles
+			position: absolute;
+			top: 11px;
+			left: 90px;
+			width: 0; 
+			height: 0; 
+			border-left: 4px solid transparent;
+			border-right: 4px solid transparent;
+			border-top: 4px solid #727272;
+			font-size: 0;
+			line-height: 0;
 		}
 	}
 
 	.arrow {
-		// pointing right styles
+		position: absolute;
+		top: 9.5px;
+		left: 92px;
+		width: 0; 
+		height: 0; 
+		border-bottom: 4px solid transparent; 
+		border-top: 4px solid transparent;
+		border-left: 4px solid #727272; 
+		font-size: 0;
+		line-height: 0;
 	}
 
 	ul.terms {
@@ -41,6 +60,10 @@ div.dropdown {
 		li {
 			background-color: #e2e2e2;
 			padding: 6px 9px;
+
+			&:hover {
+				background-color: #d3d3d3;
+			}
 		}
 	}
 }

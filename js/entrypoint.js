@@ -44,7 +44,8 @@ $(function () {
 			"held_with": [],
 			"term": 1141,
 			"academic_level": "undergraduate",
-			"last_updated": "2013-12-31T18:02:45-05:00"
+			"last_updated": "2013-12-31T18:02:45-05:00",
+			"uid": "1141+6928"
 		}
 	]);
 
@@ -54,7 +55,8 @@ $(function () {
 			new Scheduler.views.AddSectionSidebar({
 				"el": "#addSectionSidebar",
 				"indicator": "#addSectionIndicator",
-				"classData": classData
+				"classData": classData,
+				"userData": sectionList
 			}),
 			new Scheduler.views.Sidebar({
 				"el": "#customizeSidebar",

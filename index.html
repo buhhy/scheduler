@@ -23,7 +23,7 @@
 	        	<nav id="sidebarGroup" class="sidebar-group">
 	        		<section id="sidebarSlider" class="sidebar-slider">
 						<section id="addSectionSidebar" class="sidebar classes">
-							<article class="classes-search">
+							<article class="sidebar-section-group classes-search">
 							<!--insert search engine stuffs-->
 								<h1>SEARCH</h1>
 								<div class="dropdown">
@@ -41,96 +41,85 @@
 
 							</article>
 
-							<article class="classes-results">
+							<article class="sidebar-section-group">
 								<h1>RESULTS</h1>
-								<ul>
-									<span>EASIA 201R
-										<span class="open-arrow"></span>
-									</span>
-								</span>
-									<ul>
-										<span>LEC
+
+								<ul class="classes-results-list">
+									<li class="classes-results-entry">
+										<span>EASIA 201R
 											<span class="open-arrow"></span>
 										</span>
-										<li>
-											<span>
+										<ul>
+											<span>LEC
+												<span class="open-arrow"></span>
+											</span>
+											<li>
+												<span>
+													<span class="section">101</span>
+													<span class="time"> 8:30-9:50 TTh</span>
+													<span class="add">&#x2B;</span>
+												</span>
+											</li>
+											<li>
+												<span>
+													<span class="section">102</span>
+													<span class="time"> 9:00-11:50 F</span>
+													<span class="add">&#x2212;</span>
+												</span>
+											</li>
+										</ul>
+										<ul>
+											<span>TUT
+												<span class="close-arrow"></span>
+											</span>
+										</ul>
+										<ul>
+											<span>LAB
+												<span class="close-arrow"></span>
+											</span>
+										</ul>
+									</li>
+
+									<li class="classes-results-entry">
+										<span>CS 135
+											<span class="open-arrow"></span>
+										</span>
+										<ul>
+											<span>LEC
+												<span class="open-arrow"></span>
+											</span>
+											<li>
+												<span>
 												<span class="section">101</span>
 												<span class="time"> 8:30-9:50 TTh</span>
 												<span class="add">&#x2B;</span>
-											</span>
-										</li>
-										<li>
-											<span>
+												</span>
+											</li>
+											<li>
+												<span>
 												<span class="section">102</span>
 												<span class="time"> 9:00-11:50 F</span>
 												<span class="add">&#x2212;</span>
+												</span>
+											</li>
+										</ul>
+										<ul>
+											<span>TUT
+												<span class="close-arrow"></span>
 											</span>
-										</li>
-									</ul>
-									<ul>
-										<span>TUT
-											<span class="close-arrow"></span>
-										</span>
-									</ul>
-									<ul>
-										<span>LAB
-											<span class="close-arrow"></span>
-										</span>
-									</ul>
+										</ul>
+									</li>
 								</ul>
-
-								<ul>
-									<span>CS 135
-										<span class="open-arrow"></span>
-									</span>
-								</span>
-									<ul>
-										<span>LEC
-											<span class="open-arrow"></span>
-										</span>
-										<li>
-											<span>
-											<span class="section">101</span>
-											<span class="time"> 8:30-9:50 TTh</span>
-											<span class="add">&#x2B;</span>
-											</span>
-										</li>
-										<li>
-											<span>
-											<span class="section">102</span>
-											<span class="time"> 9:00-11:50 F</span>
-											<span class="add">&#x2212;</span>
-											</span>
-										</li>
-									</ul>
-									<ul>
-										<span>TUT
-											<span class="close-arrow"></span>
-										</span>
-									</ul>
-								</ul>
-
 							</article>
 
-							<article class="classes-added">
+							<article class="sidebar-section-group">
 								<h1>ADDED</h1>
 
-								<span>EASIA 201R
-									<span class="section">102</span>
-									<span class="time"> 9:00-11:50 F</span>
-									<span class="add">&#xD7;</span>
-								</span>
-
-								<span>PSYCH 208
-									<span class="section">102</span>
-									<span class="time"> 9:00-11:50 F</span>
-									<span class="add">&#xD7;</span>
-								</span>
-
+								<ul id="addedList" class="classes-added-list">
+								</ul>
 							</article>
-
 						</section>
-						
+
 
 						<section id="customizeSidebar" class="sidebar customize">
 							<article class="customize">
@@ -294,14 +283,12 @@
 			</section>
 		</script>
 
-		<!-- <ul class="add-section-list">
-			<% for (var i = 0; i < sections.length; i++) { %>
-			<li class="sl-entry">
-				<span><%= sections[i].
+		<script id="templateAddSectionAddedListEntry" type="text/template">
+			<li class="classes-added-entry">
+				<span class="section"><%= subject %> <%= catalog %> - <%= section %> <%= type %> </span>
+				<span class="time"> <%= time %> <%= day %></span>
+				<span class="add">&#xD7;</span>
 			</li>
-			<% } %>
-		</ul> -->
-		<script id="templateAddSectionSidebar" type="text/template">
 		</script>
 
 		<script id="templateCalendarEntry" type="text/template">
@@ -316,6 +303,7 @@
 		<script type="text/javascript" src="lib/underscore.min.js"></script>
 		<script type="text/javascript" src="lib/backbone.min.js"></script>
 		<script type="text/javascript" src="lib/sprintf.min.js"></script>
+		<script type="text/javascript" src="lib/jquery.throttle-debounce.min.js"></script>
 
 
 		<script type="text/javascript" src="js/scheduler.js"></script>
@@ -330,7 +318,5 @@
 		<script type="text/javascript" src="js/models/ClassData.js"></script>
 		<script type="text/javascript" src="js/entrypoint.js"></script>
 		<script type="text/javascript" src="js/dropdown.js"></script>
-
-
 	</body>
 </html>

@@ -10,15 +10,6 @@ Scheduler.views.CalendarEntryGroup = Scheduler.views.View.extend({
 		"calendarEndTime": 24 * 60
 	},
 
-	"WEEKDAYS_REGEX": /^(M?)((?:T(?:(?!h)))?)(W?)((?:Th)?)(F?)$/,
-	"WEEKDAYS_INDEX_LOOKUP": {
-		"M": 1,
-		"T": 2,
-		"W": 3,
-		"Th": 4,
-		"F": 5
-	},
-
 	"options": undefined,
 	"elementList": [],
 
@@ -39,23 +30,7 @@ Scheduler.views.CalendarEntryGroup = Scheduler.views.View.extend({
 		return _.flatten(_.map(_.filter(baseClasses, function (aClassModel) {
 			return aClassModel.get("dates").weekdays;
 		}), function (aClassModel) {
-			/*
-			This will return a list of matched strings using regex in this format, assuming the
-			following input string "TThF":
-
-			[ "TThF", "", "T", "", "Th", "F" ]
-
-			This array will need to be filtered, and converted into a list of day indices.
-			 */
-			var rawDays = aClassModel.get("dates").weekdays.match(self.WEEKDAYS_REGEX).slice(1);
-			var days = _.map(
-				_.filter(rawDays, function (aDay) {
-					return aDay || aDay.length;
-				}), function (aDay) {
-					return self.WEEKDAYS_INDEX_LOOKUP[aDay];
-				});
-
-			return _.map(days, function (aDay) {
+			return _.map(aClassModel.get("dates").indexedWeekdays, function (aDay) {
 				return new Scheduler.views.CalendarEntry({
 					"weekday": aDay,
 					"calendarStartTime": self.options.calendarStartTime,

@@ -88,13 +88,46 @@ Sample:
 */
 
 Scheduler.models.Section = Scheduler.models.Model.extend({
-	"idAttribute": "class_number",
+	"idAttribute": "uid",
 
 	"initialize": function () {
 		Scheduler.models.Model.prototype.initialize.call(this);
 		var collection = new Scheduler.models.ClassCollection();
 		collection.reset(this.get("classes"));
 		this.set("classes", collection);
+
+		this.aggregateClasses();
+	},
+
+	/**
+	 * Aggregates a list of classes into a single class instance.
+	 */
+	"aggregateClasses": function () {
+		var baseClasses = this.get("classes").filter(function (aClass) {
+			var dates = aClass.get("dates");
+			return dates.start_time && dates.end_time && dates.weekdays;
+		});
+
+		var self = this;
+
+		this.set("aggregatedClasses", this.get("classes").reduce(function (aAggregate, aClass) {
+			// If start/end times are already set, simple update if times are the same, otherwise
+			// ignore this entry.
+			if (aAggregate.startTime && aAggregate.endTime) {
+
+			} else {
+				return {
+					"weekdays": [],
+					"startTime": aClass.get("start_time"),
+					"endTime": aClass.get("end_time")
+				};
+			}
+		}, {
+			"weekdays": [],
+			"startTime": undefined,
+			"endTime": undefined,
+			"location": undefined
+		}));
 	}
 });
 
@@ -142,6 +175,47 @@ Sample:
  */
 
 Scheduler.models.Class = Scheduler.models.Model.extend({
+	"WEEKDAYS_REGEX": /^(m?)((?:t(?:(?!h)))?)(w?)((?:th)?)(f?)((?:s(?:(?!u)))?)((?:su)?)$/,
+	"WEEKDAYS_INDEX_LOOKUP": {
+		"su": 0,
+		"m": 1,
+		"t": 2,
+		"w": 3,
+		"th": 4,
+		"f": 5,
+		"s": 6
+	},
+
+	"WEEKDAYS_TEXT_LOOKUP": ["S", "M", "T", "W", "Th", "F", "Su"],
+
+	"initialize": function () {
+		Scheduler.models.Model.prototype.initialize.call(this);
+
+		/*
+		This will return a list of matched strings using regex in this format, assuming the
+		following input string "TThF":
+
+		[ "TThF", "", "T", "", "Th", "F" ]
+
+		This array will need to be filtered, and converted into a list of day indices.
+		 */
+		var dates = this.get("dates");
+
+		if (dates.weekdays) {
+			var rawDays = dates.weekdays.toLowerCase().match(this.WEEKDAYS_REGEX).slice(1);
+			var self = this;
+			var days = _.map(
+				_.filter(rawDays, function (aDay) {
+					return aDay || aDay.length;
+				}), function (aDay) {
+					return self.WEEKDAYS_INDEX_LOOKUP[aDay];
+				});
+
+			dates.indexedWeekdays = days;
+		} else {
+			dates.indexedWeekdays = [];
+		}
+	}
 });
 
 Scheduler.models.ClassCollection = Scheduler.models.Collection.extend({

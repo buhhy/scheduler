@@ -80,5 +80,5 @@ var refreshDataCaches = function () {
 	});
 }
 
-// In the future, we probably want to refresh the class list once every few days.
+// TODO: In the future, we probably want to refresh the class list once every few days.
 refreshDataCaches();

@@ -56,7 +56,7 @@
 								<h1>RESULTS</h1>
 
 								<ul class="course-results-list">
-									<li id="test" class="dropdown course-results-entry active">
+									<!-- <li class="dropdown course-results-entry active">
 										<header class="dd-header course">
 											EASIA 201R <span class="arrow"></span>
 										</header>
@@ -101,7 +101,10 @@
 												</li>
 											</ul>
 										</div>
-									</li>
+									</li> -->
+
+									<li id="test" class="course-results-entry"></li>
+									<li id="test2" class="course-results-entry"></li>
 								</ul>
 							</article>
 
@@ -233,6 +236,20 @@
             </div>
 		</section>
 
+		<script id="templateDropdown" type="text/template">
+			<header data-id="header" class="dd-header <%- titleClass %>">
+				<%= titleHtml %> <span class="arrow"></span>
+			</header>
+			<div data-id="optionListContainer" class="dd-options-container">
+				<ul data-id="optionList" class="dd-options-list">
+				</ul>
+			</div>
+		</script>
+
+		<script id="templateDropdownOption" type="text/template">
+			<li data-id="option" class="dd-option <%- optionClass %>"></li>
+		</script>
+
 		<script id="templateCalendar" type="text/template">
 			<section id="scheduleContainer" class="calendar">
 				<div class="cl-horizontal-lines">
@@ -312,6 +329,5 @@
 		<script type="text/javascript" src="js/models/RestModels.js"></script>
 		<script type="text/javascript" src="js/models/ClassData.js"></script>
 		<script type="text/javascript" src="js/entrypoint.js"></script>
-		<script type="text/javascript" src="js/dropdown.js"></script>
 	</body>
 </html>

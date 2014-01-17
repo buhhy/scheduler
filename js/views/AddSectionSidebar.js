@@ -50,7 +50,11 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 
 		this.userData.on("add", function (aInsert) {
 			self.addAddedClassEntry(aInsert, true);
-		})
+		});
+
+		this.userData.on("remove", function (aRemoved) {
+			self.removeAddedClassEntry(aRemoved, true);
+		});
 
 		this.$searchBox.keyup($.debounce(250, $.proxy(this.search, this)));
 
@@ -137,19 +141,32 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 		this.userData.add(aSection);
 	},
 
-	"addAddedClassEntry": function (aEntry, aAnimated) {
-		var sectionSplit = aEntry.get("section").split(" ");
+	"removeSection": function (aSection) {
+		this.userData.remove(aSection);
+	},
 
+	"addAddedClassEntry": function (aSection, aAnimated) {
+		var self = this;
 		var $addedEntry = $(_.template($(this.ADDED_LIST_ENTRY_TEMPLATE).html(), {
-			"subject": aEntry.get("subject"),
-			"catalog": aEntry.get("catalog_number"),
-			"section": sectionSplit[1],
-			"type": sectionSplit[0],
+			"subject": aSection.get("subject"),
+			"catalog": aSection.get("catalog_number"),
+			"section": aSection.get("sectionNumber"),
+			"type": aSection.get("sectionType"),
 			"time": "",
 			"day": ""
 		}));
 
-		this.addedEntryMap[aEntry.get("uid")] = $addedEntry;
+		$addedEntry.find("[data-id='remove']").click(function (aEvent) {
+			self.removeSection(aSection);
+		});
+
+		this.addedEntryMap[aSection.get("uid")] = $addedEntry;
 		this.$addedList.append($addedEntry);
+	},
+
+	"removeAddedClassEntry": function (aSection, aAnimated) {
+		var uid = aSection.get("uid");
+		this.addedEntryMap[uid].detach();
+		this.addedEntryMap[uid] = undefined;
 	}
 });

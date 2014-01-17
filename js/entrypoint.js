@@ -1,6 +1,6 @@
 $(function () {
 
-	var classData = new Scheduler.models.ClassData();
+	var courseData = new Scheduler.models.ClassData();
 
 	var sectionList = new Scheduler.models.SectionCollection([
 		{
@@ -55,10 +55,10 @@ $(function () {
 			new Scheduler.views.AddSectionSidebar({
 				"el": "#addSectionSidebar",
 				"indicator": "#addSectionIndicator",
-				"classData": classData,
+				"courseData": courseData,
 				"userData": sectionList
 			}),
-			new Scheduler.views.Sidebar({
+			new Scheduler.views.CustomizeSidebar({
 				"el": "#customizeSidebar",
 				"indicator": "#customizeIndicator"
 			}),

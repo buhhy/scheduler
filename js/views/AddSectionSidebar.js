@@ -1,13 +1,12 @@
 Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 	"defaults": {
-		"classData": undefined,
-		"userData": undefined,
+		"courseData": undefined,
+		"userData": undefined
 	},
 
-	"SEARCH_ENGINE_DB_NAME": "class_list",
 	"ADDED_LIST_ENTRY_TEMPLATE": "#templateAddSectionAddedListEntry",
 
-	"classData": undefined,
+	"courseData": undefined,
 	"userData": undefined,
 
 	"addedEntryMap": {},
@@ -23,7 +22,7 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 		var opts = _.defaults(aOpts, this.defaults);
 		var self = this;
 
-		this.classData = opts.classData;
+		this.courseData = opts.courseData;
 		this.userData = opts.userData;
 
 		this.addedEntryMap = {};
@@ -44,9 +43,9 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 	"bindEvents": function () {
 		var self = this;
 
-		this.classData.on("change:classList", function () {
-			console.log("changed!");
-		});
+		// this.courseData.on("change:classList", function () {
+		// 	console.log("changed!");
+		// });
 
 		this.userData.on("add", function (aInsert) {
 			self.addAddedClassEntry(aInsert, true);
@@ -70,7 +69,7 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 
 		if (input && input.length) {
 			// Massage data into correct format: course [] -> section [] -> class
-			this.classData.search(input, function (aData) {
+			this.courseData.search(input, function (aData) {
 				var searchResultMap = {};		// This is used for fast lookup of results.
 				var searchResultList = [];		// This stores results in deterministic ordering.
 
@@ -111,17 +110,18 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 		var self = this;
 
 		this.searchResultDropdowns = _.map(aSearchData, function (aElem, aIndex) {
-			var rootElem = _.template($("#templateSearchResultDropdown").html());
+			var rootElem = self.getDropdownListEntryHtml();
 
 			var dropdown = new Common.Dropdown({
 				"el": rootElem,
 				"titleHtml": aElem.courseName,
-				"titleClass": "course",
+				"titleClass": "heading-1",
 				"optionList": _.map(aElem.sections, function (aElem, aKey) {
 					return new Common.Dropdown({
 						"el": "<section></section>",
 						"titleHtml": aKey,
-						"titleClass": "section",
+						"titleClass": "heading-2",
+						"optionClass": "heading-3",
 						"optionList": _.map(aElem, function (aElem) {
 							return new Scheduler.views.SearchResultEntry({
 								"section": aElem

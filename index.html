@@ -29,7 +29,6 @@
 	        		<section id="sidebarSlider" class="sidebar-slider">
 						<section id="addSectionSidebar" class="sidebar class">
 							<article class="sidebar-section-group class-search">
-							<!--insert search engine stuffs-->
 								<h1>SEARCH</h1>
 								<div class="dropdown">
 									<span>SELECT TERM</span>
@@ -42,85 +41,36 @@
 								</div>
 
 								<input
-										id="sectionSearchBox"
-										class="searchbox"
-										placeholder="Search course code">
+									id="sectionSearchBox"
+									class="searchbox"
+									placeholder="Search course code">
 								<input
-										id="sectionSearchButton"
-										class="searchbutton"
-										type="button"
-										value="SEARCH">
+									id="sectionSearchButton"
+									class="searchbutton"
+									type="button"
+									value="SEARCH">
 							</article>
 
 							<article class="sidebar-section-group">
 								<h1>RESULTS</h1>
 
-								<ul id="searchResultList" class="course-results-list">
-									<!-- <li class="dropdown course-results-entry active">
-										<header class="dd-header course">
-											EASIA 201R <span class="arrow"></span>
-										</header>
-										<div class="dd-options-container">
-											<ul class="dd-options-list">
-												<li class="dd-option dropdown active">
-													<header class="dd-header section">
-														LEC <span class="arrow"></span>
-													</header>
-													<div class="dd-options-container">
-														<ul class="dd-options-list">
-															<li class="dd-option class">
-																<span class="section">101</span>
-																<span class="time"> 8:30-9:50 TTh</span>
-																<span class="action">&#x2B;</span>
-															</li>
-															<li class="dd-option class">
-																<span class="section">102</span>
-																<span class="time"> 9:00-11:50 F</span>
-																<span class="action">&#x2212;</span>
-															</li>
-														</ul>
-													</div>
-												</li>
-												<li class="dd-option dropdown">
-													<header class="dd-header section">
-														TUT <span class="arrow"></span>
-													</header>
-													<div class="dd-options-container">
-														<ul class="dd-options-list">
-														</ul>
-													</div>
-												</li>
-												<li class="dd-option dropdown">
-													<header class="dd-header section">
-														LAB <span class="arrow"></span>
-													</header>
-													<div class="dd-options-container">
-														<ul class="dd-options-list">
-														</ul>
-													</div>
-												</li>
-											</ul>
-										</div>
-									</li> -->
-
-									<li id="test" class="course-results-entry"></li>
-									<li id="test2" class="course-results-entry"></li>
-								</ul>
+								<ul id="searchResultList" class="course-results-list"></ul>
 							</article>
 
 							<article class="sidebar-section-group">
 								<h1>ADDED</h1>
 
-								<ul id="addedList" class="class-added-list">
-								</ul>
+								<ul id="addedList" class="class-added-list"></ul>
 							</article>
 						</section>
 
 
 						<section id="customizeSidebar" class="sidebar customize">
-							<article class="customize">
+							<article class="sidebar-section-group">
 								<h1>CUSTOMIZE</h1>
-								<ul class="cu-table">
+								<ul id="customizeDropdownList" class="">
+								</ul>
+								<!-- <ul class="cu-table">
 									<span>TABLE
 										<span class="open-arrow"></span>
 									</span>
@@ -206,7 +156,7 @@
 											<span class="navy-circle"></span>
 										</span>
 									</ul>
-								</ul>
+								</ul> -->
 
 							</article>
 						</section>
@@ -240,7 +190,12 @@
 
 		<script id="templateDropdown" type="text/template">
 			<header data-id="header" class="dd-header <%- titleClass %>">
-				<%= titleHtml %> <span class="arrow"></span>
+				<%= titleHtml %>
+				<% if (typeof(titleIndicatorHtml) !== "undefined") {
+					print(titleIndicatorHtml);
+				} else { %>
+					<span class="arrow indicator"></span>
+				<% } %>
 			</header>
 			<div data-id="optionListContainer" class="dd-options-container">
 				<ul data-id="optionList" class="dd-options-list">
@@ -254,16 +209,14 @@
 
 		<!-- End common dropdown templates. -->
 
-		<script id="templateSearchResultDropdown" type="text/template">
-			<li class="course-results-entry"></li>
+		<script id="templateDropdownListEntry" type="text/template">
+			<li class="dropdown-list-entry"></li>
 		</script>
 
 		<script id="templateSearchResultEntry" type="text/template">
-			<li class="dd-option class">
-				<span class="section"><%- catalog %></span>
-				<span class="time"> <%- time %> <%- weekdays %></span>
-				<span class="action">&#x2B;</span>
-			</li>
+			<span class="section"><%- catalog %></span>
+			<span class="time"> <%- time %> <%- weekdays %></span>
+			<span class="action">&#x2B;</span>
 		</script>
 
 		<script id="templateCalendar" type="text/template">
@@ -338,6 +291,7 @@
 		<script type="text/javascript" src="js/views/Sidebar.js"></script>
 		<script type="text/javascript" src="js/views/SidebarGroup.js"></script>
 		<script type="text/javascript" src="js/views/AddSectionSidebar.js"></script>
+		<script type="text/javascript" src="js/views/CustomizeSidebar.js"></script>
 		<script type="text/javascript" src="js/views/SearchResultEntry.js"></script>
 		<script type="text/javascript" src="js/views/SearchResultList.js"></script>
 		<script type="text/javascript" src="js/views/CalendarEntry.js"></script>

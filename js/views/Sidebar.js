@@ -39,5 +39,9 @@ Scheduler.views.Sidebar = Scheduler.views.View.extend({
 		this.index = aIndex;
 
 		this.$el.css("left", aIndex * 100 + "%");
+	},
+
+	"getDropdownListEntryHtml": function () {
+		return _.template($("#templateDropdownListEntry").html());
 	}
 });

@@ -24,6 +24,65 @@
 
 		display: none;
 		opacity: 0;
+
+		.dropdown {
+			li {
+				list-style: none;
+				.box-sizing(border-box);
+			}
+		}
+
+		.dropdown-list-entry {
+			font-size: 0.85em;
+			font-weight: 500;
+			margin-top: 20px;
+			list-style: none;
+
+			.heading-1 {
+				padding: 12px;
+				background-color: #d1d1d1;
+				width: 270px;
+				cursor: pointer;
+
+				&:hover {
+					background-color: #c4c4c4;
+				}
+			}
+
+			.heading-2 {
+				padding: 12px;
+				width: 245px;
+				background-color: #e2e2e2;
+				cursor: pointer;
+
+				&:hover {
+					background-color: #dbdbdb;
+				}
+			}
+
+			.heading-3 {
+				background-color: #f4f4f4;
+				width: 220px;
+				padding: 10px 12px;
+				cursor: pointer;
+
+				span {
+					padding-right: 20px;
+
+					&.action {
+						float: right;
+						position: relative;
+						left: 15px;
+						font-size: 1.2em;
+						font-weight: 900;
+					}
+				}
+
+				&:hover {
+					background-color: #ededed;
+				}
+			}
+		}
 	}
 
 	.sidebar-section-group {

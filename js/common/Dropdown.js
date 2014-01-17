@@ -5,6 +5,7 @@ Common.Dropdown = Backbone.View.extend({
 	"defaults": {
 		"open": false,
 		"titleHtml": "Default Title",
+		"titleIndicatorHtml": undefined,
 		"titleClass": "",
 		"optionClass": "",
 		"optionList": []
@@ -27,7 +28,8 @@ Common.Dropdown = Backbone.View.extend({
 		this.$el.addClass("dropdown");
 		this.$el.append(_.template($("#templateDropdown").html(), {
 			"titleHtml": opts.titleHtml,
-			"titleClass": opts.titleClass
+			"titleClass": opts.titleClass,
+			"titleIndicatorHtml": opts.titleIndicatorHtml
 		}));
 
 		this.$header = this.$el.find("[data-id='header']");
@@ -40,7 +42,7 @@ Common.Dropdown = Backbone.View.extend({
 
 		this.optionViewList = _.map(this.optionList, function (aElem) {
 			// Check if Backbone view.
-			var elem = $(aElem);
+			var elem = aElem;
 			if (aElem.$el)
 				elem = aElem.$el;
 
@@ -102,6 +104,10 @@ Common.Dropdown = Backbone.View.extend({
 		this.$el.fadeTo(200, 0.0, function () {
 			self.$el.detach();
 		});
+	},
+
+	"appendTo": function (aView) {
+		aView.append(this.$el);
 	}
 });
 

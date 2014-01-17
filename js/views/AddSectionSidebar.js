@@ -11,6 +11,7 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 	"userData": undefined,
 
 	"addedEntryMap": {},
+	"searchResultDropdowns": [],
 
 	"$searchBox": undefined,
 	"$searchButton": undefined,
@@ -26,9 +27,11 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 		this.userData = opts.userData;
 
 		this.addedEntryMap = {};
+		this.searchResultDropdowns = [];
 
 		this.$searchBox = this.$el.find("#sectionSearchBox");
 		this.$searchButton = this.$el.find("#sectionSearchButton");
+		this.$searchResultList = this.$el.find("#searchResultList");
 		this.$addedList = this.$el.find("#addedList");
 
 		this.userData.each(function (aEntry) {
@@ -59,13 +62,75 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 
 	"search": function () {
 		var input = this.$searchBox.val();
+		var self = this;
 
 		if (input && input.length) {
-			// Massage data into correct format: course -> section -> class
+			// Massage data into correct format: course [] -> section [] -> class
 			this.classData.search(input, function (aData) {
-				console.log(aData.toJSON());
+				var searchResultMap = {};		// This is used for fast lookup of results.
+				var searchResultList = [];		// This stores results in deterministic ordering.
+
+				aData.forEach(function (aElem) {
+					var courseKey =
+						sprintf("%s %s", aElem.get("subject"), aElem.get("catalog_number"));
+					var sectionKey = aElem.get("sectionType");
+
+					var courseMap = searchResultMap[courseKey];
+					if (!courseMap) {
+						courseMap = {};
+						searchResultList.push({
+							"courseName": courseKey,
+							"sections": courseMap
+						});
+					}
+
+					var sectionList = courseMap[sectionKey];
+					if (!sectionList)
+						sectionList = [];
+
+					sectionList.push(aElem);
+					courseMap[sectionKey] = sectionList;
+					searchResultMap[courseKey] = courseMap;
+				});
+
+				console.log(searchResultList);
+				self.buildSearchResultList(searchResultList);
 			});
 		}
+	},
+
+	"buildSearchResultList": function (aSearchData) {
+		_.forEach(this.searchResultDropdowns, function (aView) {
+			aView.destroy();
+		});
+
+		var self = this;
+
+		this.searchResultDropdowns = _.map(aSearchData, function (aElem, aIndex) {
+			var rootElem = _.template($("#templateSearchResultDropdown").html());
+
+			var dropdown = new Common.Dropdown({
+				"el": rootElem,
+				"titleHtml": aElem.courseName,
+				"titleClass": "course",
+				"optionList": _.map(aElem.sections, function (aElem, aKey) {
+					return new Common.Dropdown({
+						"el": "<section></section>",
+						"titleHtml": aKey,
+						"titleClass": "section",
+						"optionList": _.map(aElem, function (aElem) {
+							return new Scheduler.views.SearchResultEntry({
+								"section": aElem
+							});
+						})
+					});
+				})
+			});
+
+			self.$searchResultList.append(dropdown.$el);
+
+			return dropdown;
+		});
 	},
 
 	"addAddedClassEntry": function (aEntry, aAnimated) {

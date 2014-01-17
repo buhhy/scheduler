@@ -95,27 +95,17 @@ Common.Dropdown = Backbone.View.extend({
 			}
 
 		}
+	},
+
+	"destroy": function () {
+		var self = this;
+		this.$el.fadeTo(200, 0.0, function () {
+			self.$el.detach();
+		});
 	}
 });
 
 $(function () {
-	new Common.Dropdown({
-		"el": "#test",
-		"titleHtml": "<b>hi</b>",
-		"titleClass": "course",
-		"optionList": [
-			new Common.Dropdown({
-				"el": "<section></section>",
-				"titleHtml": "<b>a</b>",
-				"titleClass": "section",
-				"optionList": [
-					"<span>a</span>",
-					"<span>b</span>",
-					"<span>c</span>"
-				]
-			})
-		]
-	});
 	// $(".dropdown").click(function (aEvent) {
 	// 	aEvent.stopPropagation();
 	// 	$(this).toggleClass("active");

@@ -1,6 +1,6 @@
-Scheduler.views.AddSectionList = Scheduler.views.View.extend({
+Scheduler.views.SearchResultList = Scheduler.views.View.extend({
 	"defaults": {
-		"sectionList": undefined	// Default data model
+		"searchResultList": undefined	// Data
 	},
 
 	"options": undefined,
@@ -38,8 +38,8 @@ Scheduler.views.AddSectionList = Scheduler.views.View.extend({
 			});
 		});
 
-		_.each(this.sectionViewList, function (aView) {
-			aView.attachElementsToView();
-		});
+		// _.each(this.sectionViewList, function (aView) {
+		// 	aView.attachElementsToView();
+		// });
 	}
 });

@@ -92,10 +92,20 @@ Scheduler.models.Section = Scheduler.models.Model.extend({
 
 	"initialize": function () {
 		Scheduler.models.Model.prototype.initialize.call(this);
+
+		// Initialize Backbone collection of classes.
 		var collection = new Scheduler.models.ClassCollection();
 		collection.reset(this.get("classes"));
 		this.set("classes", collection);
 
+		// Split section into type and number.
+		var section = this.get("section").split(" ");
+		if (section && section.length == 2) {
+			this.set("sectionType", section[0]);
+			this.set("sectionNumber", section[1]);
+		}
+
+		// Aggregate multiple classes in a section to a single displayable class.
 		this.aggregateClasses();
 	},
 

@@ -121,7 +121,7 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 						"optionList": _.map(aElem, function (aElem) {
 							return new Scheduler.views.SearchResultEntry({
 								"section": aElem
-							});
+							}).click($.proxy(self.addSection, self));
 						})
 					});
 				})
@@ -131,6 +131,10 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 
 			return dropdown;
 		});
+	},
+
+	"addSection": function (aSection) {
+		this.userData.add(aSection);
 	},
 
 	"addAddedClassEntry": function (aEntry, aAnimated) {

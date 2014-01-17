@@ -4,8 +4,13 @@
 	<header>
 		<link type="text/css" rel="stylesheet" href="css/reset.css" />
 		<link type="text/css" rel="stylesheet" href="css/style.css" />
+
+		<!-- Remove these later. --><!--
 		<link type="text/css" rel="stylesheet" href="css/calendar.css" />
 		<link type="text/css" rel="stylesheet" href="css/dropdown.css" />
+		<link type="text/css" rel="stylesheet" href="css/sidebar.css" />
+		<link type="text/css" rel="stylesheet" href="css/sidebar.addsection.css" />
+		<link type="text/css" rel="stylesheet" href="css/sidebar.print.css" /> -->
 
 		<title>uwaterlooScheduler</title>
 	</header>
@@ -22,8 +27,8 @@
 	        <div class="position-container">
 	        	<nav id="sidebarGroup" class="sidebar-group">
 	        		<section id="sidebarSlider" class="sidebar-slider">
-						<section id="addSectionSidebar" class="sidebar classes">
-							<article class="sidebar-section-group classes-search">
+						<section id="addSectionSidebar" class="sidebar class">
+							<article class="sidebar-section-group class-search">
 							<!--insert search engine stuffs-->
 								<h1>SEARCH</h1>
 								<div class="dropdown">
@@ -36,78 +41,66 @@
 									</ul>
 								</div>
 
-								<input id="sectionSearchBox" class="searchbox" placeholder="Search course code">
-								<input id="sectionSearchButton" class="searchbutton" type="button" value="SEARCH">
-
+								<input
+										id="sectionSearchBox"
+										class="searchbox"
+										placeholder="Search course code">
+								<input
+										id="sectionSearchButton"
+										class="searchbutton"
+										type="button"
+										value="SEARCH">
 							</article>
 
 							<article class="sidebar-section-group">
 								<h1>RESULTS</h1>
 
-								<ul class="classes-results-list">
-									<li class="classes-results-entry">
-										<span>EASIA 201R
-											<span class="open-arrow"></span>
-										</span>
-										<ul>
-											<span>LEC
-												<span class="open-arrow"></span>
-											</span>
-											<li>
-												<span>
-													<span class="section">101</span>
-													<span class="time"> 8:30-9:50 TTh</span>
-													<span class="add">&#x2B;</span>
-												</span>
-											</li>
-											<li>
-												<span>
-													<span class="section">102</span>
-													<span class="time"> 9:00-11:50 F</span>
-													<span class="add">&#x2212;</span>
-												</span>
-											</li>
-										</ul>
-										<ul>
-											<span>TUT
-												<span class="close-arrow"></span>
-											</span>
-										</ul>
-										<ul>
-											<span>LAB
-												<span class="close-arrow"></span>
-											</span>
-										</ul>
-									</li>
-
-									<li class="classes-results-entry">
-										<span>CS 135
-											<span class="open-arrow"></span>
-										</span>
-										<ul>
-											<span>LEC
-												<span class="open-arrow"></span>
-											</span>
-											<li>
-												<span>
-												<span class="section">101</span>
-												<span class="time"> 8:30-9:50 TTh</span>
-												<span class="add">&#x2B;</span>
-												</span>
-											</li>
-											<li>
-												<span>
-												<span class="section">102</span>
-												<span class="time"> 9:00-11:50 F</span>
-												<span class="add">&#x2212;</span>
-												</span>
-											</li>
-										</ul>
-										<ul>
-											<span>TUT
-												<span class="close-arrow"></span>
-											</span>
-										</ul>
+								<ul class="course-results-list">
+									<li id="test" class="dropdown course-results-entry active">
+										<header class="dd-header course">
+											EASIA 201R <span class="arrow"></span>
+										</header>
+										<div class="dd-options-container">
+											<ul class="dd-options-list">
+												<li class="dd-option dropdown active">
+													<header class="dd-header section">
+														LEC <span class="arrow"></span>
+													</header>
+													<div class="dd-options-container">
+														<ul class="dd-options-list">
+															<li class="dd-option class">
+																<span class="section">101</span>
+																<span class="time"> 8:30-9:50 TTh</span>
+																<span class="action">&#x2B;</span>
+															</li>
+															<li class="dd-option class">
+																<span class="section">102</span>
+																<span class="time"> 9:00-11:50 F</span>
+																<span class="action">&#x2212;</span>
+															</li>
+														</ul>
+													</div>
+												</li>
+												<li class="dd-option dropdown">
+													<header class="dd-header section">
+														TUT <span class="arrow"></span>
+													</header>
+													<div class="dd-options-container">
+														<ul class="dd-options-list">
+														</ul>
+													</div>
+												</li>
+												<li class="dd-option dropdown">
+													<header class="dd-header section">
+														LAB <span class="arrow"></span>
+													</header>
+													<div class="dd-options-container">
+														<ul class="dd-options-list">
+														</ul>
+													</div>
+												</li>
+											</ul>
+										</div>
 									</li>
 								</ul>
 							</article>
@@ -115,7 +108,7 @@
 							<article class="sidebar-section-group">
 								<h1>ADDED</h1>
 
-								<ul id="addedList" class="classes-added-list">
+								<ul id="addedList" class="class-added-list">
 								</ul>
 							</article>
 						</section>
@@ -284,7 +277,7 @@
 		</script>
 
 		<script id="templateAddSectionAddedListEntry" type="text/template">
-			<li class="classes-added-entry">
+			<li class="class-added-entry">
 				<span class="section"><%= subject %> <%= catalog %> - <%= section %> <%= type %> </span>
 				<span class="time"> <%= time %> <%= day %></span>
 				<span class="add">&#xD7;</span>
@@ -304,6 +297,8 @@
 		<script type="text/javascript" src="lib/backbone.min.js"></script>
 		<script type="text/javascript" src="lib/sprintf.min.js"></script>
 		<script type="text/javascript" src="lib/jquery.throttle-debounce.min.js"></script>
+
+		<script type="text/javascript" src="js/common/Dropdown.js"></script>
 
 
 		<script type="text/javascript" src="js/scheduler.js"></script>

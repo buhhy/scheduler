@@ -49,7 +49,7 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 			self.addAddedClassEntry(aInsert, true);
 		})
 
-		this.$searchBox.keyup($.debounce(250, this.search));
+		this.$searchBox.keyup($.debounce(250, $.proxy(this.search, this)));
 
 		this.$searchButton.click(function (aEvent) {
 			aEvent.preventDefault();
@@ -58,11 +58,13 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 	},
 
 	"search": function () {
-		var input = self.$searchBox.val();
+		var input = this.$searchBox.val();
 
 		if (input && input.length) {
-			// Display data here.
-			console.log(self.classData.search(input).toJSON());
+			// Massage data into correct format: course -> section -> class
+			this.classData.search(input, function (aData) {
+				console.log(aData.toJSON());
+			});
 		}
 	},
 

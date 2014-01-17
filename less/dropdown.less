@@ -1,5 +1,41 @@
 @import "mixins.less";
 
+.dropdown {
+	&.active {
+		.arrow {
+			border-left: 4px solid transparent;
+			border-right: 4px solid transparent;
+			border-top: 4px solid #727272;
+		}
+	}
+
+	.arrow {
+		float: right;
+		top: 3px;
+		position: relative;
+		width: 0;
+		height: 0;
+		font-size: 0;
+		line-height: 0;
+
+		border-bottom: 4px solid transparent;
+		border-top: 4px solid transparent;
+		border-left: 4px solid #727272;
+	}
+
+	.dd-header {
+
+	}
+
+	.dd-options-container {
+		.dd-options-list {
+			.dd-option {
+
+			}
+		}
+	}
+}
+
 div.dropdown {
 	display: inline-block;
 	background-color: #e2e2e2;
@@ -27,32 +63,16 @@ div.dropdown {
 			display: block;
 		}
 
-		.arrow {
-			position: absolute;
-			top: 11px;
-			left: 90px;
-			width: 0; 
-			height: 0; 
-			border-left: 4px solid transparent;
-			border-right: 4px solid transparent;
-			border-top: 4px solid #727272;
-			font-size: 0;
-			line-height: 0;
-		}
+		// .arrow {
+		// 	top: 11px;
+		// 	left: 90px;
+		// }
 	}
 
-	.arrow {
-		position: absolute;
-		top: 9.5px;
-		left: 92px;
-		width: 0; 
-		height: 0; 
-		border-bottom: 4px solid transparent; 
-		border-top: 4px solid transparent;
-		border-left: 4px solid #727272; 
-		font-size: 0;
-		line-height: 0;
-	}
+	// .arrow {
+	// 	top: 9.5px;
+	// 	left: 92px;
+	// }
 
 	ul.terms {
 		position: absolute;

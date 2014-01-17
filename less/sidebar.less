@@ -1,0 +1,38 @@
+// Sidebar styles
+
+.sidebar-group {
+	overflow: hidden;
+	position: absolute;
+	left: 0;
+	width: 325px;
+	height: 100%;
+	background-color: #EFEFEF;
+	border-right: 1px solid #D8D8D8;
+	font-weight: 300;
+
+	.sidebar-slider {
+		position: relative;
+		width: 100%;
+		height: 100%;
+	}
+
+	.sidebar {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		top: 0;
+
+		display: none;
+		opacity: 0;
+	}
+
+	.sidebar-section-group {
+		padding: 22px 18px;
+
+		.divider;
+
+		&:first-child {
+			border-top: none;
+		}
+	}
+}

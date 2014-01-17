@@ -75,6 +75,4 @@ $(function () {
 		"endTime": 22 * 60 + 30,
 		"sectionList": sectionList
 	});
-
-	classData.fetchTermClassList(function (aData) { });
 });

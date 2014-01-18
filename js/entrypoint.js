@@ -60,7 +60,8 @@ $(function () {
 			}),
 			new Scheduler.views.CustomizeSidebar({
 				"el": "#customizeSidebar",
-				"indicator": "#customizeIndicator"
+				"indicator": "#customizeIndicator",
+				"userData": sectionList
 			}),
 			new Scheduler.views.Sidebar({
 				"el": "#printSidebar",

@@ -30,8 +30,28 @@ Scheduler.views.CustomizeSidebar = Scheduler.views.Sidebar.extend({
 		var self = this;
 
 		this.dropdownMap = {
-			// "table": ,
-			// "weeks": ,
+			"table": new Common.Dropdown({
+				"el": rootElem,
+				"titleHtml": "TABLE",
+				"titleClass": "heading-1",
+				"optionClass": "heading-2",
+				"optionList": [
+					"BACKGROUND",
+					"FONT",
+					"BORDER"
+				]
+			}),
+			"weeks": new Common.Dropdown({
+				"el": rootElem,
+				"titleHtml": "DAYS OF THE WEEK",
+				"titleClass": "heading-1",
+				"optionClass": "heading-2",
+				"optionList": [
+					"BACKGROUND",
+					"FONT",
+					"BORDER"
+				]
+			}),
 			"time": new Common.Dropdown({
 				"el": rootElem,
 				"titleHtml": "TIMES",

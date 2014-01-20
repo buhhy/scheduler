@@ -34,39 +34,55 @@ Scheduler.views.CustomizeSidebar = Scheduler.views.Sidebar.extend({
 				"el": rootElem,
 				"titleHtml": "TABLE",
 				"titleClass": "heading-1",
-				"optionClass": "heading-2",
 				"optionList": [
-					"BACKGROUND",
-					"FONT",
-					"BORDER"
-				]
-			}),
-			"weeks": new Common.Dropdown({
-				"el": rootElem,
-				"titleHtml": "DAYS OF THE WEEK",
-				"titleClass": "heading-1",
-				"optionClass": "heading-2",
-				"optionList": [
-					"BACKGROUND",
-					"FONT",
-					"BORDER"
-				]
-			}),
-			"time": new Common.Dropdown({
-				"el": rootElem,
-				"titleHtml": "TIMES",
-				"titleClass": "heading-1",
-				"optionClass": "heading-2",
-				"optionList": [
-					"BACKGROUND",
-					"FONT",
-					"BORDER"
+
 				]
 			})
+			// "weeks": new Common.Dropdown({
+			// 	"el": rootElem,
+			// 	"titleHtml": "DAYS OF THE WEEK",
+			// 	"titleClass": "heading-1",
+			// 	"optionClass": "heading-2",
+			// 	"optionList": [
+			// 		"BACKGROUND",
+			// 		"FONT",
+			// 		"BORDER"
+			// 	]
+			// }),
+			// "time": new Common.Dropdown({
+			// 	"el": rootElem,
+			// 	"titleHtml": "TIMES",
+			// 	"titleClass": "heading-1",
+			// 	"optionClass": "heading-2",
+			// 	"optionList": [
+			// 		"BACKGROUND",
+			// 		"FONT",
+			// 		"BORDER"
+			// 	]
+			// })
 		};
 
 		_.map(this.dropdownMap, function (aElem) {
 			aElem.appendTo(self.$customizeDropdownList);
+		});
+	},
+
+	"buildPaletteDropdown": function (aTitle, aColors, aThemeObject, aKey) {
+		return new Common.Dropdown({
+			"el": "<section></section>",
+			"titleHtml": aTitle,
+			"titleClass": "heading-2",
+			"optionClass": "heading-3 palette",
+			"titleIndicatorHtml": _.template($("#templatePalette").html(), {
+				"colors": [ aThemeObject.get(aKey) ]
+			}),
+			"optionList": [
+				new Scheduler.views.Palette({
+					"colors": aColors,
+					"model": aThemeObject,
+					"colorName": aKey
+				})
+			]
 		});
 	},
 

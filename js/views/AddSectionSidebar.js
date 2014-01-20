@@ -33,7 +33,7 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 		this.$searchResultList = this.$el.find("#searchResultList");
 		this.$addedList = this.$el.find("#addedList");
 
-		this.userData.each(function (aEntry) {
+		this.userData.get("userClassList").each(function (aEntry) {
 			self.addAddedClassEntry(aEntry, false);
 		});
 
@@ -46,12 +46,13 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 		// this.courseData.on("change:classList", function () {
 		// 	console.log("changed!");
 		// });
+		var userClassList = this.userData.get("userClassList");
 
-		this.userData.on("add", function (aInsert) {
+		userClassList.on("add", function (aInsert) {
 			self.addAddedClassEntry(aInsert, true);
 		});
 
-		this.userData.on("remove", function (aRemoved) {
+		userClassList.on("remove", function (aRemoved) {
 			self.removeAddedClassEntry(aRemoved, true);
 		});
 
@@ -138,11 +139,11 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 	},
 
 	"addSection": function (aSection) {
-		this.userData.add(aSection);
+		this.userData.get("userClassList").add(aSection);
 	},
 
 	"removeSection": function (aSection) {
-		this.userData.remove(aSection);
+		this.userData.get("userClassList").remove(aSection);
 	},
 
 	"addAddedClassEntry": function (aSection, aAnimated) {

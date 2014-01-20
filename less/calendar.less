@@ -14,6 +14,11 @@
 				border-left: none;
 			}
 		}
+
+		// Fixes Firefox bug where the child div doesn't stretch to 100% of height of table cell.
+		.cl-content-row {
+			height: 100%;
+		}
 	}
 
 	.cl-horizontal-lines {

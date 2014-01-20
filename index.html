@@ -191,11 +191,13 @@
 		<script id="templateDropdown" type="text/template">
 			<header data-id="header" class="dd-header <%- titleClass %>">
 				<%= titleHtml %>
-				<% if (typeof(titleIndicatorHtml) !== "undefined") {
-					print(titleIndicatorHtml);
-				} else { %>
-					<span class="arrow indicator"></span>
-				<% } %>
+				<div class="indicator">
+					<% if (typeof(titleIndicatorHtml) !== "undefined") {
+						print(titleIndicatorHtml);
+					} else { %>
+						<span class="arrow"></span>
+					<% } %>
+				</div>
 			</header>
 			<div data-id="optionListContainer" class="dd-options-container">
 				<ul data-id="optionList" class="dd-options-list">
@@ -209,14 +211,25 @@
 
 		<!-- End common dropdown templates. -->
 
+		<!-- A template that represents a list item that will be turned into a dropdown. -->
 		<script id="templateDropdownListEntry" type="text/template">
 			<li class="dropdown-list-entry"></li>
 		</script>
 
+		<!-- Used to draw a color selection palette. -->
+		<script id="templatePalette" type="text/template">
+			<% for (var i = 0; i < colors.length; i++) { %>
+				<span
+					data-color="<%= colors[i] %>"
+					class="color-indicator"
+					style="background-color: <%= colors[i] %>;"></span>
+			<% }%>
+		</script>
+
 		<script id="templateSearchResultEntry" type="text/template">
-			<span class="section"><%- catalog %></span>
-			<span class="time"> <%- time %> <%- weekdays %></span>
-			<span class="action">&#x2B;</span>
+			<span class="text"><%- catalog %></span>
+			<span class="text"> <%- time %> <%- weekdays %></span>
+			<span class="text action">&#x2B;</span>
 		</script>
 
 		<script id="templateCalendar" type="text/template">
@@ -288,6 +301,10 @@
 
 
 		<script type="text/javascript" src="js/scheduler.js"></script>
+		<script type="text/javascript" src="js/models/RestModels.js"></script>
+		<script type="text/javascript" src="js/models/ThemeModels.js"></script>
+		<script type="text/javascript" src="js/models/ClassData.js"></script>
+		<script type="text/javascript" src="js/models/UserData.js"></script>
 		<script type="text/javascript" src="js/views/Sidebar.js"></script>
 		<script type="text/javascript" src="js/views/SidebarGroup.js"></script>
 		<script type="text/javascript" src="js/views/AddSectionSidebar.js"></script>
@@ -297,8 +314,7 @@
 		<script type="text/javascript" src="js/views/CalendarEntry.js"></script>
 		<script type="text/javascript" src="js/views/CalendarEntryGroup.js"></script>
 		<script type="text/javascript" src="js/views/Calendar.js"></script>
-		<script type="text/javascript" src="js/models/RestModels.js"></script>
-		<script type="text/javascript" src="js/models/ClassData.js"></script>
+		<script type="text/javascript" src="js/views/Palette.js"></script>
 		<script type="text/javascript" src="js/entrypoint.js"></script>
 	</body>
 </html>

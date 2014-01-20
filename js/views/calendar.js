@@ -3,14 +3,14 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 		"startTime": 0,				// Calendar start time in minutes
 		"endTime": 24 * 60,			// Calendar end time in minutes
 		"interval": 60,				// Intervals between time lines in minutes
-		"sectionList": undefined	// Default data model
+		"userData": undefined	// Default data model
 	},
 
 	// The calendar displays an extra 30 minutes at the top.
 	"CALENDAR_START_TIME_OFFSET": 30,
 
 	"options": undefined,
-	"sectionList": undefined,
+	"userData": undefined,
 
 	// A hashmap of elements mapped by the class id.
 	"sectionViewList": undefined,
@@ -38,7 +38,7 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 
 		this.$el.append(this.$calendar);
 
-		this.sectionList = opts.sectionList || new Scheduler.models.SectionCollection();
+		this.userData = opts.userData;
 
 		// Find the table columns which will be containing all the event views, then wrap them all
 		// inside jQuery wrapper objects, because accessing each element of a jQuery selector
@@ -48,7 +48,7 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 		});
 
 		// Sets event listener for data collection.
-		this.sectionList.on("all", function (aModel, aResponse) {
+		this.userData.get("userClassList").on("all", function (aModel, aResponse) {
 			self.refreshData();
 		});
 
@@ -62,7 +62,7 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 			aView.detachElements();
 		});
 
-		this.sectionViewList = this.sectionList.map(function (aSectionModel) {
+		this.sectionViewList = this.userData.get("userClassList").map(function (aSectionModel) {
 			return new Scheduler.views.CalendarEntryGroup({
 				"sectionModel": aSectionModel,
 				"calendarColumns": self.columnList,

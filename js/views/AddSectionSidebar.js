@@ -122,7 +122,7 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 						"el": "<section></section>",
 						"titleHtml": aKey,
 						"titleClass": "heading-2",
-						"optionClass": "heading-3",
+						"optionClass": "heading-3 clickable",
 						"optionList": _.map(aElem, function (aElem) {
 							return new Scheduler.views.SearchResultEntry({
 								"section": aElem

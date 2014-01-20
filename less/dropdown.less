@@ -4,9 +4,7 @@
 	.dd-header {
 		&.active {
 			.arrow {
-				border-left: 4px solid transparent;
-				border-right: 4px solid transparent;
-				border-top: 4px solid #727272;
+				.transform(~"rotate(90deg)");
 			}
 		}
 
@@ -14,10 +12,18 @@
 			border-bottom: 4px solid transparent;
 			border-top: 4px solid transparent;
 			border-left: 4px solid #727272;
+			display: block;
+			position: relative;
+
 			width: 0;
-			font-size: 0;
-			line-height: 0;
-			vertical-align: middle;
+			height: 0;
+
+			top: 50%;
+
+			margin-top: -4px;
+
+			.transform-origin(~"0% 50%");
+			.transition(~"transform 250ms ease");
 		}
 
 		.indicator {

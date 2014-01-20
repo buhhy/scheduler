@@ -163,7 +163,7 @@
 
 
 						<section id="printSidebar" class="sidebar print">
-							<article class="complete">
+							<article class="sidebar-section-group complete">
 
 								<h1>Congratulations!</h1>
 								<h2>Your schedule is now complete.</h2>
@@ -220,6 +220,7 @@
 		<script id="templatePalette" type="text/template">
 			<% for (var i = 0; i < colors.length; i++) { %>
 				<span
+					data-id="color-indicator"
 					data-color="<%= colors[i] %>"
 					class="color-indicator"
 					style="background-color: <%= colors[i] %>;"></span>

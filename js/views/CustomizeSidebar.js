@@ -28,6 +28,7 @@ Scheduler.views.CustomizeSidebar = Scheduler.views.Sidebar.extend({
 	"buildDropdowns": function () {
 		var rootElem = this.getDropdownListEntryHtml();
 		var self = this;
+		var globalTheme = this.userData.get("globalTheme");
 
 		this.dropdownMap = {
 			"table": new Common.Dropdown({
@@ -35,7 +36,11 @@ Scheduler.views.CustomizeSidebar = Scheduler.views.Sidebar.extend({
 				"titleHtml": "TABLE",
 				"titleClass": "heading-1",
 				"optionList": [
-
+					this.buildPaletteDropdown(
+						"BACKGROUND",
+						["#f00", "#0f0", "#00f"],
+						globalTheme.get("tableTheme"),
+						"backgroundColor")
 				]
 			})
 			// "weeks": new Common.Dropdown({
@@ -68,7 +73,7 @@ Scheduler.views.CustomizeSidebar = Scheduler.views.Sidebar.extend({
 	},
 
 	"buildPaletteDropdown": function (aTitle, aColors, aThemeObject, aKey) {
-		return new Common.Dropdown({
+		var dropdown = new Common.Dropdown({
 			"el": "<section></section>",
 			"titleHtml": aTitle,
 			"titleClass": "heading-2",
@@ -84,6 +89,16 @@ Scheduler.views.CustomizeSidebar = Scheduler.views.Sidebar.extend({
 				})
 			]
 		});
+
+		var $indicator = dropdown.$header.find("[data-id='color-indicator']");
+
+		// Bind a change event on the model, so if the global theme changes, then change the color
+		// indicator on the dropdown header.
+		aThemeObject.on("change:" + aKey, function (aModel, aValue) {
+			$indicator.css("background-color", aValue);
+		});
+
+		return dropdown;
 	},
 
 	"bindEvents": function () {

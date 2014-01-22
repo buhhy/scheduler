@@ -50,6 +50,7 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 
 		this.bindEvents();
 		this.refreshData();
+		this.refreshSelection();
 	},
 
 	"bindEvents": function () {
@@ -58,18 +59,11 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 		// Sets event listener for data collection.
 		this.userData.get("userClassList").on("all", function (aModel, aResponse) {
 			self.refreshData();
+			self.refreshSelection();
 		});
 
 		this.options.selectedSectionList.on("all", function () {
-			var changed = {};
-
-			self.options.selectedSectionList.forEach(function (aSection) {
-				changed[aSection.id] = true;
-			});
-
-			_.forEach(self.sectionViewList, function (aElem, aKey) {
-				aElem.setSelected(!!changed[aKey]);
-			});
+			self.refreshSelection();
 		});
 	},
 
@@ -101,8 +95,28 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 		});
 	},
 
+	"refreshSelection": function () {
+		var self = this;
+		var changed = {};
+
+		self.options.selectedSectionList.forEach(function (aSection) {
+			changed[aSection.id] = true;
+		});
+
+		_.forEach(self.sectionViewList, function (aElem, aKey) {
+			aElem.setSelected(!!changed[aKey]);
+		});
+	},
+
 	"selectSection": function (aSection) {
-		this.options.selectedSectionList.add(aSection);
+		// Currently, only one item can be selected at a time. Clicking on a selected item will
+		// deselect it, while clicking on another item will deselect all previous items and select
+		// the newly clicked entry.
+		if (this.options.selectedSectionList.get(aSection)) {
+			this.options.selectedSectionList.remove(aSection)
+		} else {
+			this.options.selectedSectionList.reset(aSection);
+		}
 	},
 
 	"minutesToStringFormat": function (aMin) {

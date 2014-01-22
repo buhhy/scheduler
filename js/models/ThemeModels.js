@@ -15,10 +15,10 @@ Scheduler.models.GlobalTheme = Scheduler.models.Model.extend({
 		return {
 			"tableTheme": new Scheduler.models.Theme(),
 			"daysTheme": new Scheduler.models.Theme({
-				"borderColor": undefined
+				"borderColor": ""
 			}),
 			"timeTheme": new Scheduler.models.Theme({
-				"borderColor": undefined
+				"borderColor": ""
 			})
 		}
 	},

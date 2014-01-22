@@ -7,9 +7,9 @@ Scheduler.views.CustomizeSidebar = Scheduler.views.Sidebar.extend({
 
 	"globalThemeDropdownMap": {},
 
-	"elementThemeDropdown": undefined,
+	"sectionThemeDropdown": undefined,
 
-	"elementThemeDropdownContainer": undefined,
+	"sectionThemeContainer": undefined,
 
 	"$customizeDropdownList": undefined,
 
@@ -21,6 +21,7 @@ Scheduler.views.CustomizeSidebar = Scheduler.views.Sidebar.extend({
 		this.userData = opts.userData;
 
 		this.$customizeDropdownList = this.$el.find("#customizeDropdownList");
+		this.sectionThemeContainer = this.$el.find("#sectionThemeContainer");
 
 		// this.userData.each(function (aEntry) {
 		// 	self.addAddedClassEntry(aEntry, false);
@@ -36,10 +37,28 @@ Scheduler.views.CustomizeSidebar = Scheduler.views.Sidebar.extend({
 		var globalTheme = this.userData.get("globalTheme");
 		var themeData = this.options.themeData;
 
-		this.elementThemeDropdown = new Common.Dropdown({
-			"el": "<div></div>",
-			"titleHtml": ""
-		});
+		// this.sectionThemeDropdown = new Common.Dropdown({
+		// 	"el": "#sectionThemeDropdown",
+		// 	"titleHtml": "COURSE",
+		// 	"titleClass": "heading-1",
+		// 	"optionList": [
+		// 		this.buildPaletteDropdown(
+		// 			"BACKGROUND",
+		// 			themeData.get("table"),
+		// 			globalTheme.get("tableTheme"),
+		// 			"backgroundColor"),
+		// 		this.buildPaletteDropdown(
+		// 			"FONT COLOR",
+		// 			themeData.get("table"),
+		// 			globalTheme.get("tableTheme"),
+		// 			"fontColor"),
+		// 		this.buildPaletteDropdown(
+		// 			"BORDER COLOR",
+		// 			themeData.get("table"),
+		// 			globalTheme.get("tableTheme"),
+		// 			"borderColor")
+		// 	]
+		// });
 
 		this.globalThemeDropdownMap = {
 			"table": new Common.Dropdown({

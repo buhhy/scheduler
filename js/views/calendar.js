@@ -11,11 +11,15 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 	"CALENDAR_START_TIME_OFFSET": 30,
 
 	"options": undefined,
-	"userData": undefined,
 
 	// A hashmap of elements mapped by the class id.
 	"sectionViewList": undefined,
 	"columnList": undefined,
+
+	"$timeTable": undefined,
+	"$dayTable": undefined,
+	"$timeLabels": undefined,
+	"$dayLabels": undefined,
 
 	"initialize": function (aOpts) {
 		var opts = _.defaults(aOpts, this.defaults);
@@ -25,6 +29,15 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 		this.sectionViewList = {};
 
 		var timeLabels = [];
+		var dayLabels = [
+			"<b>SUN</b>DAY",
+			"<b>MON</b>DAY",
+			"<b>TUE</b>SDAY",
+			"<b>WED</b>NESDAY",
+			"<b>THU</b>RSDAY",
+			"<b>FRI</b>DAY",
+			"<b>SAT</b>URDAY"
+		];
 
 		// The time labels should begin 30 minutes after the start time.
 		for (var i = opts.startTime + this.CALENDAR_START_TIME_OFFSET;
@@ -34,19 +47,27 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 		}
 
 		this.$calendar = $(_.template($("#templateCalendar").html(), {
-			"labels": timeLabels
+			"timeLabels": timeLabels,
+			"dayLabels": dayLabels
 		}));
 
 		this.$el.append(this.$calendar);
+		this.$el.addClass("cl");
 
-		this.userData = opts.userData;
+		this.$timeTable = this.$el.find("[data-id='timeTable']");
+		this.$dayTable = this.$el.find("[data-id='dayTable']");
+		this.$timeLabels = this.$el.find("[data-id='timeLabel']");
+		this.$dayLabels = this.$el.find("[data-id='dayLabel']");
+
 
 		// Find the table columns which will be containing all the event views, then wrap them all
 		// inside jQuery wrapper objects, because accessing each element of a jQuery selector
 		// returns not the jQuery-ized element, but the bare element.
-		this.columnList = this.$el.find(".position-container").map(function (aIndex, aElem) {
-			return $(aElem);
-		});
+		this.columnList = this.$el
+				.find("[data-id='positionContainer']")
+				.map(function (aIndex, aElem) {
+					return $(aElem);
+				});
 
 		this.bindEvents();
 		this.refreshData();
@@ -55,11 +76,35 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 
 	"bindEvents": function () {
 		var self = this;
+		var globalTheme = this.options.userData.get("globalTheme");
+		var userClassList = this.options.userData.get("userClassList");
 
 		// Sets event listener for data collection.
-		this.userData.get("userClassList").on("all", function (aModel, aResponse) {
+		userClassList.on("all", function (aModel, aResponse) {
 			self.refreshData();
 			self.refreshSelection();
+		});
+
+		globalTheme.get("tableTheme").on({
+			"change:backgroundColor": function (aModel, aValue) {
+				self.$el.css("background-color", aValue);
+			}
+		});
+
+		globalTheme.get("daysTheme").on({
+			"change:backgroundColor": function (aModel, aValue) {
+				self.$dayLabels.css("background-color", aValue);
+			},
+
+			"change:fontColor": function (aModel, aValue) {
+				self.$dayTable.css("color", aValue);
+			}
+		});
+
+		globalTheme.get("timeTheme").on({
+			"change:fontColor": function (aModel, aValue) {
+				self.$timeTable.css("color", aValue);
+			}
 		});
 
 		this.options.selectedSectionList.on("all", function () {
@@ -75,7 +120,7 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 		});
 
 		this.sectionViewList = {};
-		this.userData.get("userClassList").map(function (aSectionModel) {
+		this.options.userData.get("userClassList").map(function (aSectionModel) {
 			var newEntryGroup = new Scheduler.views.CalendarEntryGroup({
 				"sectionModel": aSectionModel,
 				"calendarColumns": self.columnList,

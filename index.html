@@ -71,8 +71,15 @@
 						<section id="customizeSidebar" class="sidebar customize">
 							<article class="sidebar-section-group">
 								<h1>CUSTOMIZE</h1>
-								<ul id="customizeDropdownList" class="">
-								</ul>
+								<p id="sectionThemeContainer" class="sidebar-subsection-group">
+									<h2>COURSE THEMES</h2>
+									<div id="sectionThemeDropdown"></div>
+								</p>
+								<p class="sidebar-subsection-group">
+									<h2>GLOBAL THEMES</h2>
+									<ul id="customizeDropdownList" class="">
+									</ul>
+								</p>
 							</article>
 						</section>
 
@@ -94,7 +101,7 @@
 				<section class="preview">
 					<div class="preview-container">
 						<h1 class="preview-title">PREVIEW</h1>
-						<section id="scheduleContainer" class="calendar">
+						<section id="scheduleContainer">
 						</section>
 					</div>
 				</section>
@@ -156,46 +163,38 @@
 		<!-- Begin calendar templates: -->
 
 		<script id="templateCalendar" type="text/template">
-			<section id="scheduleContainer" class="calendar">
-				<div class="cl-horizontal-lines">
-					<table id="lineTable">
-						<tr class="cl-header-row">
-							<th class="cl-time-label"></th>
-							<th class="cl-time-divider"></th>
+			<div class="cl-horizontal-lines">
+				<table data-id="timeTable" class="cl-time-table">
+					<tr class="cl-header-row">
+						<th class="cl-time-label"></th>
+						<th class="cl-time-divider"></th>
+					</tr>
+					<% for (var i = 0; i < timeLabels.length; i++) { %>
+						<tr data-id="timeLabel" class="cl-content-row">
+							<td class="cl-time-label"><%= timeLabels[i] %></td>
+							<td class="cl-time-divider"><hr></td>
 						</tr>
-						<% for (var i = 0; i < labels.length; i++) { %>
-							<tr class="cl-content-row">
-								<td class="cl-time-label"><%= labels[i] %></td>
-								<td class="cl-time-divider"><hr></td>
-							</tr>
+					<% } %>
+				</table>
+			</div>
+			<div class="cl-grid">
+				<table data-id="dayTable" class="cl-day-table">
+					<tr class="cl-header-row">
+						<th data-id="dayLabel" class="cl-header-cell cl-left-spacer"></th>
+						<% for (var i = 0; i < dayLabels.length; i++) { %>
+							<th data-id="dayLabel" class="cl-header-cell"><%= dayLabels[i] %></th>
 						<% } %>
-					</table>
-				</div>
-				<div class="cl-grid">
-					<table>
-						<tr class="cl-header-row">
-							<th class="cl-header-cell cl-left-spacer"></th>
-							<th class="cl-header-cell"><b>SUN</b>DAY</th>
-							<th class="cl-header-cell"><b>MON</b>DAY</th>
-							<th class="cl-header-cell"><b>TUE</b>SDAY</th>
-							<th class="cl-header-cell"><b>WED</b>NESDAY</th>
-							<th class="cl-header-cell"><b>THU</b>RSDAY</th>
-							<th class="cl-header-cell"><b>FRI</b>DAY</th>
-							<th class="cl-header-cell"><b>SAT</b>URDAY</th>
-						</tr>
-						<tr class="cl-content-row">
-							<td></td>
-							<td class="cl-content-cell"><div class="position-container"></div></td>
-							<td class="cl-content-cell"><div class="position-container"></div></td>
-							<td class="cl-content-cell"><div class="position-container"></div></td>
-							<td class="cl-content-cell"><div class="position-container"></div></td>
-							<td class="cl-content-cell"><div class="position-container"></div></td>
-							<td class="cl-content-cell"><div class="position-container"></div></td>
-							<td class="cl-content-cell"><div class="position-container"></div></td>
-						</tr>
-					</table>
-				</div>
-			</section>
+					</tr>
+					<tr class="cl-content-row">
+						<td></td>
+						<% for (var i = 0; i < dayLabels.length; i++) { %>
+							<td class="cl-content-cell">
+								<div data-id="positionContainer" class="position-container"></div>
+							</td>
+						<% } %>
+					</tr>
+				</table>
+			</div>
 		</script>
 
 		<script id="templateCalendarEntry" type="text/template">

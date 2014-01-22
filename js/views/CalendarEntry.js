@@ -10,6 +10,7 @@ Scheduler.views.CalendarEntry = Scheduler.views.View.extend({
 		"calendarEndTime": 24 * 60
 	},
 
+	"sectionModel": undefined,
 	"options": undefined,
 	"weekday": -1,
 
@@ -18,6 +19,7 @@ Scheduler.views.CalendarEntry = Scheduler.views.View.extend({
 
 		this.options = opts;
 		this.weekday = opts.weekday;
+		this.sectionModel = opts.sectionModel;
 
 		this.setElement(this.buildElement(opts.sectionModel, opts.classModel));
 		this.reposition();
@@ -61,5 +63,20 @@ Scheduler.views.CalendarEntry = Scheduler.views.View.extend({
 	"parseTime": function (aTimeStr) {
 		var split = aTimeStr.split(":");
 		return parseInt(split[0]) * 60 + parseInt(split[1]);
+	},
+
+	"click": function (aCallback) {
+		var self = this;
+		this.$el.click(function (aEvent) {
+			aEvent.stopPropagation();
+			aCallback(self.sectionModel, self);
+		});
+	},
+
+	"setSelected": function (aSelected) {
+		if (aSelected)
+			this.$el.addClass("active");
+		else
+			this.$el.removeClass("active");
 	}
 });

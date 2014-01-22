@@ -1,9 +1,10 @@
 Scheduler.views.Calendar = Scheduler.views.View.extend({
 	"defaults": {
-		"startTime": 0,				// Calendar start time in minutes
-		"endTime": 24 * 60,			// Calendar end time in minutes
-		"interval": 60,				// Intervals between time lines in minutes
-		"userData": undefined	// Default data model
+		"startTime": 0,						// Calendar start time in minutes
+		"endTime": 24 * 60,					// Calendar end time in minutes
+		"interval": 60,						// Intervals between time lines in minutes
+		"userData": undefined,				// Default data model
+		"selectedSectionList": undefined 	// List of selected sections on the calendar
 	},
 
 	// The calendar displays an extra 30 minutes at the top.
@@ -21,7 +22,7 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 		var self = this;
 
 		this.options = opts;
-		this.sectionViewList = [];
+		this.sectionViewList = {};
 
 		var timeLabels = [];
 
@@ -47,12 +48,29 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 			return $(aElem);
 		});
 
+		this.bindEvents();
+		this.refreshData();
+	},
+
+	"bindEvents": function () {
+		var self = this;
+
 		// Sets event listener for data collection.
 		this.userData.get("userClassList").on("all", function (aModel, aResponse) {
 			self.refreshData();
 		});
 
-		this.refreshData();
+		this.options.selectedSectionList.on("all", function () {
+			var changed = {};
+
+			self.options.selectedSectionList.forEach(function (aSection) {
+				changed[aSection.id] = true;
+			});
+
+			_.forEach(self.sectionViewList, function (aElem, aKey) {
+				aElem.setSelected(!!changed[aKey]);
+			});
+		});
 	},
 
 	"refreshData": function () {
@@ -62,18 +80,29 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 			aView.detachElements();
 		});
 
-		this.sectionViewList = this.userData.get("userClassList").map(function (aSectionModel) {
-			return new Scheduler.views.CalendarEntryGroup({
+		this.sectionViewList = {};
+		this.userData.get("userClassList").map(function (aSectionModel) {
+			var newEntryGroup = new Scheduler.views.CalendarEntryGroup({
 				"sectionModel": aSectionModel,
 				"calendarColumns": self.columnList,
 				"calendarStartTime": self.options.startTime,
 				"calendarEndTime": self.options.endTime
 			});
+
+			newEntryGroup.click(function (aSection, aCalendarGroup) {
+				self.selectSection(aSection);
+			});
+
+			self.sectionViewList[aSectionModel.id] = newEntryGroup;
 		});
 
 		_.each(this.sectionViewList, function (aView) {
 			aView.attachElementsToView();
 		});
+	},
+
+	"selectSection": function (aSection) {
+		this.options.selectedSectionList.add(aSection);
 	},
 
 	"minutesToStringFormat": function (aMin) {

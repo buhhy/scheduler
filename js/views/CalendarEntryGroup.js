@@ -12,6 +12,7 @@ Scheduler.views.CalendarEntryGroup = Scheduler.views.View.extend({
 
 	"options": undefined,
 	"elementList": [],
+	"selected": false,
 
 	"initialize": function (aOpts) {
 		var opts = _.defaults(aOpts, this.defaults);
@@ -58,5 +59,28 @@ Scheduler.views.CalendarEntryGroup = Scheduler.views.View.extend({
 		_.each(this.elementList, function (aElem) {
 			aElem.detachFromView();
 		})
+	},
+
+	"click": function (aCallback) {
+		var self = this;
+		_.forEach(this.elementList, function (aElem) {
+			aElem.click(function () {
+				aCallback(self.options.sectionModel, self);
+			});
+		});
+	},
+
+	"setSelected": function (aSelected) {
+		if (this.selected !== aSelected) {
+			this.selected = aSelected;
+
+			_.forEach(this.elementList, function (aElem) {
+				aElem.setSelected(aSelected);
+			});
+		}
+	},
+
+	"isSelected": function () {
+		return this.selected;
 	}
 });

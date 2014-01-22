@@ -4,6 +4,8 @@ $(function () {
 
 	var userData = new Scheduler.models.UserData();
 
+	var selectedSectionList = new Scheduler.models.SectionCollection();
+
 	// var sectionList = new Scheduler.models.SectionCollection([
 	// 	{
 	// 		"subject": "STV",
@@ -59,12 +61,14 @@ $(function () {
 			new Scheduler.views.AddSectionSidebar({
 				"el": "#addSectionSidebar",
 				"indicator": "#addSectionIndicator",
+				"selectedSectionList": selectedSectionList,
 				"courseData": courseData,
 				"userData": userData
 			}),
 			new Scheduler.views.CustomizeSidebar({
 				"el": "#customizeSidebar",
 				"indicator": "#customizeIndicator",
+				"selectedSectionList": selectedSectionList,
 				"userData": userData
 			}),
 			new Scheduler.views.Sidebar({
@@ -78,6 +82,7 @@ $(function () {
 		"el": "#scheduleContainer",
 		"startTime": 8 * 60 + 30,
 		"endTime": 22 * 60 + 30,
-		"userData": userData
+		"userData": userData,
+		"selectedSectionList": selectedSectionList
 	});
 });

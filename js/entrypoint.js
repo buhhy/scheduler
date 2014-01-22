@@ -4,6 +4,8 @@ $(function () {
 
 	var userData = new Scheduler.models.UserData();
 
+	var themeData = new Scheduler.models.ThemeData();
+
 	var selectedSectionList = new Scheduler.models.SectionCollection();
 
 	// var sectionList = new Scheduler.models.SectionCollection([
@@ -69,7 +71,8 @@ $(function () {
 				"el": "#customizeSidebar",
 				"indicator": "#customizeIndicator",
 				"selectedSectionList": selectedSectionList,
-				"userData": userData
+				"userData": userData,
+				"themeData": themeData
 			}),
 			new Scheduler.views.Sidebar({
 				"el": "#printSidebar",

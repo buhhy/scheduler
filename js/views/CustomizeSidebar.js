@@ -5,7 +5,11 @@ Scheduler.views.CustomizeSidebar = Scheduler.views.Sidebar.extend({
 
 	"userData": undefined,
 
-	"dropdownMap": {},
+	"globalThemeDropdownMap": {},
+
+	"elementThemeDropdown": undefined,
+
+	"elementThemeDropdownContainer": undefined,
 
 	"$customizeDropdownList": undefined,
 
@@ -13,6 +17,7 @@ Scheduler.views.CustomizeSidebar = Scheduler.views.Sidebar.extend({
 		Scheduler.views.Sidebar.prototype.initialize.call(this, aOpts);
 		var opts = _.defaults(aOpts, this.defaults);
 
+		this.options = opts;
 		this.userData = opts.userData;
 
 		this.$customizeDropdownList = this.$el.find("#customizeDropdownList");
@@ -29,8 +34,14 @@ Scheduler.views.CustomizeSidebar = Scheduler.views.Sidebar.extend({
 		var rootElem = this.getDropdownListEntryHtml();
 		var self = this;
 		var globalTheme = this.userData.get("globalTheme");
+		var themeData = this.options.themeData;
 
-		this.dropdownMap = {
+		this.elementThemeDropdown = new Common.Dropdown({
+			"el": "<div></div>",
+			"titleHtml": ""
+		});
+
+		this.globalThemeDropdownMap = {
 			"table": new Common.Dropdown({
 				"el": rootElem,
 				"titleHtml": "TABLE",
@@ -38,53 +49,75 @@ Scheduler.views.CustomizeSidebar = Scheduler.views.Sidebar.extend({
 				"optionList": [
 					this.buildPaletteDropdown(
 						"BACKGROUND",
-						["#f00", "#0f0", "#00f"],
+						themeData.get("table"),
 						globalTheme.get("tableTheme"),
-						"backgroundColor")
+						"backgroundColor"),
+					this.buildPaletteDropdown(
+						"FONT COLOR",
+						themeData.get("table"),
+						globalTheme.get("tableTheme"),
+						"fontColor"),
+					this.buildPaletteDropdown(
+						"BORDER COLOR",
+						themeData.get("table"),
+						globalTheme.get("tableTheme"),
+						"borderColor")
+				]
+			}),
+			"days": new Common.Dropdown({
+				"el": rootElem,
+				"titleHtml": "DAYS OF THE WEEK",
+				"titleClass": "heading-1",
+				"optionList": [
+					this.buildPaletteDropdown(
+						"BACKGROUND",
+						themeData.get("days"),
+						globalTheme.get("daysTheme"),
+						"backgroundColor"),
+					this.buildPaletteDropdown(
+						"FONT COLOR",
+						themeData.get("days"),
+						globalTheme.get("daysTheme"),
+						"fontColor")
+				]
+			}),
+			"time": new Common.Dropdown({
+				"el": rootElem,
+				"titleHtml": "TIME",
+				"titleClass": "heading-1",
+				"optionList": [
+					this.buildPaletteDropdown(
+						"BACKGROUND",
+						themeData.get("time"),
+						globalTheme.get("timeTheme"),
+						"backgroundColor"),
+					this.buildPaletteDropdown(
+						"FONT COLOR",
+						themeData.get("time"),
+						globalTheme.get("timeTheme"),
+						"fontColor")
 				]
 			})
-			// "weeks": new Common.Dropdown({
-			// 	"el": rootElem,
-			// 	"titleHtml": "DAYS OF THE WEEK",
-			// 	"titleClass": "heading-1",
-			// 	"optionClass": "heading-2",
-			// 	"optionList": [
-			// 		"BACKGROUND",
-			// 		"FONT",
-			// 		"BORDER"
-			// 	]
-			// }),
-			// "time": new Common.Dropdown({
-			// 	"el": rootElem,
-			// 	"titleHtml": "TIMES",
-			// 	"titleClass": "heading-1",
-			// 	"optionClass": "heading-2",
-			// 	"optionList": [
-			// 		"BACKGROUND",
-			// 		"FONT",
-			// 		"BORDER"
-			// 	]
-			// })
 		};
 
-		_.map(this.dropdownMap, function (aElem) {
+		_.map(this.globalThemeDropdownMap, function (aElem) {
 			aElem.appendTo(self.$customizeDropdownList);
 		});
 	},
 
-	"buildPaletteDropdown": function (aTitle, aColors, aThemeObject, aKey) {
+	"buildPaletteDropdown": function (aTitle, aThemeData, aThemeModel, aKey) {
 		var dropdown = new Common.Dropdown({
 			"el": "<section></section>",
 			"titleHtml": aTitle,
 			"titleClass": "heading-2",
 			"optionClass": "heading-3 palette",
 			"titleIndicatorHtml": _.template($("#templatePalette").html(), {
-				"colors": [ aThemeObject.get(aKey) ]
+				"colors": [ aThemeModel.get(aKey) ]
 			}),
 			"optionList": [
 				new Scheduler.views.Palette({
-					"colors": aColors,
-					"model": aThemeObject,
+					"colors": aThemeData[aKey],
+					"model": aThemeModel,
 					"colorName": aKey
 				})
 			]
@@ -94,7 +127,7 @@ Scheduler.views.CustomizeSidebar = Scheduler.views.Sidebar.extend({
 
 		// Bind a change event on the model, so if the global theme changes, then change the color
 		// indicator on the dropdown header.
-		aThemeObject.on("change:" + aKey, function (aModel, aValue) {
+		aThemeModel.on("change:" + aKey, function (aModel, aValue) {
 			$indicator.css("background-color", aValue);
 		});
 

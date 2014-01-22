@@ -1,6 +1,10 @@
 if (!window.Common)
 	window.Common = {};
 
+/**
+ * This class builds a dropdown that can contain more dropdowns, Backbone views, or simple HTML. The
+ * dropdown expands and animates vertically on click, and closes upon another click.
+ */
 Common.Dropdown = Backbone.View.extend({
 	"defaults": {
 		"open": false,

@@ -88,6 +88,12 @@ Sample:
 */
 
 Scheduler.models.Section = Scheduler.models.Model.extend({
+	"defaults": function () {
+		return {
+			"theme": new Scheduler.models.Theme()
+		};
+	},
+
 	"idAttribute": "uid",
 
 	"initialize": function () {

@@ -106,10 +106,10 @@
 			opacity: 0.0;
 			width: 100%;
 			height: 100%;
-			top: -11px;
-			left: -11px;
+			top: -6px;
+			left: -6px;
 
-			padding: 10px;
+			padding: 5px;
 			border: 1px dashed black;
 
 			.transition(~"all 150ms ease");
@@ -138,6 +138,8 @@
 
 		// Selected calendar entry
 		&.active {
+			z-index: 5;
+
 			.cl-marquee {
 				visibility: visible;
 				opacity: 1.0;

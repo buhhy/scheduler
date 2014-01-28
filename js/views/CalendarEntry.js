@@ -10,7 +10,6 @@ Scheduler.views.CalendarEntry = Scheduler.views.View.extend({
 		"calendarEndTime": 24 * 60
 	},
 
-	"sectionModel": undefined,
 	"options": undefined,
 	"weekday": -1,
 
@@ -19,10 +18,11 @@ Scheduler.views.CalendarEntry = Scheduler.views.View.extend({
 
 		this.options = opts;
 		this.weekday = opts.weekday;
-		this.sectionModel = opts.sectionModel;
 
 		this.setElement(this.buildElement(opts.sectionModel, opts.classModel));
 		this.reposition();
+		this.bindEvents();
+		this.setStyles();
 	},
 
 	"buildElement": function (aSectionModel, aClassModel) {
@@ -57,6 +57,23 @@ Scheduler.views.CalendarEntry = Scheduler.views.View.extend({
 		this.$el.css("height", height + "%");
 	},
 
+	"bindEvents": function () {
+		var self = this;
+
+		this.options.sectionModel.get("theme").on("change", function (aModel) {
+			self.setStyles();
+		});
+	},
+
+	"setStyles": function () {
+		var model = this.options.sectionModel.get("theme");
+		this.$el.css({
+			"background-color": model.get("backgroundColor"),
+			"color": model.get("fontColor"),
+			"border-color": model.get("borderColor")
+		});
+	},
+
 	/**
 	 * Parses time in the format hh:mm.
 	 */
@@ -69,7 +86,7 @@ Scheduler.views.CalendarEntry = Scheduler.views.View.extend({
 		var self = this;
 		this.$el.click(function (aEvent) {
 			aEvent.stopPropagation();
-			aCallback(self.sectionModel, self);
+			aCallback(self.options.sectionModel, self);
 		});
 	},
 

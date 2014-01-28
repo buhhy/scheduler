@@ -46,7 +46,7 @@ Scheduler.views.CalendarEntryGroup = Scheduler.views.View.extend({
 	"attachElementsToView": function () {
 		var self = this;
 
-		_.each(this.elementList, function (aElem) {
+		_.forEach(this.elementList, function (aElem) {
 			var target = self.options.calendarColumns[aElem.weekday];
 			aElem.reposition();
 			target.append(aElem.$el);
@@ -56,7 +56,7 @@ Scheduler.views.CalendarEntryGroup = Scheduler.views.View.extend({
 	"detachElements": function () {
 		var self = this;
 
-		_.each(this.elementList, function (aElem) {
+		_.forEach(this.elementList, function (aElem) {
 			aElem.detachFromView();
 		})
 	},

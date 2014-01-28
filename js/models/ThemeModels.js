@@ -10,6 +10,10 @@ Scheduler.models.Theme = Scheduler.models.Model.extend({
 	}
 });
 
+Scheduler.models.ThemeCollection = Scheduler.models.Collection.extend({
+	"model": Scheduler.models.Theme
+});
+
 Scheduler.models.GlobalTheme = Scheduler.models.Model.extend({
 	"defaults": function () {
 		return {

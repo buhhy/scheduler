@@ -237,25 +237,5 @@ Scheduler.views.CustomizeSidebar = Scheduler.views.Sidebar.extend({
 	},
 
 	"bindEvents": function () {
-		var self = this;
-
-		// this.classData.on("change:classList", function () {
-		// 	console.log("changed!");
-		// });
-
-		// this.userData.on("add", function (aInsert) {
-		// 	self.addAddedClassEntry(aInsert, true);
-		// });
-
-		// this.userData.on("remove", function (aRemoved) {
-		// 	self.removeAddedClassEntry(aRemoved, true);
-		// });
-
-		// this.$searchBox.keyup($.debounce(250, $.proxy(this.search, this)));
-
-		// this.$searchButton.click(function (aEvent) {
-		// 	aEvent.preventDefault();
-		// 	self.search();
-		// });
 	}
 });

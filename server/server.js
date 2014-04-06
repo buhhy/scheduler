@@ -3,6 +3,7 @@ var express = require("express");
 var cors = require("cors");
 var classData = require("./classData");
 var mongoStore = require("./mongoStore");
+var printer = require("./printer");
 var searchIndex = require("./searchIndex");
 
 var app = express();
@@ -20,33 +21,41 @@ var classQueryResponse = function (aResponse, aTerm, aQuery) {
 
 app.use(cors());
 
-app.get("/api/class", function (req, res) {
-	var query = req.param("search");
+app.get("/api/class", function (aReq, aRes) {
+	var query = aReq.param("search");
 
 	console.log(query);
 
 	classData.currentTerm(function (aCurrentTerm) {
-		classQueryResponse(res, aCurrentTerm, query);
+		classQueryResponse(aRes, aCurrentTerm, query);
 	});
 });
 
-app.get("/api/:term/class", function (req, res) {
-	var term = parseInt(req.params.term);
-	var query = req.param("search");
+app.get("/api/:term/class", function (aReq, aRes) {
+	var term = parseInt(aReq.params.term);
+	var query = aReq.param("search");
 
 	if (isNaN(term) || term === null || term === undefined) {
-		res.json({
-			"error": sprintf.sprintf("Invalid term identifier: %s", req.params.term)
+		aRes.json({
+			"error": sprintf.sprintf("Invalid term identifier: %s", aReq.params.term)
 		});
 	} else {
-		classQueryResponse(res, term, query);
+		classQueryResponse(aRes, term, query);
 	}
 });
 
-app.get("/api/term", function (req, res) {
+app.get("/api/term", function (aReq, aRes) {
 	classData.currentTerms(function (aData) {
-		res.json(aData);
+		aRes.json(aData);
 	});
+});
+
+app.get("/api/print", function (aReq, aRes) {
+	// printer.print(function (aRes) {
+	// 	console.log("wut");
+	// 	aRes.json({"success": "whoa"});
+	// });
+	printer.test().pipe(aRes);
 });
 
 app.listen(port);
@@ -81,4 +90,4 @@ var refreshDataCaches = function () {
 }
 
 // TODO: In the future, we probably want to refresh the class list once every few days.
-refreshDataCaches();
+// refreshDataCaches();

@@ -4,6 +4,7 @@
 	<header>
 		<link type="text/css" rel="stylesheet" href="css/reset.css" />
 		<link type="text/css" rel="stylesheet" href="css/style.css" />
+		<link type="text/css" rel="stylesheet" href="css/print.css" media="print" />
 
 		<!-- Remove these later. --><!--
 		<link type="text/css" rel="stylesheet" href="css/calendar.css" />
@@ -91,8 +92,8 @@
 								<h1>Congratulations!</h1>
 								<h2>Your schedule is now complete.</h2>
 
-								<div class="save">SAVE PDF</div>
-								<div class="print">PRINT SCHEDULE</div>
+								<div id="pdfButton" class="save">SAVE PDF</div>
+								<div id="printButton" class="print">PRINT SCHEDULE</div>
 
 							</article>
 						</section>
@@ -102,7 +103,7 @@
 				<section class="preview">
 					<div class="preview-container">
 						<h1 class="preview-title">PREVIEW</h1>
-						<section id="scheduleContainer">
+						<section id="scheduleContainer" class = "print-content">
 						</section>
 					</div>
 				</section>
@@ -216,11 +217,12 @@
 			</li>
 		</script>
 
-		<script type="text/javascript" src="lib/jquery-2.0.3.min.js"></script>
+		<script type="text/javascript" src="lib/jquery-2.1.0.min.js"></script>
 		<script type="text/javascript" src="lib/underscore.min.js"></script>
 		<script type="text/javascript" src="lib/backbone.min.js"></script>
 		<script type="text/javascript" src="lib/sprintf.min.js"></script>
 		<script type="text/javascript" src="lib/jquery.throttle-debounce.min.js"></script>
+		<script type="text/javascript" src="lib/jquery.print-preview.js"></script>
 
 		<script type="text/javascript" src="js/common/Dropdown.js"></script>
 
@@ -235,6 +237,7 @@
 		<script type="text/javascript" src="js/views/SidebarGroup.js"></script>
 		<script type="text/javascript" src="js/views/AddSectionSidebar.js"></script>
 		<script type="text/javascript" src="js/views/CustomizeSidebar.js"></script>
+		<script type="text/javascript" src="js/views/PrintSidebar.js"></script>
 		<script type="text/javascript" src="js/views/SearchResultEntry.js"></script>
 		<script type="text/javascript" src="js/views/SearchResultList.js"></script>
 		<script type="text/javascript" src="js/views/CalendarEntry.js"></script>

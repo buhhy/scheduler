@@ -74,9 +74,10 @@ $(function () {
 				"userData": userData,
 				"themeData": themeData
 			}),
-			new Scheduler.views.Sidebar({
+			new Scheduler.views.PrintSidebar({
 				"el": "#printSidebar",
-				"indicator": "#printIndicator"
+				"indicator": "#printIndicator",
+				"userData": userData
 			})
 		]
 	});

@@ -1,14 +1,11 @@
 Scheduler.views.Calendar = Scheduler.views.View.extend({
 	"defaults": {
-		"startTime": 0,						// Calendar start time in minutes
-		"endTime": 24 * 60,					// Calendar end time in minutes
-		"interval": 60,						// Intervals between time lines in minutes
 		"userData": undefined,				// Default data model
 		"selectedSectionList": undefined 	// List of selected sections on the calendar
 	},
 
 	// The calendar displays an extra 30 minutes at the top.
-	"CALENDAR_START_TIME_OFFSET": 30,
+	"START_TIME_OFFSET": 30,
 
 	"options": undefined,
 
@@ -21,12 +18,22 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 	"$timeLabels": undefined,
 	"$dayLabels": undefined,
 
+	"startTime": 0,						// Calendar start time in minutes
+	"endTime": 24 * 60,					// Calendar end time in minutes
+	"interval": 60,						// Intervals between time lines in minutes
+	"autofit": false,					// Auto-fits the start and end bounds depending on classes
+
 	"initialize": function (aOpts) {
 		var opts = _.defaults(aOpts, this.defaults);
 		var self = this;
+		var calendarSettings = opts.userData.get("calendarSettings");
 
 		this.options = opts;
 		this.sectionViewList = {};
+		this.startTime = calendarSettings.get("startTime") || this.startTime;
+		this.endTime = calendarSettings.get("endTime") || this.endTime;
+		this.interval = calendarSettings.get("interval") || this.interval;
+		this.autofit = !!calendarSettings.get("autofit");		// Converts to boolean
 
 		var timeLabels = [];
 		var dayLabels = [
@@ -40,11 +47,8 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 		];
 
 		// The time labels should begin 30 minutes after the start time.
-		for (var i = opts.startTime + this.CALENDAR_START_TIME_OFFSET;
-			i < opts.endTime; i += opts.interval) {
-
+		for (var i = this.startTime + this.START_TIME_OFFSET; i < this.endTime; i += this.interval)
 			timeLabels.push(this.minutesToStringFormat(i));
-		}
 
 		this.$calendar = $(_.template($("#templateCalendar").html(), {
 			"timeLabels": timeLabels,
@@ -124,8 +128,8 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 			var newEntryGroup = new Scheduler.views.CalendarEntryGroup({
 				"sectionModel": aSectionModel,
 				"calendarColumns": self.columnList,
-				"calendarStartTime": self.options.startTime,
-				"calendarEndTime": self.options.endTime
+				"calendarStartTime": self.startTime,
+				"calendarEndTime": self.endTime
 			});
 
 			newEntryGroup.click(function (aSection, aCalendarGroup) {

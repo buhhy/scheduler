@@ -1,3 +1,8 @@
+/**
+ * These models store user-set themes, unlike ThemeData, which stores global theme data, such as
+ * which colors can be changed and the list of selectable colors.
+ */
+
 Scheduler.models.Theme = Scheduler.models.Model.extend({
 	"defaults": {
 		"backgroundColor": "#eee",

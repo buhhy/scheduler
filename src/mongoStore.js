@@ -1,4 +1,4 @@
-var sprintf = require("./lib/sprintf.min");
+var sprintf = require("./lib/sprintf");
 var mongo = require("mongodb");
 
 var db = undefined;
@@ -30,13 +30,13 @@ var storeClasses = function (aTerm, aClasses) {
 					if (aError)
 						console.log(aError);
 				});
-				console.log(sprintf.sprintf("Updated %s entries in database.", aClasses.length));
+				console.log(sprintf.s("Updated %s entries in database.", aClasses.length));
 			} else {
 				classData.insert(data, function (aError) {
 					if (aError)
 						console.log(aError);
 				});
-				console.log(sprintf.sprintf("Inserted %s entries into database.", aClasses.length));
+				console.log(sprintf.s("Inserted %s entries into database.", aClasses.length));
 			}
 		});
 	}
@@ -53,11 +53,11 @@ var findClasses = function (aTerm, aCallback) {
 			} else {
 				if (aItems.length) {
 					console.log(
-						sprintf.sprintf(
+						sprintf.s(
 							"Retrieved %s entries from database.", aItems[0].classes.length));
 					aCallback(aItems[0].classes);
 				} else {
-					console.log(sprintf.sprintf("No entries found for term %d.", aTerm));
+					console.log(sprintf.s("No entries found for term %d.", aTerm));
 					aCallback(null);
 				}
 			}

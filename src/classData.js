@@ -1,4 +1,4 @@
-var sprintf = require("./lib/sprintf.min");
+var sprintf = require("./lib/sprintf");
 var https = require("https");
 
 var HOST = "api.uwaterloo.ca";
@@ -18,8 +18,8 @@ Array.prototype.find = function (aIterator) {
 
 var buildApiUrl = function (aUrl, aArgs) {
 	var args = aArgs || [];
-	var url = sprintf.vsprintf(aUrl, args);
-	return sprintf.sprintf("%s.json?key=%s", url, API_KEY);
+	var url = sprintf.v(aUrl, args);
+	return sprintf.s("%s.json?key=%s", url, API_KEY);
 };
 
 var request = function (aUrl, aCallback) {
@@ -89,7 +89,7 @@ exports.currentTerm = function (aOnFinish) {
 
 		if (result) {
 			var currentTerm = result.current_term;
-			console.log(sprintf.sprintf("The current term code is %d.", currentTerm));
+			console.log(sprintf.s("The current term code is %d.", currentTerm));
 
 			aOnFinish(currentTerm);
 		}
@@ -104,7 +104,7 @@ exports.reloadClassData = function (aCurrentTerm, aOnFinish) {
 		// Fetch all classes.
 		// subjects.splice(3, subjects.length - 3);
 		var classCountdown = subjects.length;
-		console.log(sprintf.sprintf(
+		console.log(sprintf.s(
 			"Fetching %d subject courses for term %d.", classCountdown, aCurrentTerm));
 
 		subjects.forEach(function (aElem) {
@@ -135,7 +135,7 @@ exports.reloadClassData = function (aCurrentTerm, aOnFinish) {
 
 		if (result) {
 			subjects = result;
-			console.log(sprintf.sprintf(
+			console.log(sprintf.s(
 				"%d subjects were found for term %d.", result.length, aCurrentTerm));
 
 			fetchClasses();

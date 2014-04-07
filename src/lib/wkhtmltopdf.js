@@ -30,13 +30,22 @@ function wkhtmltopdf(input, options, callback) {
     if (val !== false)
       args.push(key);
 
-    if (val !== "" && typeof val !== 'boolean') {
-      // escape and quote the value if it is a string
-      if (typeof val === 'string')
-        val = '"' + val.replace(/(["\\$`])/g, '\\$1') + '"';
+    var values = [];
+    // For multiple arguments, put all of them in
+    if (val instanceof Array)
+      values = val;
+    else
+      values[0] = val;
 
-      args.push(val);
-    }
+    values.forEach(function (val) {
+      if (typeof val !== 'boolean') {
+        // escape and quote the value if it is a string
+        if (typeof val === 'string')
+          val = '"' + val.replace(/(["\\$`])/g, '\\$1') + '"';
+
+        args.push(val);
+      }
+    });
   }
 
   var isUrl = /^(https?|file):\/\//.test(input);

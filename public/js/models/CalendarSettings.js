@@ -3,6 +3,7 @@ Scheduler.models.CalendarSettings = Scheduler.models.Model.extend({
 		"startTime": 8 * 60 +30,
 		"endTime": 22 * 60 + 30,
 		"interval": 60,
+		"startOffset": 30,
 		"autofit": false
 	},
 

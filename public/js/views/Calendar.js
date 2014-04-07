@@ -4,9 +4,6 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 		"selectedSectionList": undefined 	// List of selected sections on the calendar
 	},
 
-	// The calendar displays an extra 30 minutes at the top.
-	"START_TIME_OFFSET": 30,
-
 	"options": undefined,
 
 	// A hashmap of elements mapped by the class id.
@@ -22,6 +19,7 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 	"endTime": 24 * 60,					// Calendar end time in minutes
 	"interval": 60,						// Intervals between time lines in minutes
 	"autofit": false,					// Auto-fits the start and end bounds depending on classes
+	"startOffset": 30, 					// The calendar displays an extra 30 minutes at the top.
 
 	"initialize": function (aOpts) {
 		var opts = _.defaults(aOpts, this.defaults);
@@ -33,6 +31,7 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 		this.startTime = calendarSettings.get("startTime") || this.startTime;
 		this.endTime = calendarSettings.get("endTime") || this.endTime;
 		this.interval = calendarSettings.get("interval") || this.interval;
+		this.startOffset = calendarSettings.get("startOffset") || this.startOffset;
 		this.autofit = !!calendarSettings.get("autofit");		// Converts to boolean
 
 		var timeLabels = [];
@@ -46,8 +45,8 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 			"<b>SAT</b>URDAY"
 		];
 
-		// The time labels should begin 30 minutes after the start time.
-		for (var i = this.startTime + this.START_TIME_OFFSET; i < this.endTime; i += this.interval)
+		// The time labels should begin 30 minutes er the start time.
+		for (var i = this.startTime + this.startOffset; i < this.endTime; i += this.interval)
 			timeLabels.push(this.minutesToStringFormat(i));
 
 		this.$calendar = $(_.template($("#templateCalendar").html(), {

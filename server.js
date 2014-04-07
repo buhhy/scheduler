@@ -10,7 +10,7 @@ var assetDir = path.join(__dirname, "public");
 var viewDir = path.join(__dirname, "views");
 var encoding = "UTF-8";
 
-var sprintf = require(path.join(srcDir, "lib", "sprintf.min"));
+var sprintf = require(path.join(srcDir, "lib", "sprintf"));
 var classData = require(path.join(srcDir, "classData"));
 var mongoStore = require(path.join(srcDir, "mongoStore"));
 var printer = require(path.join(srcDir, "printer"));
@@ -60,13 +60,18 @@ app.get("/", function (aReq, aRes) {
 	aRes.render("index.html", { /* params */ });
 });
 
-app.get("/preview/:id", function (aReq, aRes) {
+app.post("/preview/:id", function (aReq, aRes) {
 	// TODO: Less hackery here plz
+	var data = JSON.parse(aReq.body.data);
+	var globalTheme = data.globalTheme;
+	var userClassList = data.userClassList;
+
 	var id = parseInt(aReq.params.id);
-	var startTime = 8 * 60 + 30;
-	var endTime = 22 * 60 + 30;
-	var interval = 60;
-	var CALENDAR_START_TIME_OFFSET = 30;
+
+	var startTime = data.calendarSettings.startTime;
+	var endTime = data.calendarSettings.endTime;
+	var interval = data.calendarSettings.interval;
+	var startOffset = data.calendarSettings.startOffset;
 
 	var timeLabels = [];
 	var dayLabels = [
@@ -83,27 +88,44 @@ app.get("/preview/:id", function (aReq, aRes) {
 		var pastNoon = aMin >= 12 * 60;
 		var hour = Math.floor(aMin / 60) % 12 || 12;
 		var min = aMin % 60;
-		// return hour + ":" + this.padZeroes(min, 2) + (pastNoon ? " PM" : " AM");
 		return hour + (pastNoon ? " PM" : " AM");
-	}
+	};
 
-	for (var i = startTime + CALENDAR_START_TIME_OFFSET;
-		i < endTime; i += interval) {
+	var themeToStyle = function (aTheme) {
+		var styles = [];
 
+		if (aTheme.backgroundColor)
+			styles.push(sprintf.s("background-color:%s;", aTheme.backgroundColor));
+		if (aTheme.fontColor)
+			styles.push(sprintf.s("color:%s;", aTheme.fontColor));
+		if (aTheme.borderColor)
+			styles.push(sprintf.s("border-color:%s;", aTheme.borderColor));
+
+		return styles.join(" ");
+	};
+
+	for (var i = startTime + startOffset; i < endTime; i += interval)
 		timeLabels.push(minutesToStringFormat(i));
-	}
 
 	var dayData = dayLabels.map(function (label) {
 		return {
 			"label": label,
-			"entries": []
+			"entries": userClassList
 		};
 	});
 
-	aRes.render("preview.ejs", {
+	var renderParams = {
 		"timeLabels": timeLabels,
-		"dayData": dayData
-	});
+		"dayData": dayData,
+		"dayStyle": themeToStyle(globalTheme.daysTheme),
+		"timeStyle": themeToStyle(globalTheme.timeTheme),
+		"tableStyle": themeToStyle(globalTheme.tableTheme)
+	};
+
+	console.log(data);
+	console.log(renderParams);
+
+	aRes.render("preview.ejs", renderParams);
 });
 
 app.get("/api/class", function (aReq, aRes) {
@@ -122,7 +144,7 @@ app.get("/api/:term/class", function (aReq, aRes) {
 
 	if (isNaN(term) || term === null || term === undefined) {
 		aRes.json({
-			"error": sprintf.sprintf("Invalid term identifier: %s", aReq.params.term)
+			"error": sprintf.s("Invalid term identifier: %s", aReq.params.term)
 		});
 	} else {
 		classQueryResponse(aRes, term, query);
@@ -140,15 +162,9 @@ app.post("/api/print/:id", function (aReq, aRes) {
 	var id = parseInt(aReq.params.id);
 	var previewUrl = getHostFromRequest(aReq) + "/preview/" + id;
 
-	var data = JSON.parse(aReq.body.data);
-	var print = aReq.body.print.toLowerCase() === "true";
-
-	console.log(data);
-	console.log(print);
-
 	console.log(previewUrl);
 
-	printer.print(previewUrl).pipe(aRes);
+	printer.print(previewUrl, aReq.body.data).pipe(aRes);
 });
 
 app.listen(port);
@@ -174,7 +190,7 @@ var refreshDataCaches = function () {
 	classData.currentTerms(function (aTerms) {
 		Object.keys(aTerms).forEach(function (aKey) {
 			var termId = aTerms[aKey].id;
-			console.log(sprintf.sprintf("Verifying data for term %d.", termId));
+			console.log(sprintf.s("Verifying data for term %d.", termId));
 			mongoStore.findClasses(termId, function (aClasses) {
 				if (!aClasses || !aClasses.length) {
 					refreshMongoCache(termId);

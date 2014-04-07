@@ -1,5 +1,6 @@
-var wkhtmltopdf = require('wkhtmltopdf');
+var path = require("path");
 var fs = require('fs');
+var wkhtmltopdf = require("./lib/wkhtmltopdf");
 
 var wkparams = {
 	"pageSize": "letter",

@@ -10,6 +10,8 @@ $(function () {
 
 	var globalTheme = new Scheduler.models.GlobalTheme();
 
+	courseData.fetchTermList();
+
 	var sidebar = new Scheduler.views.SidebarGroup({
 		"el": "#sidebarGroup",
 		"sidebars": [

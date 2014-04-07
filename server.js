@@ -132,7 +132,7 @@ app.get("/api/term", function (aReq, aRes) {
 	});
 });
 
-app.get("/api/print/:id", function (aReq, aRes) {
+app.post("/api/print/:id", function (aReq, aRes) {
 	var id = parseInt(aReq.params.id);
 	var previewUrl = getHostFromRequest(aReq) + "/preview/" + id;
 

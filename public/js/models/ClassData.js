@@ -13,8 +13,6 @@ Scheduler.models.ClassData = Scheduler.models.Model.extend({
 
 	"initialize": function () {
 		Scheduler.models.Model.prototype.initialize.call(this);
-
-		this.fetchTermList();
 	},
 
 	"buildApiUrl": function (aUrl, aArgs) {

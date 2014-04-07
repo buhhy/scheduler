@@ -2,6 +2,7 @@ var express = require("express");
 var cors = require("cors");
 var lessMiddleware = require("less-middleware");
 var path = require("path");
+var ejs = require('ejs');
 
 var srcDir = path.join(__dirname, "src");
 var assetDir = path.join(__dirname, "public");
@@ -15,6 +16,10 @@ var searchIndex = require(path.join(srcDir, "searchIndex"));
 
 var app = express();
 var port = process.env.PORT || 4888;
+
+// Prevents conflicts with underscore.js templates since both use <% ... %>
+ejs.open = "@{";
+ejs.close = "}";
 
 app.configure(function () {
 	// Put other configurations here:
@@ -31,6 +36,10 @@ app.configure(function () {
 	app.use(express.static(assetDir));
 });
 
+app.engine('.html', require('ejs').__express);
+app.set("view engine", "ejs");
+app.set("views", viewDir);
+
 var classQueryResponse = function (aResponse, aTerm, aQuery) {
 	if (aQuery && aQuery.length) {
 		aResponse.json(searchIndex.search(aTerm, aQuery));
@@ -44,7 +53,7 @@ var classQueryResponse = function (aResponse, aTerm, aQuery) {
 app.use(cors());
 
 app.get("/", function (aReq, aRes) {
-	aRes.sendfile(path.join(viewDir, "index.html"));
+	aRes.render("index.html", { /* params */ });
 });
 
 app.get("/api/class", function (aReq, aRes) {

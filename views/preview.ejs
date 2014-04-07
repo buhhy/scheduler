@@ -1,0 +1,54 @@
+<html>
+	<head>
+		<link type="text/css" rel="stylesheet" href="/css/reset.css" />
+		<link type="text/css" rel="stylesheet" href="/css/preview.css" />
+	</head>
+	<body>
+		<article class="cl preview">
+			<div class="cl-horizontal-lines">
+				<table data-id="timeTable" class="cl-time-table">
+					<tr class="cl-header-row">
+						<th class="cl-time-label"></th>
+						<th class="cl-time-divider"></th>
+					</tr>
+					{{ for (var i = 0; i < timeLabels.length; i++) { }}
+						<tr data-id="timeLabel" class="cl-content-row">
+							<td class="cl-time-label">{{- timeLabels[i] }}</td>
+							<td class="cl-time-divider"><hr></td>
+						</tr>
+					{{ } }}
+				</table>
+			</div>
+			<div class="cl-grid">
+				<table data-id="dayTable" class="cl-day-table">
+					<tr class="cl-header-row">
+						<th data-id="dayLabel" class="cl-header-cell cl-left-spacer"></th>
+						{{ for (var i = 0; i < dayData.length; i++) { }}
+							<th data-id="dayLabel" class="cl-header-cell">{{- dayData[i].label }}</th>
+						{{ } }}
+					</tr>
+					<tr class="cl-content-row">
+						<td></td>
+						{{ for (var i = 0; i < dayData.length; i++) { }}
+							<td class="cl-content-cell">
+								<div data-id="positionContainer" class="position-container">
+									{{
+									for (var j = 0; j < dayData[i].entries.length; j++) {
+										var en = dayData[i].entries[j];
+									}}
+										<article class="cl-entry">
+											<section class="cl-marquee"></section>
+											<h1 class="cl-title">{{= en.name }}</h1>
+											<h2 class="cl-desc">{{= en.subject }} {{= en.catalog }} - {{= en.section }} {{= en.type }}</h2>
+											<h2 class="cl-desc">{{= en.location["building"] }} {{= en.location["room"] }}</h2>
+										</article>
+									{{ } }}
+								</div>
+							</td>
+						{{ } }}
+					</tr>
+				</table>
+			</div>
+		</article>
+	</body>
+</html>

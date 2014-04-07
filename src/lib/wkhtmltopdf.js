@@ -18,7 +18,7 @@ function wkhtmltopdf(input, options, callback) {
   var args = [];
   args.push(wkhtmltopdf.command );
 
-  if ( options.quiet )
+  if (options.quiet)
     args.push('--quiet');
   delete options.quiet;
 
@@ -30,7 +30,7 @@ function wkhtmltopdf(input, options, callback) {
     if (val !== false)
       args.push(key);
 
-    if (typeof val !== 'boolean') {
+    if (val !== "" && typeof val !== 'boolean') {
       // escape and quote the value if it is a string
       if (typeof val === 'string')
         val = '"' + val.replace(/(["\\$`])/g, '\\$1') + '"';
@@ -76,11 +76,18 @@ function wkhtmltopdf(input, options, callback) {
 }
 
 function logError(child) {
-  child.stdout.setEncoding('utf8');
-  child.stdout.on('data', function(data) { console.log('(INFO) WKHTML INFO --------------------------- \n'); console.dir(data); });
+  // This output is really not that useful...
+  // child.stdout.setEncoding('utf8');
+  // child.stdout.on('data', function (data) {
+  //   console.log('(INFO) WKHTML INFO --------------------------- \n');
+  //   console.log(data);
+  // });
 
   child.stderr.setEncoding('utf8');
-  child.stderr.on('data', function(data) { console.log('(ERROR) WKHTML ERROR --------------------------- \n'); console.dir(data); });
+  child.stderr.on('data', function (data) {
+    console.log('(ERROR) WKHTML ERROR --------------------------- \n');
+    console.log(data);
+  });
 }
 
 wkhtmltopdf.command = 'wkhtmltopdf';

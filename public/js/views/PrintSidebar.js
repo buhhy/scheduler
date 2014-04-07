@@ -22,17 +22,34 @@ Scheduler.views.PrintSidebar = Scheduler.views.Sidebar.extend({
 
 	"convertToPdf": function (aPrint) {
 		// TODO: this is really hacky lol, change this at some point
-		var hiddenForm = document.createElement("form");
-		hiddenForm.action = "/api/print/5";
-		hiddenForm.method = "POST";
-		hiddenForm.target = "_blank";
+		if (!this.hiddenForm) {
+			var hiddenForm = document.createElement("form");
+			hiddenForm.action = "/api/print/5";
+			hiddenForm.method = "POST";
+			hiddenForm.target = "_blank";
+			hiddenForm.style.display = "none";
 
-		var jsonInput = document.createElement("form");
-		jsonInput.type = "hidden";
-		jsonInput.value = JSON.stringify(this.options.userData);
-		jsonInput.name = "data";
+			var jsonInput = document.createElement("input");
+			jsonInput.name = "data";
 
-		hiddenForm.submit();
-		// console.log(JSON.stringify(this.options.userData, null, "  "));
+			var printAfter = document.createElement("input");
+			printAfter.name = "print";
+
+			hiddenForm.appendChild(jsonInput);
+			hiddenForm.appendChild(printAfter);
+
+			this.hiddenForm = hiddenForm;
+			this.jsonInput = jsonInput;
+			this.printAfter = printAfter;
+			document.body.appendChild(hiddenForm);
+		}
+
+		this.jsonInput.value = JSON.stringify(this.options.userData);
+		this.printAfter.value = !!aPrint;
+
+		this.hiddenForm.submit();
+
+		console.log(hiddenForm);
+		console.log(JSON.stringify(this.options.userData, null, "  "));
 	}
 });

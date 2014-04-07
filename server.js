@@ -23,6 +23,10 @@ var port = process.env.PORT || 4888;
 ejs.open = "{{";
 ejs.close = "}}";
 
+app.engine('.html', require('ejs').__express);
+app.set("view engine", "ejs");
+app.set("views", viewDir);
+
 app.configure(function () {
 	// Put other configurations here:
 
@@ -35,12 +39,11 @@ app.configure(function () {
 		"debug": true
 	}));
 
+	app.use(express.bodyParser());
 	app.use(express.static(assetDir));
+	app.use(cors());
 });
 
-app.engine('.html', require('ejs').__express);
-app.set("view engine", "ejs");
-app.set("views", viewDir);
 
 var classQueryResponse = function (aResponse, aTerm, aQuery) {
 	if (aQuery && aQuery.length) {
@@ -52,13 +55,13 @@ var classQueryResponse = function (aResponse, aTerm, aQuery) {
 	}
 }
 
-app.use(cors());
 
 app.get("/", function (aReq, aRes) {
 	aRes.render("index.html", { /* params */ });
 });
 
 app.get("/preview/:id", function (aReq, aRes) {
+	// TODO: Less hackery here plz
 	var id = parseInt(aReq.params.id);
 	var startTime = 8 * 60 + 30;
 	var endTime = 22 * 60 + 30;
@@ -133,8 +136,15 @@ app.get("/api/term", function (aReq, aRes) {
 });
 
 app.post("/api/print/:id", function (aReq, aRes) {
+	// TODO: Less hackery here too plz
 	var id = parseInt(aReq.params.id);
 	var previewUrl = getHostFromRequest(aReq) + "/preview/" + id;
+
+	var data = JSON.parse(aReq.body.data);
+	var print = aReq.body.print.toLowerCase() === "true";
+
+	console.log(data);
+	console.log(print);
 
 	console.log(previewUrl);
 

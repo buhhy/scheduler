@@ -4,108 +4,123 @@ var slang = require('slang');
 
 var OBJ_CONSTRUCTOR = {}.constructor;
 
+function pushArgument (aArgs, aValue) {
+	if (typeof aValue !== 'boolean') {
+		// stringify the json value
+		if (aValue.constructor === OBJ_CONSTRUCTOR) {
+			try {
+				aValue = JSON.stringify(aValue);
+			} catch (e) {
+				console.log(e);
+			}
+		}
+
+		// escape and quote the aValueue if it is a string
+		if (typeof aValue === 'string') {
+			aValue = '"' + aValue.replace(/(["\\$`])/g, '\\$1') + '"';
+		}
+
+		aArgs.push(aValue);
+	}
+};
+
 function wkhtmltopdf(input, options, callback) {
-  if (!options) {
-    options = { quiet: true, logging: false, };
-  } else if (typeof options == 'function') {
-    callback = options;
-    options = { quiet: true, logging: false, };
-  }
-  var logging = options.logging ? options.logging===true ? true : false : false;
-  delete options.logging;
+	if (!options) {
+		options = { quiet: true, logging: false, };
+	} else if (typeof options == 'function') {
+		callback = options;
+		options = { quiet: true, logging: false, };
+	}
+	var logging = options.logging ? options.logging===true ? true : false : false;
+	delete options.logging;
 
-  var output = options.output;
-  delete options.output;
+	var output = options.output;
+	delete options.output;
 
-  var args = [];
-  args.push(wkhtmltopdf.command );
+	var args = [];
+	args.push(wkhtmltopdf.command );
 
-  if (options.quiet)
-    args.push('--quiet');
-  delete options.quiet;
+	if (options.quiet)
+		args.push('--quiet');
+	delete options.quiet;
 
 
-  for (var key in options) {
-    var val = options[key];
-    key = key.length === 1 ? '-' + key : '--' + slang.dasherize(key);
+	for (var key in options) {
+		var val = options[key];
+		key = key.length === 1 ? '-' + key : '--' + slang.dasherize(key);
 
-    if (val !== false)
-      args.push(key);
+		var values = [];
+		if (val instanceof Array) {
+			args.push(key);
 
-    var values = [];
-    // For multiple arguments, put all of them in
-    if (val instanceof Array)
-      values = val;
-    else
-      values[0] = val;
+			// For multiple arguments, put all of them in
+			val.forEach(function (val) {
+				pushArgument(args, val);
+			});
+		} else if (val.constructor === OBJ_CONSTRUCTOR) {
+			// For object arguments, put them into repeated arguments
+			for (var key2 in val) {
+				args.push(key)
+				args.push(key2)
+				pushArgument(args, val[key2]);
+			}
+		} else {
+			if (val !== false)
+				args.push(key);
+			pushArgument(args, val);
+		}
 
-    values.forEach(function (val) {
-      if (typeof val !== 'boolean') {
-        // escape and quote the value if it is a string
-        if (typeof val === 'string') {
-          val = '"' + val.replace(/(["\\$`])/g, '\\$1') + '"';
-        } else if (val.constructor === OBJ_CONSTRUCTOR) {
-          try {
-            val = JSON.stringify(val);
-          } catch (e) {
-            console.log(e);
-          }
-        }
+	}
 
-        args.push(val);
-      }
-    });
-  }
+	var isUrl = /^(https?|file):\/\//.test(input);
+	if (process.platform === 'win32')
+		input = '"' + input + '"';
 
-  var isUrl = /^(https?|file):\/\//.test(input);
-  if (process.platform === 'win32')
-    input = '"' + input + '"';
+	args.push(isUrl ? input : '-'); // stdin if HTML given directly
+	args.push(output || '-');       // stdout if no output file
 
-  args.push(isUrl ? input : '-'); // stdin if HTML given directly
-  args.push(output || '-');       // stdout if no output file
+	if (process.platform === 'win32') {
+		args.unshift('"');
+		args.unshift('/C');
+		args.push('"');
 
-  if (process.platform === 'win32') {
-    args.unshift('"');
-    args.unshift('/C');
-    args.push('"');
+		if (logging) {
+			console.log('WKHTMLTOPDF args:\n');
+			console.dir(args);
+			console.log('\n');
+		}
 
-    if (logging) {
-      console.log('WKHTMLTOPDF args:\n');
-      console.dir(args);
-      console.log('\n');
-    }
+		var child = spawn('cmd', args, { windowsVerbatimArguments: true });
+		if (logging) logError(child);
+	} else {
+		// this nasty business prevents piping problems on linux
+		var child = spawn('/bin/sh', ['-c', args.join(' ') + ' | cat']);
+		if (logging) logError(child);
+	}
 
-    var child = spawn('cmd', args, { windowsVerbatimArguments: true });
-    if (logging) logError(child);
-  } else {
-    // this nasty business prevents piping problems on linux
-    var child = spawn('/bin/sh', ['-c', args.join(' ') + ' | cat']);
-    if (logging) logError(child);
-  }
+	if (callback)
+		child.on('exit', callback);
 
-  if (callback)
-    child.on('exit', callback);
+	if (!isUrl)
+		child.stdin.end(input);
 
-  if (!isUrl)
-    child.stdin.end(input);
-
-  // return stdout stream so we can pipe
-  return child.stdout;
+	// return stdout stream so we can pipe
+	return child.stdout;
 }
 
 function logError(child) {
-  // This output is really not that useful...
-  // child.stdout.setEncoding('utf8');
-  // child.stdout.on('data', function (data) {
-  //   console.log('(INFO) WKHTML INFO --------------------------- \n');
-  //   console.log(data);
-  // });
+	// This output is really not that useful...
+	// child.stdout.setEncoding('utf8');
+	// child.stdout.on('data', function (data) {
+	//   console.log('(INFO) WKHTML INFO --------------------------- \n');
+	//   console.log(data);
+	// });
 
-  child.stderr.setEncoding('utf8');
-  child.stderr.on('data', function (data) {
-    console.log('(ERROR) WKHTML ERROR --------------------------- \n');
-    console.log(data);
-  });
+	child.stderr.setEncoding('utf8');
+	child.stderr.on('data', function (data) {
+		console.log('(ERROR) WKHTML ERROR --------------------------- \n');
+		console.log(data);
+	});
 }
 
 wkhtmltopdf.command = 'wkhtmltopdf';

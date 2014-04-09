@@ -63,6 +63,7 @@ app.get("/", function (aReq, aRes) {
 app.post("/preview/:id", function (aReq, aRes) {
 	// TODO: Less hackery here plz
 	var data = JSON.parse(aReq.body.data);
+	var pageSize = JSON.parse(aReq.body.pageSize) || printer.A4;
 	var globalTheme = data.globalTheme;
 	var userClassList = data.userClassList;
 
@@ -143,9 +144,13 @@ app.post("/preview/:id", function (aReq, aRes) {
 		};
 	});
 
+	// Landscape, hence reversed page sizes
+	var pageSizeStyle = sprintf.s("width: %dmm;height: %dmm;", pageSize.height, pageSize.width);
+
 	var renderParams = {
 		"timeLabels": timeLabels,
 		"dayData": dayData,
+		"pageSizeStyle": pageSizeStyle,
 		"dayStyles": themeToStyle(globalTheme.daysTheme),
 		"timeStyles": themeToStyle(globalTheme.timeTheme),
 		"tableStyles": themeToStyle(globalTheme.tableTheme)
@@ -193,7 +198,7 @@ app.post("/api/print/:id", function (aReq, aRes) {
 	console.log(previewUrl);
 
 	try {
-		printer.print(previewUrl, aReq.body.data).pipe(aRes);
+		printer.print(previewUrl, JSON.parse(aReq.body.data)).pipe(aRes);
 	} catch (err) {
 		console.log(err);
 	}

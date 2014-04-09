@@ -3,7 +3,7 @@
 		<link type="text/css" rel="stylesheet" href="http://localhost:4888/css/reset.css" />
 		<link type="text/css" rel="stylesheet" href="http://localhost:4888/css/preview.css" />
 	</head>
-	<body>
+	<body style="{{= pageSizeStyle }}">
 		<article class="cl preview">
 			<div class="cl-horizontal-lines">
 				<table class="cl-time-table">
@@ -14,7 +14,7 @@
 					{{ for (var i = 0; i < timeLabels.length; i++) { }}
 						<tr data-id="time-row" class="cl-content-row">
 							<td class="cl-time-label" style="{{= timeStyles.fontColor }}">{{- timeLabels[i] }}</td>
-							<td data-id="time-divider" class="cl-time-divider"><hr></td>
+							<td class="cl-time-divider"><hr data-id="time-divider"></td>
 						</tr>
 					{{ } }}
 				</table>
@@ -54,7 +54,20 @@
 		<script>
 			var EPSILON = 1E-5;
 
+			var runOnPrint = function () {
+			};
+
+			window.matchMedia("print").addListener(function (aMatch) {
+				console.log(".......");
+				if (aMatch.matches) document.body.width="100px";
+				else console.log("NOT");
+			});
+
 			window.onload = function () {
+				realignClassItems();
+			};
+
+			var realignClassItems = function () {
 				// Move everything into the proper spot.
 				var items = document.querySelectorAll("[data-id='item']");
 				var lines = document.querySelectorAll("[data-id='time-row']");
@@ -66,8 +79,11 @@
 					for (var i = 0; i < lines.length; ++i) {
 						var divider = lines[i].querySelector("[data-id='time-divider']");
 						var lastCellHeight = lineHeights[lineHeights.length - 1].height || 0;
+
+					console.log(lines[i].offsetHeight + " " + lines[i].scrollHeight);
+
 						lineHeights.push({
-							"offset": divider.offsetTop,
+							"offset": divider.offsetTop + lastCellHeight,
 							"height": lines[i].offsetHeight + lastCellHeight
 						});
 					}
@@ -102,10 +118,8 @@
 				// Adjust for pixel-percent layout of class boxes.
 				for (var i = 0; i < items.length; ++i) {
 					var item = items[i];
-					var startPc = parseInt(item.dataset.start);
+					var startPc = parseFloat(item.dataset.start);
 					var endPc = parseFloat(item.dataset.end);
-
-					console.log(startPc + " " + endPc);
 
 					var startPx = calculatePxOffset(startPc);
 					var heightPx = calculatePxOffset(endPc) - startPx;
@@ -113,7 +127,7 @@
 					item.style.top = startPx + "px";
 					item.style.height = heightPx + "px";
 				}
-			};
+			}
 		</script>
 	</body>
 </html>

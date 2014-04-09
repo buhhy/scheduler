@@ -11,13 +11,12 @@ var PAPER_SIZES = {
 	"letter": size(279.4, 215.9)
 };
 
-exports.print = function (aUrl, aData, aPageSize) {
-	aData = aData || {};
+exports.print = function (aUrl, aPageSize) {
 	pageSize = aPageSize || PAPER_SIZES.A4;
 
 	return wkhtmltopdf(aUrl, {
 		"pageWidth": mm(pageSize.width),
-		"pageHeight": mm(pageSize.height-0.01),
+		"pageHeight": mm(pageSize.height),
 		"dpi": "96",
 		"disable-smart-shrinking": true,
 		"disable-javascript": false,
@@ -29,8 +28,7 @@ exports.print = function (aUrl, aData, aPageSize) {
 		"marginRight": "0",
 		"logging": true,
 		"post": {
-			"pageSize": pageSize,
-			"data": aData
+			"pageSize": pageSize
 		},
 		"custom-header": ["CONTENT-TYPE", "application/x-www-form-urlencoded"]
 	});

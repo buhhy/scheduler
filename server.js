@@ -190,15 +190,17 @@ app.get("/api/term", function (aReq, aRes) {
 	});
 });
 
-app.post("/api/print/:id", function (aReq, aRes) {
+app.post("/api/print/:hash", function (aReq, aRes) {
 	// TODO: Less hackery here too plz
-	var id = parseInt(aReq.params.id);
-	var previewUrl = getHostFromRequest(aReq) + "/preview/" + id;
+	var hash = aReq.params.hash;
+	var previewUrl = sprintf.s("%s/preview/%s", getHostFromRequest(aReq), hash);
+
+	mongoStore.storeUserSchedule(JSON.parse(aReq.body.data));
 
 	console.log(previewUrl);
 
 	try {
-		printer.print(previewUrl, JSON.parse(aReq.body.data)).pipe(aRes);
+		printer.print(previewUrl).pipe(aRes);
 	} catch (err) {
 		console.log(err);
 	}

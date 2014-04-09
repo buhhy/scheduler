@@ -32,8 +32,8 @@ Scheduler.views.CalendarEntry = Scheduler.views.View.extend({
 			"name": aSectionModel.get("title"),
 			"subject": aSectionModel.get("subject"),
 			"catalog": aSectionModel.get("catalog_number"),
-			"section": sectionSplit[1],
-			"type": sectionSplit[0],
+			"section": aSectionModel.get("sectionNumber"),
+			"type": aSectionModel.get("sectionType"),
 			"location": aClassModel.get("location")
 		}));
 	},
@@ -46,8 +46,8 @@ Scheduler.views.CalendarEntry = Scheduler.views.View.extend({
 		var cst = this.options.calendarStartTime;
 		var cet = this.options.calendarEndTime;
 
-		var classStartTime = this.parseTime(this.options.classModel.get("dates").start_time);
-		var classEndTime = this.parseTime(this.options.classModel.get("dates").end_time);
+		var classStartTime = this.options.classModel.get("startTime");
+		var classEndTime = this.options.classModel.get("endTime");
 
 		var totalTime = cet - cst;
 		var top = 100.0 * (classStartTime - cst) / totalTime;
@@ -72,14 +72,6 @@ Scheduler.views.CalendarEntry = Scheduler.views.View.extend({
 			"color": model.get("fontColor"),
 			"border-color": model.get("borderColor")
 		});
-	},
-
-	/**
-	 * Parses time in the format hh:mm.
-	 */
-	"parseTime": function (aTimeStr) {
-		var split = aTimeStr.split(":");
-		return parseInt(split[0]) * 60 + parseInt(split[1]);
 	},
 
 	"click": function (aCallback) {

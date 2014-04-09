@@ -1,46 +1,46 @@
 <html>
 	<head>
-		<link type="text/css" rel="stylesheet" href="/css/reset.css" />
-		<link type="text/css" rel="stylesheet" href="/css/preview.css" />
+		<link type="text/css" rel="stylesheet" href="http://localhost:4888/css/reset.css" />
+		<link type="text/css" rel="stylesheet" href="http://localhost:4888/css/preview.css" />
 	</head>
 	<body>
 		<article class="cl preview">
 			<div class="cl-horizontal-lines">
-				<table data-id="timeTable" class="cl-time-table">
+				<table class="cl-time-table">
 					<tr class="cl-header-row">
 						<th class="cl-time-label"></th>
 						<th class="cl-time-divider"></th>
 					</tr>
 					{{ for (var i = 0; i < timeLabels.length; i++) { }}
-						<tr data-id="timeLabel" class="cl-content-row">
-							<td class="cl-time-label">{{- timeLabels[i] }}</td>
-							<td class="cl-time-divider"><hr></td>
+						<tr data-id="time-row" class="cl-content-row">
+							<td class="cl-time-label" style="{{= timeStyles.fontColor }}">{{- timeLabels[i] }}</td>
+							<td data-id="time-divider" class="cl-time-divider"><hr></td>
 						</tr>
 					{{ } }}
 				</table>
 			</div>
 			<div class="cl-grid">
-				<table data-id="dayTable" class="cl-day-table">
-					<tr class="cl-header-row">
-						<th data-id="dayLabel" class="cl-header-cell cl-left-spacer"></th>
+				<table class="cl-day-table">
+					<tr style="{{= dayStyles.fontColor + ' ' + dayStyles.backgroundColor }}" class="cl-header-row">
+						<th class="cl-header-cell cl-left-spacer"></th>
 						{{ for (var i = 0; i < dayData.length; i++) { }}
-							<th data-id="dayLabel" class="cl-header-cell">{{- dayData[i].label }}</th>
+							<th class="cl-header-cell">{{- dayData[i].label }}</th>
 						{{ } }}
 					</tr>
 					<tr class="cl-content-row">
 						<td></td>
 						{{ for (var i = 0; i < dayData.length; i++) { }}
 							<td class="cl-content-cell">
-								<div data-id="positionContainer" class="position-container">
+								<div class="position-container">
 									{{
 									for (var j = 0; j < dayData[i].entries.length; j++) {
 										var en = dayData[i].entries[j];
 									}}
-										<article class="cl-entry">
+										<article data-id="item" data-start="{{= en.startTimeBracket }}" data-end="{{= en.endTimeBracket }}" class="cl-entry">
 											<section class="cl-marquee"></section>
 											<h1 class="cl-title">{{= en.name }}</h1>
 											<h2 class="cl-desc">{{= en.subject }} {{= en.catalog }} - {{= en.section }} {{= en.type }}</h2>
-											<h2 class="cl-desc">{{= en.location["building"] }} {{= en.location["room"] }}</h2>
+											<h2 class="cl-desc">{{= en.building }} {{= en.room }}</h2>
 										</article>
 									{{ } }}
 								</div>
@@ -50,5 +50,70 @@
 				</table>
 			</div>
 		</article>
+
+		<script>
+			var EPSILON = 1E-5;
+
+			window.onload = function () {
+				// Move everything into the proper spot.
+				var items = document.querySelectorAll("[data-id='item']");
+				var lines = document.querySelectorAll("[data-id='time-row']");
+
+				// Prebuild a cache of line-heights.
+				var lineHeights = [{}];
+
+				{
+					for (var i = 0; i < lines.length; ++i) {
+						var divider = lines[i].querySelector("[data-id='time-divider']");
+						var lastCellHeight = lineHeights[lineHeights.length - 1].height || 0;
+						lineHeights.push({
+							"offset": divider.offsetTop,
+							"height": lines[i].offsetHeight + lastCellHeight
+						});
+					}
+
+					var last = lineHeights[lineHeights.length - 1];
+
+					lineHeights[0] = {
+						"offset": -lineHeights[1].offset
+					}
+
+					lineHeights.push({
+						"offset": last.offset + last.height
+					});
+				}
+
+				var calculatePxOffset = function (aPcOffset) {
+					var fl = Math.floor(aPcOffset);
+					var rem = Math.abs(aPcOffset - fl);
+					var startPx = lineHeights[fl].offset;
+
+					// If there is a fractional component, then we need to append it
+					if (rem > EPSILON) {
+						var endPx = lineHeights[fl + 1].offset;
+						return startPx + Math.round(rem * (endPx - startPx));
+					} else {
+						return startPx;
+					}
+				}
+
+				console.log(JSON.stringify(lineHeights, false, "  "));
+
+				// Adjust for pixel-percent layout of class boxes.
+				for (var i = 0; i < items.length; ++i) {
+					var item = items[i];
+					var startPc = parseInt(item.dataset.start);
+					var endPc = parseFloat(item.dataset.end);
+
+					console.log(startPc + " " + endPc);
+
+					var startPx = calculatePxOffset(startPc);
+					var heightPx = calculatePxOffset(endPc) - startPx;
+
+					item.style.top = startPx + "px";
+					item.style.height = heightPx + "px";
+				}
+			};
+		</script>
 	</body>
 </html>

@@ -24,14 +24,14 @@ Scheduler.views.CalendarEntryGroup = Scheduler.views.View.extend({
 
 	"buildElements": function (aSectionModel) {
 		var baseClasses = aSectionModel.get("classes").filter(function (aClass) {
-			return !(aClass.get("start_time") || aClass.get("end_time"));
+			return aClass.get("startTime") && aClass.get("endTime");
 		});
 		var self = this;
 
 		return _.flatten(_.map(_.filter(baseClasses, function (aClassModel) {
-			return aClassModel.get("dates").weekdays;
+			return aClassModel.get("indexedWeekdays");
 		}), function (aClassModel) {
-			return _.map(aClassModel.get("dates").indexedWeekdays, function (aDay) {
+			return _.map(aClassModel.get("indexedWeekdays"), function (aDay) {
 				return new Scheduler.views.CalendarEntry({
 					"weekday": aDay,
 					"calendarStartTime": self.options.calendarStartTime,

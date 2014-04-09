@@ -161,15 +161,10 @@
 .cl .cl-day-table th:first-child {
   border-left: none;
 }
-.cl .cl-day-table .cl-content-row {
-  height: 100%;
-}
-.cl .cl-header-row {
-  height: 2.5em;
-  letter-spacing: 2px;
-}
-.cl .cl-header-row .cl-header-cell {
+.cl .cl-day-table .cl-header-row {
   background-color: #c9c9ca;
+}
+.cl .cl-day-table .cl-header-row .cl-header-cell {
   font-weight: 300;
   padding-right: 1.2em;
   text-align: right;
@@ -180,8 +175,15 @@
   -moz-transition: background 200ms ease;
   -webkit-transition: background 200ms ease;
 }
-.cl .cl-header-row .cl-header-cell b {
+.cl .cl-day-table .cl-header-row .cl-header-cell b {
   font-weight: 700;
+}
+.cl .cl-day-table .cl-content-row {
+  height: 100%;
+}
+.cl .cl-header-row {
+  height: 2.5em;
+  letter-spacing: 2px;
 }
 .cl .cl-left-spacer {
   width: 8em;

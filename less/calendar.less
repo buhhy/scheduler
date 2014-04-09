@@ -52,6 +52,23 @@
 			}
 		}
 
+		.cl-header-row {
+			background-color: #c9c9ca;
+
+			.cl-header-cell {
+				font-weight: 300;
+				padding-right: 1.2em;
+				text-align: right;
+				font-size: 0.75em;
+
+				.transition(~"background 200ms ease");
+
+				b {
+					font-weight: 700;
+				}
+			}
+		}
+
 		// Fixes Firefox bug where the child div doesn't stretch to 100% of height of table cell.
 		.cl-content-row {
 			height: 100%;
@@ -61,20 +78,6 @@
 	.cl-header-row {
 		height: 2.5em;
 		letter-spacing: 2px;
-
-		.cl-header-cell {
-			background-color: #c9c9ca;
-			font-weight: 300;
-			padding-right: 1.2em;
-			text-align: right;
-			font-size: 0.75em;
-
-			.transition(~"background 200ms ease");
-
-			b {
-				font-weight: 700;
-			}
-		}
 	}
 
 	.cl-left-spacer {

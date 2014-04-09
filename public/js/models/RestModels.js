@@ -109,7 +109,13 @@ Scheduler.models.Section = Scheduler.models.Model.extend({
 		if (section && section.length == 2) {
 			this.set("sectionType", section[0]);
 			this.set("sectionNumber", section[1]);
+		} else {
+			this.set("sectionType", "N/A");
+			this.set("sectionNumber", "N/A");
 		}
+
+		// Changing for consistent naming.
+		this.set("catalogNumber", this.get("catalog_number"));
 
 		// Aggregate multiple classes in a section to a single displayable class.
 		this.aggregateClasses();
@@ -218,6 +224,8 @@ Scheduler.models.Class = Scheduler.models.Model.extend({
 		var dates = this.get("dates");
 
 		if (dates.weekdays) {
+			// Convert weekday letters to an array index, with Sunday being 0
+
 			var rawDays = dates.weekdays.toLowerCase().match(this.WEEKDAYS_REGEX).slice(1);
 			var self = this;
 			var days = _.map(
@@ -227,10 +235,27 @@ Scheduler.models.Class = Scheduler.models.Model.extend({
 					return self.WEEKDAYS_INDEX_LOOKUP[aDay];
 				});
 
-			dates.indexedWeekdays = days;
+			this.set("indexedWeekdays", days);
 		} else {
-			dates.indexedWeekdays = [];
+			this.set("indexedWeekdays", []);
 		}
+
+		// Convert start and end time from string to integer of seconds
+		this.set("startTime", this.parseTime(dates.start_time || "0:00"));
+		this.set("endTime", this.parseTime(dates.end_time || "23:59"));
+
+		// Make sure there is a location.
+		var location = this.get("location") || {};
+		this.set("building", location.building || "N/A");
+		this.set("room", location.room || "N/A");
+	},
+
+	/**
+	 * Parses time in the format hh:mm.
+	 */
+	"parseTime": function (aTimeStr) {
+		var split = aTimeStr.split(":");
+		return parseInt(split[0]) * 60 + parseInt(split[1]);
 	}
 });
 

@@ -7,18 +7,12 @@ Scheduler.models.ClassData = Scheduler.models.Model.extend({
 
 	"DOMAIN": "http://localhost:4888/%s",
 
-	"CLASS_DATA_URL": "api/class",
-	"TERM_DATA_URL": "api/term",
-	"SEARCH_URL": "api/%d/class",
+	"CLASS_DATA_URL": "/api/class",
+	"TERM_DATA_URL": "/api/term",
+	"SEARCH_URL": "/api/%d/class",
 
 	"initialize": function () {
 		Scheduler.models.Model.prototype.initialize.call(this);
-	},
-
-	"buildApiUrl": function (aUrl, aArgs) {
-		var args = aArgs || [];
-		var url = vsprintf(aUrl, args);
-		return sprintf(this.DOMAIN, url);
 	},
 
 	// "fetchTermClassList": function (aOnFinish) {
@@ -37,7 +31,7 @@ Scheduler.models.ClassData = Scheduler.models.Model.extend({
 		var self = this;
 
 		$.ajax({
-			"url": this.buildApiUrl(this.TERM_DATA_URL)
+			"url": this.TERM_DATA_URL
 		}).done(function (aData) {
 			if (aData)
 				self.set("termList", aData);
@@ -54,7 +48,7 @@ Scheduler.models.ClassData = Scheduler.models.Model.extend({
 
 			if (selTerm) {
 				$.ajax({
-					"url": this.buildApiUrl(this.SEARCH_URL, [selTerm.id]),
+					"url": sprintf(this.SEARCH_URL, selTerm.id),
 					"data": {
 						"search": aText
 					}

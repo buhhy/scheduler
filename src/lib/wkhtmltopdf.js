@@ -2,6 +2,8 @@
 var spawn = require('child_process').spawn;
 var slang = require('slang');
 
+var OBJ_CONSTRUCTOR = {}.constructor;
+
 function wkhtmltopdf(input, options, callback) {
   if (!options) {
     options = { quiet: true, logging: false, };
@@ -40,8 +42,15 @@ function wkhtmltopdf(input, options, callback) {
     values.forEach(function (val) {
       if (typeof val !== 'boolean') {
         // escape and quote the value if it is a string
-        if (typeof val === 'string')
+        if (typeof val === 'string') {
           val = '"' + val.replace(/(["\\$`])/g, '\\$1') + '"';
+        } else if (val.constructor === OBJ_CONSTRUCTOR) {
+          try {
+            val = JSON.stringify(val);
+          } catch (e) {
+            console.log(e);
+          }
+        }
 
         args.push(val);
       }

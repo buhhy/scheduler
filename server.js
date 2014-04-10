@@ -61,104 +61,108 @@ app.get("/", function (aReq, aRes) {
 });
 
 app.get("/preview/:hash", function (aReq, aRes) {
-	mongoStore.findUserSchedule(aReq.params.hash, function (aData) {
-		console.log(aData);
-		// TODO: Less hackery here plz, retrieve page size from request
-		var pageSize = printer.PAPER_SIZES.A4;
-		var globalTheme = aData.globalTheme;
-		var userClassList = aData.userClassList;
+	var hash = aReq.params.hash;
+	mongoStore.findUserSchedule(hash, function (aData) {
+		if (!aData) {
+			aRes.send(404, sprintf.s("Could not find schedule with url hash `%s`.", hash));
+		} else {
+			// TODO: Less hackery here plz, retrieve page size from request
+			var pageSize = printer.PAPER_SIZES.A4;
+			var globalTheme = aData.globalTheme;
+			var userClassList = aData.userClassList;
 
 
-		var calStartTime = aData.calendarSettings.startTime;
-		var calEndTime = aData.calendarSettings.endTime;
-		var interval = aData.calendarSettings.interval;
-		var startOffset = aData.calendarSettings.startOffset;
+			var calStartTime = aData.calendarSettings.startTime;
+			var calEndTime = aData.calendarSettings.endTime;
+			var interval = aData.calendarSettings.interval;
+			var startOffset = aData.calendarSettings.startOffset;
 
-		var timeLabels = [];
-		var dayLabels = [
-			"<b>SUN</b>DAY",
-			"<b>MON</b>DAY",
-			"<b>TUE</b>SDAY",
-			"<b>WED</b>NESDAY",
-			"<b>THU</b>RSDAY",
-			"<b>FRI</b>DAY",
-			"<b>SAT</b>URDAY"
-		];
+			var timeLabels = [];
+			var dayLabels = [
+				"<b>SUN</b>DAY",
+				"<b>MON</b>DAY",
+				"<b>TUE</b>SDAY",
+				"<b>WED</b>NESDAY",
+				"<b>THU</b>RSDAY",
+				"<b>FRI</b>DAY",
+				"<b>SAT</b>URDAY"
+			];
 
-		var minutesToStringFormat = function (aMin) {
-			var pastNoon = aMin >= 12 * 60;
-			var hour = Math.floor(aMin / 60) % 12 || 12;
-			var min = aMin % 60;
-			return hour + (pastNoon ? " PM" : " AM");
-		};
+			var minutesToStringFormat = function (aMin) {
+				var pastNoon = aMin >= 12 * 60;
+				var hour = Math.floor(aMin / 60) % 12 || 12;
+				var min = aMin % 60;
+				return hour + (pastNoon ? " PM" : " AM");
+			};
 
-		var themeToStyle = function (aTheme) {
-			var styles = {}
+			var themeToStyle = function (aTheme) {
+				var styles = {}
 
-			if (aTheme.backgroundColor)
-				styles.backgroundColor = sprintf.s("background-color:%s;", aTheme.backgroundColor);
-			if (aTheme.fontColor)
-				styles.fontColor = sprintf.s("color:%s;", aTheme.fontColor);
-			if (aTheme.borderColor)
-				styles.fontColor = sprintf.s("border-color:%s;", aTheme.borderColor);
+				if (aTheme.backgroundColor)
+					styles.backgroundColor = sprintf.s("background-color:%s;", aTheme.backgroundColor);
+				if (aTheme.fontColor)
+					styles.fontColor = sprintf.s("color:%s;", aTheme.fontColor);
+				if (aTheme.borderColor)
+					styles.fontColor = sprintf.s("border-color:%s;", aTheme.borderColor);
 
-			return styles;
-		};
+				return styles;
+			};
 
-		var calculateBracketPosition = function (aTime) {
-			return (aTime - calStartTime + startOffset) / interval;
-		};
+			var calculateBracketPosition = function (aTime) {
+				return (aTime - calStartTime + startOffset) / interval;
+			};
 
-		var classesByDays = [];
+			var classesByDays = [];
 
-		// Retrives for each day, a list of classes that occur on that day
-		userClassList.forEach(function (aSection) {
-			aSection.classes.forEach(function (aClass) {
-				aClass.indexedWeekdays.forEach(function (aIndex) {
-					var classesByDay = classesByDays[aIndex] || [];
+			// Retrives for each day, a list of classes that occur on that day
+			userClassList.forEach(function (aSection) {
+				aSection.classes.forEach(function (aClass) {
+					aClass.indexedWeekdays.forEach(function (aIndex) {
+						var classesByDay = classesByDays[aIndex] || [];
 
-					classesByDay.push({
-						"name": aSection.title,
-						"subject": aSection.subject,
-						"catalog": aSection.catalogNumber,
-						"section": aSection.sectionNumber,
-						"type": aSection.sectionType,
-						"building": aClass.building,
-						"room": aClass.room,
-						"startTimeBracket": calculateBracketPosition(aClass.startTime),
-						"endTimeBracket": calculateBracketPosition(aClass.endTime)
+						classesByDay.push({
+							"name": aSection.title,
+							"subject": aSection.subject,
+							"catalog": aSection.catalogNumber,
+							"section": aSection.sectionNumber,
+							"type": aSection.sectionType,
+							"building": aClass.building,
+							"room": aClass.room,
+							"startTimeBracket": calculateBracketPosition(aClass.startTime),
+							"endTimeBracket": calculateBracketPosition(aClass.endTime)
+						});
+
+						classesByDays[aIndex] = classesByDay;
 					});
-
-					classesByDays[aIndex] = classesByDay;
 				});
 			});
-		});
 
-		for (var i = calStartTime + startOffset; i < calEndTime; i += interval)
-			timeLabels.push(minutesToStringFormat(i));
+			for (var i = calStartTime + startOffset; i < calEndTime; i += interval)
+				timeLabels.push(minutesToStringFormat(i));
 
-		var dayData = dayLabels.map(function (aLabel, aIndex) {
-			return {
-				"label": aLabel,
-				"entries": classesByDays[aIndex] || []
+			var dayData = dayLabels.map(function (aLabel, aIndex) {
+				return {
+					"label": aLabel,
+					"entries": classesByDays[aIndex] || []
+				};
+			});
+
+			// Landscape, hence reversed page sizes
+			var pageSizeStyle = sprintf.s("width: %dmm;height: %dmm;", pageSize.height, pageSize.width);
+
+			var renderParams = {
+				"timeLabels": timeLabels,
+				"dayData": dayData,
+				"pageSizeStyle": pageSizeStyle,
+				"dayStyles": themeToStyle(globalTheme.daysTheme),
+				"timeStyles": themeToStyle(globalTheme.timeTheme),
+				"tableStyles": themeToStyle(globalTheme.tableTheme)
 			};
-		});
 
-		// Landscape, hence reversed page sizes
-		var pageSizeStyle = sprintf.s("width: %dmm;height: %dmm;", pageSize.height, pageSize.width);
+			console.log(JSON.stringify(renderParams, null, "  "));
 
-		var renderParams = {
-			"timeLabels": timeLabels,
-			"dayData": dayData,
-			"pageSizeStyle": pageSizeStyle,
-			"dayStyles": themeToStyle(globalTheme.daysTheme),
-			"timeStyles": themeToStyle(globalTheme.timeTheme),
-			"tableStyles": themeToStyle(globalTheme.tableTheme)
-		};
-
-		console.log(JSON.stringify(renderParams, null, "  "));
-
-		aRes.render("preview.ejs", renderParams);
+			aRes.render("preview.ejs", renderParams);
+		}
 	});
 });
 

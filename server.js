@@ -60,105 +60,106 @@ app.get("/", function (aReq, aRes) {
 	aRes.render("index.html", { /* params */ });
 });
 
-app.post("/preview/:id", function (aReq, aRes) {
-	// TODO: Less hackery here plz
-	var data = JSON.parse(aReq.body.data);
-	var pageSize = JSON.parse(aReq.body.pageSize) || printer.A4;
-	var globalTheme = data.globalTheme;
-	var userClassList = data.userClassList;
+app.post("/preview/:hash", function (aReq, aRes) {
+	mongoStore.findUserSchedule(aReq.params.hash, function (aData) {
+		console.log(aData);
+		// TODO: Less hackery here plz
+		var pageSize = JSON.parse(aReq.body.pageSize) || printer.A4;
+		var globalTheme = aData.globalTheme;
+		var userClassList = aData.userClassList;
 
-	var id = parseInt(aReq.params.id);
 
-	var calStartTime = data.calendarSettings.startTime;
-	var calEndTime = data.calendarSettings.endTime;
-	var interval = data.calendarSettings.interval;
-	var startOffset = data.calendarSettings.startOffset;
+		var calStartTime = aData.calendarSettings.startTime;
+		var calEndTime = aData.calendarSettings.endTime;
+		var interval = aData.calendarSettings.interval;
+		var startOffset = aData.calendarSettings.startOffset;
 
-	var timeLabels = [];
-	var dayLabels = [
-		"<b>SUN</b>DAY",
-		"<b>MON</b>DAY",
-		"<b>TUE</b>SDAY",
-		"<b>WED</b>NESDAY",
-		"<b>THU</b>RSDAY",
-		"<b>FRI</b>DAY",
-		"<b>SAT</b>URDAY"
-	];
+		var timeLabels = [];
+		var dayLabels = [
+			"<b>SUN</b>DAY",
+			"<b>MON</b>DAY",
+			"<b>TUE</b>SDAY",
+			"<b>WED</b>NESDAY",
+			"<b>THU</b>RSDAY",
+			"<b>FRI</b>DAY",
+			"<b>SAT</b>URDAY"
+		];
 
-	var minutesToStringFormat = function (aMin) {
-		var pastNoon = aMin >= 12 * 60;
-		var hour = Math.floor(aMin / 60) % 12 || 12;
-		var min = aMin % 60;
-		return hour + (pastNoon ? " PM" : " AM");
-	};
+		var minutesToStringFormat = function (aMin) {
+			var pastNoon = aMin >= 12 * 60;
+			var hour = Math.floor(aMin / 60) % 12 || 12;
+			var min = aMin % 60;
+			return hour + (pastNoon ? " PM" : " AM");
+		};
 
-	var themeToStyle = function (aTheme) {
-		var styles = {}
+		var themeToStyle = function (aTheme) {
+			var styles = {}
 
-		if (aTheme.backgroundColor)
-			styles.backgroundColor = sprintf.s("background-color:%s;", aTheme.backgroundColor);
-		if (aTheme.fontColor)
-			styles.fontColor = sprintf.s("color:%s;", aTheme.fontColor);
-		if (aTheme.borderColor)
-			styles.fontColor = sprintf.s("border-color:%s;", aTheme.borderColor);
+			if (aTheme.backgroundColor)
+				styles.backgroundColor = sprintf.s("background-color:%s;", aTheme.backgroundColor);
+			if (aTheme.fontColor)
+				styles.fontColor = sprintf.s("color:%s;", aTheme.fontColor);
+			if (aTheme.borderColor)
+				styles.fontColor = sprintf.s("border-color:%s;", aTheme.borderColor);
 
-		return styles;
-	};
+			return styles;
+		};
 
-	var calculateBracketPosition = function (aTime) {
-		return (aTime - calStartTime + startOffset) / interval;
-	};
+		var calculateBracketPosition = function (aTime) {
+			return (aTime - calStartTime + startOffset) / interval;
+		};
 
-	var classesByDays = [];
+		var classesByDays = [];
 
-	// Retrives for each day, a list of classes that occur on that day
-	userClassList.forEach(function (aSection) {
-		aSection.classes.forEach(function (aClass) {
-			aClass.indexedWeekdays.forEach(function (aIndex) {
-				var classesByDay = classesByDays[aIndex] || [];
+		// Retrives for each day, a list of classes that occur on that day
+		userClassList.forEach(function (aSection) {
+			aSection.classes.forEach(function (aClass) {
+				aClass.indexedWeekdays.forEach(function (aIndex) {
+					var classesByDay = classesByDays[aIndex] || [];
 
-				classesByDay.push({
-					"name": aSection.title,
-					"subject": aSection.subject,
-					"catalog": aSection.catalogNumber,
-					"section": aSection.sectionNumber,
-					"type": aSection.sectionType,
-					"building": aClass.building,
-					"room": aClass.room,
-					"startTimeBracket": calculateBracketPosition(aClass.startTime),
-					"endTimeBracket": calculateBracketPosition(aClass.endTime)
+					classesByDay.push({
+						"name": aSection.title,
+						"subject": aSection.subject,
+						"catalog": aSection.catalogNumber,
+						"section": aSection.sectionNumber,
+						"type": aSection.sectionType,
+						"building": aClass.building,
+						"room": aClass.room,
+						"startTimeBracket": calculateBracketPosition(aClass.startTime),
+						"endTimeBracket": calculateBracketPosition(aClass.endTime)
+					});
+
+					classesByDays[aIndex] = classesByDay;
 				});
-
-				classesByDays[aIndex] = classesByDay;
 			});
 		});
-	});
 
-	for (var i = calStartTime + startOffset; i < calEndTime; i += interval)
-		timeLabels.push(minutesToStringFormat(i));
+		for (var i = calStartTime + startOffset; i < calEndTime; i += interval)
+			timeLabels.push(minutesToStringFormat(i));
 
-	var dayData = dayLabels.map(function (aLabel, aIndex) {
-		return {
-			"label": aLabel,
-			"entries": classesByDays[aIndex] || []
+		var dayData = dayLabels.map(function (aLabel, aIndex) {
+			return {
+				"label": aLabel,
+				"entries": classesByDays[aIndex] || []
+			};
+		});
+
+		// Landscape, hence reversed page sizes
+		var pageSizeStyle = sprintf.s("width: %dmm;height: %dmm;", pageSize.height, pageSize.width);
+
+		var renderParams = {
+			"timeLabels": timeLabels,
+			"dayData": dayData,
+			"pageSizeStyle": pageSizeStyle,
+			"dayStyles": themeToStyle(globalTheme.daysTheme),
+			"timeStyles": themeToStyle(globalTheme.timeTheme),
+			"tableStyles": themeToStyle(globalTheme.tableTheme)
 		};
+
+		console.log(JSON.stringify(renderParams, null, "  "));
+
+		aRes.render("preview.ejs", renderParams);
 	});
-
-	// Landscape, hence reversed page sizes
-	var pageSizeStyle = sprintf.s("width: %dmm;height: %dmm;", pageSize.height, pageSize.width);
-
-	var renderParams = {
-		"timeLabels": timeLabels,
-		"dayData": dayData,
-		"pageSizeStyle": pageSizeStyle,
-		"dayStyles": themeToStyle(globalTheme.daysTheme),
-		"timeStyles": themeToStyle(globalTheme.timeTheme),
-		"tableStyles": themeToStyle(globalTheme.tableTheme)
-	};
-
-	console.log(JSON.stringify(renderParams, null, "  "));
-
-	aRes.render("preview.ejs", renderParams);
 });
 
 app.get("/api/class", function (aReq, aRes) {
@@ -193,17 +194,16 @@ app.get("/api/term", function (aReq, aRes) {
 app.post("/api/print/:hash", function (aReq, aRes) {
 	// TODO: Less hackery here too plz
 	var hash = aReq.params.hash;
-	var previewUrl = sprintf.s("%s/preview/%s", getHostFromRequest(aReq), hash);
 
-	mongoStore.storeUserSchedule(JSON.parse(aReq.body.data));
-
-	console.log(previewUrl);
-
-	try {
-		printer.print(previewUrl).pipe(aRes);
-	} catch (err) {
-		console.log(err);
-	}
+	mongoStore.storeUserSchedule(JSON.parse(aReq.body.data), undefined, function (aResult) {
+		try {
+			var previewUrl = sprintf.s("%s/preview/%s", getHostFromRequest(aReq), aResult.hash);
+			console.log(previewUrl);
+			printer.print(previewUrl).pipe(aRes);
+		} catch (err) {
+			console.log(err);
+		}
+	});
 });
 
 app.listen(port);

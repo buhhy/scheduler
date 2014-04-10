@@ -54,15 +54,6 @@
 		<script>
 			var EPSILON = 1E-5;
 
-			var runOnPrint = function () {
-			};
-
-			window.matchMedia("print").addListener(function (aMatch) {
-				console.log(".......");
-				if (aMatch.matches) document.body.width="100px";
-				else console.log("NOT");
-			});
-
 			window.onload = function () {
 				realignClassItems();
 			};
@@ -79,8 +70,6 @@
 					for (var i = 0; i < lines.length; ++i) {
 						var divider = lines[i].querySelector("[data-id='time-divider']");
 						var lastCellHeight = lineHeights[lineHeights.length - 1].height || 0;
-
-					console.log(lines[i].offsetHeight + " " + lines[i].scrollHeight);
 
 						lineHeights.push({
 							"offset": divider.offsetTop + lastCellHeight,
@@ -112,8 +101,6 @@
 						return startPx;
 					}
 				}
-
-				console.log(JSON.stringify(lineHeights, false, "  "));
 
 				// Adjust for pixel-percent layout of class boxes.
 				for (var i = 0; i < items.length; ++i) {

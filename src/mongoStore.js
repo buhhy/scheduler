@@ -153,16 +153,16 @@ var findUserSchedule = function (aHash, aCallback) {
 	}
 };
 
-var storeUserSchedule = function (aSchedule, aId) {
+var storeUserSchedule = function (aSchedule, aId, aCallback) {
 	if (db) {
 		if (aId === null || aId === undefined) {
 			// insert new schedule
 			getNextId(scheduleIdKey, function (aNewId) {
-				console.log(aNewId);
 				aSchedule._id = aNewId;
 				aSchedule.hash = hashId(aSchedule._id);
-				userSchedule.insert(aSchedule, function (aError) {
+				userSchedule.insert(aSchedule, function (aError, aResult) {
 					if (aError) console.log(aError);
+					else if (aCallback) aCallback(aResult[0]);
 				});
 				console.log(
 					sprintf.s("Inserted new schedule with ID `%d` and hash `%s` into database.",

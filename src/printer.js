@@ -27,9 +27,6 @@ exports.print = function (aUrl, aPageSize) {
 		"marginLeft": "0",
 		"marginRight": "0",
 		"logging": true,
-		"post": {
-			"pageSize": pageSize
-		},
 		"custom-header": ["CONTENT-TYPE", "application/x-www-form-urlencoded"]
 	});
 };

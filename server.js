@@ -60,11 +60,11 @@ app.get("/", function (aReq, aRes) {
 	aRes.render("index.html", { /* params */ });
 });
 
-app.post("/preview/:hash", function (aReq, aRes) {
+app.get("/preview/:hash", function (aReq, aRes) {
 	mongoStore.findUserSchedule(aReq.params.hash, function (aData) {
 		console.log(aData);
-		// TODO: Less hackery here plz
-		var pageSize = JSON.parse(aReq.body.pageSize) || printer.A4;
+		// TODO: Less hackery here plz, retrieve page size from request
+		var pageSize = printer.PAPER_SIZES.A4;
 		var globalTheme = aData.globalTheme;
 		var userClassList = aData.userClassList;
 

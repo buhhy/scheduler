@@ -60,7 +60,7 @@ Scheduler.models.CourseCollection = Scheduler.models.Collection.extend({
 });
 
 /*
-Sample:
+Pre-processing:
 	{
 		"subject": "STV",
 		"catalog_number": "100",
@@ -84,6 +84,14 @@ Sample:
 		"term": 1141,
 		"academic_level": "undergraduate",
 		"last_updated": "2013-12-31T18:02:45-05:00"
+	}
+Post-processing:
+	{
+		"subject": "STV",
+		"catalogNumber": "100",
+		"sectionType": "LEC",
+		"sectionNumber": "001",
+		"classes": []
 	}
 */
 
@@ -131,25 +139,29 @@ Scheduler.models.Section = Scheduler.models.Model.extend({
 		});
 
 		var self = this;
+		var aggregates = {};
 
 		this.set("aggregatedClasses", this.get("classes").reduce(function (aAggregate, aClass) {
-			// If start/end times are already set, simple update if times are the same, otherwise
-			// ignore this entry.
-			if (aAggregate.startTime && aAggregate.endTime) {
-
-			} else {
-				return {
-					"weekdays": [],
-					"startTime": aClass.get("start_time"),
-					"endTime": aClass.get("end_time")
-				};
+			var push = true;
+			for (var i = 0; i < aAggregate.length; i++) {
+				if (aAggregate[i].equals(aClass))
+					push = false;
 			}
-		}, {
-			"weekdays": [],
-			"startTime": undefined,
-			"endTime": undefined,
-			"location": undefined
-		}));
+			if (push)
+				aAggregate.push(aClass);
+			return aAggregate;
+		}, []));
+	},
+
+	"getAggregateTimeString": function () {
+		var clazz = this.get("aggregatedClasses");
+
+		if (clazz.length > 1)
+			return "multiple";
+		else if (clazz.length == 1)
+			return clazz[0].getAggregateTimeString();
+		else
+			return "none"
 	}
 });
 
@@ -174,7 +186,7 @@ Scheduler.models.SectionCollection = Scheduler.models.Collection.extend({
 });
 
 /*
-Sample:
+Pre-processing:
 	{
 		"dates": {
 			"start_time": "18:30",
@@ -193,6 +205,14 @@ Sample:
 		"instructors": [
 			"Campbell,Scott Martin"
 		]
+	}
+Post-processing:
+	{
+		"startTime": 1110,
+		"endTime": 1280,
+		"indexedWeekdays": [ 1 ],
+		"building": "E5",
+		"room": "6004"
 	}
  */
 
@@ -241,8 +261,8 @@ Scheduler.models.Class = Scheduler.models.Model.extend({
 		}
 
 		// Convert start and end time from string to integer of seconds
-		this.set("startTime", this.parseTime(dates.start_time || "0:00"));
-		this.set("endTime", this.parseTime(dates.end_time || "23:59"));
+		this.set("startTime", TimeUtils.parseTimeToMinutes(dates.start_time || "0:00"));
+		this.set("endTime", TimeUtils.parseTimeToMinutes(dates.end_time || "23:59"));
 
 		// Make sure there is a location.
 		var location = this.get("location") || {};
@@ -250,12 +270,25 @@ Scheduler.models.Class = Scheduler.models.Model.extend({
 		this.set("room", location.room || "N/A");
 	},
 
-	/**
-	 * Parses time in the format hh:mm.
-	 */
-	"parseTime": function (aTimeStr) {
-		var split = aTimeStr.split(":");
-		return parseInt(split[0]) * 60 + parseInt(split[1]);
+	"getAggregateTimeString": function () {
+		var self = this;
+		return sprintf("%s-%s %s",
+			TimeUtils.minutesToStringFormat(this.get("startTime")),
+			TimeUtils.minutesToStringFormat(this.get("endTime")),
+			_.reduce(
+				this.get("indexedWeekdays"),
+				function (aAgg, aDay) {
+					return aAgg + self.WEEKDAYS_TEXT_LOOKUP[aDay];
+				}, ""));
+	},
+
+	"equals": function (aClass) {
+		return
+			aClass.get("startTime") === this.get("startTime") &&
+			aClass.get("endTime") === this.get("endTime") &&
+			aClass.get("indexedWeekdays") === this.get("indexedWeekdays") &&
+			aClass.get("building").toLowerCase === this.get("building").toLowerCase &&
+			aClass.get("room").toLowerCase === this.get("room").toLowerCase;
 	}
 });
 

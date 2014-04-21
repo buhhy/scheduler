@@ -153,8 +153,7 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 			"catalog": aSection.get("catalog_number"),
 			"section": aSection.get("sectionNumber"),
 			"type": aSection.get("sectionType"),
-			"time": "",
-			"day": ""
+			"times": aSection.getAggregateTimeString()
 		}));
 
 		$addedEntry.find("[data-id='remove']").click(function (aEvent) {

@@ -6,8 +6,7 @@ Scheduler.views.CalendarEntryGroup = Scheduler.views.View.extend({
 	"defaults": {
 		"sectionModel": undefined,
 		"calendarColumns": [],
-		"calendarStartTime": 0,
-		"calendarEndTime": 24 * 60
+		"calendarSettings": undefined
 	},
 
 	"options": undefined,
@@ -34,8 +33,7 @@ Scheduler.views.CalendarEntryGroup = Scheduler.views.View.extend({
 			return _.map(aClassModel.get("indexedWeekdays"), function (aDay) {
 				return new Scheduler.views.CalendarEntry({
 					"weekday": aDay,
-					"calendarStartTime": self.options.calendarStartTime,
-					"calendarEndTime": self.options.calendarEndTime,
+					"calendarSettings": self.options.calendarSettings,
 					"sectionModel": self.options.sectionModel,
 					"classModel": aClassModel
 				});

@@ -4,7 +4,14 @@ Scheduler.models.CalendarSettings = Scheduler.models.Model.extend({
 		"endTime": 22 * 60 + 30,
 		"interval": 60,
 		"startOffset": 30,
-		"autofit": false
+		"autofit": false,
+		// different styling applied to classes of different lengths in minutes
+		"thresholds": [
+			{ name: "mini", threshold: 30},
+			{ name: "short", threshold: 60},
+			{ name: "regular", threshold: 90},
+			{ name: "long", threshold: Number.MAX_VALUE}
+		]
 	},
 
 	"initialize": function () {

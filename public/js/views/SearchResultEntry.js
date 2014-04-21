@@ -20,8 +20,7 @@ Scheduler.views.SearchResultEntry = Scheduler.views.View.extend({
 	"buildElement": function (aSectionModel) {
 		return $(_.template($("#templateSearchResultEntry").html(), {
 			"catalog": aSectionModel.get("sectionNumber"),
-			"weekdays": "weekdays",
-			"time": "time"
+			"times": aSectionModel.getAggregateTimeString()
 		}));
 	},
 

@@ -6,8 +6,7 @@ Scheduler.views.CalendarEntry = Scheduler.views.View.extend({
 		"weekday": undefined,
 		"sectionModel": undefined,
 		"classModel": undefined,
-		"calendarStartTime": 0,
-		"calendarEndTime": 24 * 60
+		"calendarSettings": undefined
 	},
 
 	"options": undefined,
@@ -43,15 +42,24 @@ Scheduler.views.CalendarEntry = Scheduler.views.View.extend({
 	 * meaning resizing the window should result in instantly updated positions.
 	 */
 	"reposition": function () {
-		var cst = this.options.calendarStartTime;
-		var cet = this.options.calendarEndTime;
+		var cst = this.options.calendarSettings.get("startTime");
+		var cet = this.options.calendarSettings.get("endTime");
+		var thresholds = this.options.calendarSettings.get("thresholds");
 
 		var classStartTime = this.options.classModel.get("startTime");
 		var classEndTime = this.options.classModel.get("endTime");
+		var classDuration = classEndTime - classStartTime;
 
 		var totalTime = cet - cst;
 		var top = 100.0 * (classStartTime - cst) / totalTime;
 		var height = 100.0 * (classEndTime - classStartTime) / totalTime;
+
+		for (var i = 0; i < thresholds.length; i++) {
+			if (classDuration <= thresholds[i].threshold) {
+				this.$el.addClass(thresholds[i].name);
+				break;
+			}
+		}
 
 		this.$el.css("top", top + "%");
 		this.$el.css("height", height + "%");

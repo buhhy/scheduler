@@ -32,7 +32,7 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 		this.endTime = calendarSettings.get("endTime") || this.endTime;
 		this.interval = calendarSettings.get("interval") || this.interval;
 		this.startOffset = calendarSettings.get("startOffset") || this.startOffset;
-		this.autofit = !!calendarSettings.get("autofit");		// Converts to boolean
+		this.autofit = calendarSettings.get("autofit");
 
 		var timeLabels = [];
 		var dayLabels = [
@@ -47,7 +47,7 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 
 		// The time labels should begin 30 minutes er the start time.
 		for (var i = this.startTime + this.startOffset; i < this.endTime; i += this.interval)
-			timeLabels.push(this.minutesToStringFormat(i));
+			timeLabels.push(TimeUtils.minutesToStringFormat(i, true));
 
 		this.$calendar = $(_.template($("#templateCalendar").html(), {
 			"timeLabels": timeLabels,
@@ -127,8 +127,7 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 			var newEntryGroup = new Scheduler.views.CalendarEntryGroup({
 				"sectionModel": aSectionModel,
 				"calendarColumns": self.columnList,
-				"calendarStartTime": self.startTime,
-				"calendarEndTime": self.endTime
+				"calendarSettings": self.options.userData.get("calendarSettings")
 			});
 
 			newEntryGroup.click(function (aSection, aCalendarGroup) {
@@ -165,18 +164,5 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 		} else {
 			this.options.selectedSectionList.reset(aSection);
 		}
-	},
-
-	"minutesToStringFormat": function (aMin) {
-		var pastNoon = aMin >= 12 * 60;
-		var hour = Math.floor(aMin / 60) % 12 || 12;
-		var min = aMin % 60;
-		// return hour + ":" + this.padZeroes(min, 2) + (pastNoon ? " PM" : " AM");
-		return hour + (pastNoon ? " PM" : " AM");
-	},
-
-	"padZeroes": function (aInt, aLength) {
-		var str = aInt + "";
-		return str.length >= aLength ? str : (new Array(aLength - str.length + 1)).join("0") + str;
 	}
 });

@@ -40,6 +40,10 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 		this.bindEvents();
 	},
 
+	"onShow": function () {
+		this.$searchBox.focus();
+	},
+
 	"bindEvents": function () {
 		var self = this;
 
@@ -56,7 +60,12 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 			self.removeAddedClassEntry(aRemoved, true);
 		});
 
-		this.$searchBox.keyup($.debounce(250, $.proxy(this.search, this)));
+		// Removing auto-search on type because of performance, and because that feature sucks
+		// this.$searchBox.keyup($.debounce(250, $.proxy(this.search, this)));
+		this.$searchBox.keyup(function (aEvent) {
+			if (event.which == 13 /* enter key */)
+				self.search();
+		});
 
 		this.$searchButton.click(function (aEvent) {
 			aEvent.preventDefault();

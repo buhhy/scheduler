@@ -24,10 +24,12 @@ Scheduler.views.SidebarGroup = Scheduler.views.View.extend({
 		$.each(this.sidebars, function (aIndex, aView) {
 			aView.setIndex(aIndex);
 
-			if (aIndex === self.currentPage)
+			if (aIndex === self.currentPage) {
 				aView.show();
-			else
+				aView.onShow();
+			} else {
 				aView.hide();
+			}
 
 			aView.setOnIndicatorClick(function (aEvent) {
 				aEvent.preventDefault();
@@ -55,7 +57,9 @@ Scheduler.views.SidebarGroup = Scheduler.views.View.extend({
 				this.$sidebarSlider.animate({ "left": newOffset * -100 + "%" }, 500);
 
 				fromPage.hide(true);
+				fromPage.onHide();
 				toPage.show(true);
+				toPage.onShow();
 
 				this.currentPage = newOffset;
 			}

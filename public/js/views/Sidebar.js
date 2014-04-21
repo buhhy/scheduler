@@ -31,6 +31,9 @@ Scheduler.views.Sidebar = Scheduler.views.View.extend({
 		});
 	},
 
+	"onShow": function () {},	// called when this sidebar enters the view
+	"onHide": function () {},	// called when this sidebar disappears
+
 	"setOnIndicatorClick": function (aClickFn) {
 		this.$indicator.click(aClickFn);
 	},

@@ -76,6 +76,7 @@ app.get("/preview/:hash", function (aReq, aRes) {
 			var calEndTime = aData.calendarSettings.endTime;
 			var interval = aData.calendarSettings.interval;
 			var startOffset = aData.calendarSettings.startOffset;
+			var thresholds = aData.calendarSettings.thresholds;
 
 			var timeLabels = [];
 			var dayLabels = [
@@ -103,11 +104,18 @@ app.get("/preview/:hash", function (aReq, aRes) {
 				if (aTheme.fontColor)
 					styles.fontColor = sprintf.s("color:%s;", aTheme.fontColor);
 				if (aTheme.borderColor)
-					styles.fontColor = sprintf.s("border-color:%s;", aTheme.borderColor);
+					styles.borderColor = sprintf.s("border-color:%s;", aTheme.borderColor);
 
 				return styles;
 			};
 
+			/**
+			 * Determines which calendar bracket the given time belongs to. For example, for a
+			 * calendar starting at 8:00AM and a bracket size of 60 minutes, 8:30AM would be bracket
+			 * 0.5, 9:00AM would be bracket 1, and 11:30AM would be bracket 3.5.
+			 * @param  {[number]} aTime [Time in minutes]
+			 * @return {[number]}
+			 */
 			var calculateBracketPosition = function (aTime) {
 				return (aTime - calStartTime + startOffset) / interval;
 			};
@@ -120,6 +128,17 @@ app.get("/preview/:hash", function (aReq, aRes) {
 					aClass.indexedWeekdays.forEach(function (aIndex) {
 						var classesByDay = classesByDays[aIndex] || [];
 
+						// Determines what CSS class to apply to the class element, `short`,
+						// `regular`, `long`, etc
+						var classDurationClass = "";
+						var classDuration = aClass.endTime - aClass.startTime;
+						for (var i = 0; i < thresholds.length; i++) {
+							if (classDuration <= thresholds[i].threshold) {
+								classDurationClass = thresholds[i].name;
+								break;
+							}
+						}
+
 						classesByDay.push({
 							"name": aSection.title,
 							"subject": aSection.subject,
@@ -128,6 +147,8 @@ app.get("/preview/:hash", function (aReq, aRes) {
 							"type": aSection.sectionType,
 							"building": aClass.building,
 							"room": aClass.room,
+							"classDuration": classDurationClass,
+							"styles": themeToStyle(aSection.theme),
 							"startTimeBracket": calculateBracketPosition(aClass.startTime),
 							"endTimeBracket": calculateBracketPosition(aClass.endTime)
 						});

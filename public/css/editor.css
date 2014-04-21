@@ -2,7 +2,7 @@
 @font-face {
   font-family: "Lato";
   src: url("/fonts/eot/Lato-Black.eot");
-  src: url("/fonts/eot/Lato-Black.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */ url("/fonts/woff/Lato-Black.woff") format("woff"), /* Modern Browsers */ url("/fonts/ttf/Lato-Black.ttf") format("truetype");
+  src: url("/fonts/svg/lato-black.svg") format("svg"), url("/fonts/woff/Lato-Black.woff") format("woff"), /* Modern Browsers */ url("/fonts/eot/Lato-Black.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */ url("/fonts/ttf/Lato-Black.ttf") format("truetype");
   font-style: normal;
   font-weight: 900;
   text-rendering: optimizeLegibility;
@@ -13,7 +13,7 @@
 @font-face {
   font-family: "Lato";
   src: url("/fonts/eot/Lato-BlackItalic.eot");
-  src: url("/fonts/eot/Lato-BlackItalic.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */ url("/fonts/woff/Lato-BlackItalic.woff") format("woff"), /* Modern Browsers */ url("/fonts/ttf/Lato-BlackItalic.ttf") format("truetype");
+  src: url("/fonts/svg/lato-blackitalic.svg") format("svg"), url("/fonts/woff/Lato-BlackItalic.woff") format("woff"), /* Modern Browsers */ url("/fonts/eot/Lato-BlackItalic.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */ url("/fonts/ttf/Lato-BlackItalic.ttf") format("truetype");
   font-style: italic;
   font-weight: 900;
   text-rendering: optimizeLegibility;
@@ -24,7 +24,7 @@
 @font-face {
   font-family: "Lato";
   src: url("/fonts/eot/Lato-Bold.eot");
-  src: url("/fonts/eot/Lato-Bold.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */ url("/fonts/woff/Lato-Bold.woff") format("woff"), /* Modern Browsers */ url("/fonts/ttf/Lato-Bold.ttf") format("truetype");
+  src: url("/fonts/svg/lato-bold.svg") format("svg"), url("/fonts/eot/Lato-Bold.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */ url("/fonts/woff/Lato-Bold.woff") format("woff"), /* Modern Browsers */ url("/fonts/ttf/Lato-Bold.ttf") format("truetype");
   font-style: normal;
   font-weight: 700;
   text-rendering: optimizeLegibility;
@@ -35,7 +35,7 @@
 @font-face {
   font-family: "Lato";
   src: url("/fonts/eot/Lato-BoldItalic.eot");
-  src: url("/fonts/eot/Lato-BoldItalic.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */ url("/fonts/woff/Lato-BoldItalic.woff") format("woff"), /* Modern Browsers */ url("/fonts/ttf/Lato-BoldItalic.ttf") format("truetype");
+  src: url("/fonts/svg/lato-bolditalic.svg") format("svg"), url("/fonts/eot/Lato-BoldItalic.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */ url("/fonts/woff/Lato-BoldItalic.woff") format("woff"), /* Modern Browsers */ url("/fonts/ttf/Lato-BoldItalic.ttf") format("truetype");
   font-style: italic;
   font-weight: 700;
   text-rendering: optimizeLegibility;
@@ -46,7 +46,7 @@
 @font-face {
   font-family: "Lato";
   src: url("/fonts/eot/Lato-Hairline.eot");
-  src: url("/fonts/eot/Lato-Hairline.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */ url("/fonts/woff/Lato-Hairline.woff") format("woff"), /* Modern Browsers */ url("/fonts/ttf/Lato-Hairline.ttf") format("truetype");
+  src: url("/fonts/svg/lato-hairline.svg") format("svg"), url("/fonts/woff/Lato-Hairline.woff") format("woff"), /* Modern Browsers */ url("/fonts/eot/Lato-Hairline.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */ url("/fonts/ttf/Lato-Hairline.ttf") format("truetype");
   font-style: normal;
   font-weight: 100;
   text-rendering: optimizeLegibility;
@@ -57,7 +57,7 @@
 @font-face {
   font-family: "Lato";
   src: url("/fonts/eot/Lato-HairlineItalic.eot");
-  src: url("/fonts/eot/Lato-HairlineItalic.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */ url("/fonts/woff/Lato-HairlineItalic.woff") format("woff"), /* Modern Browsers */ url("/fonts/ttf/Lato-HairlineItalic.ttf") format("truetype");
+  src: url("/fonts/svg/lato-hairlineitalic.svg") format("svg"), url("/fonts/eot/Lato-HairlineItalic.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */ url("/fonts/woff/Lato-HairlineItalic.woff") format("woff"), /* Modern Browsers */ url("/fonts/ttf/Lato-HairlineItalic.ttf") format("truetype");
   font-style: italic;
   font-weight: 100;
   text-rendering: optimizeLegibility;
@@ -68,7 +68,7 @@
 @font-face {
   font-family: "Lato";
   src: url("/fonts/eot/Lato-Light.eot");
-  src: url("/fonts/eot/Lato-Light.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */ url("/fonts/woff/Lato-Light.woff") format("woff"), /* Modern Browsers */ url("/fonts/ttf/Lato-Light.ttf") format("truetype");
+  src: url("/fonts/svg/lato-light.svg") format("svg"), url("/fonts/woff/Lato-Light.woff") format("woff"), /* Modern Browsers */ url("/fonts/eot/Lato-Light.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */ url("/fonts/ttf/Lato-Light.ttf") format("truetype");
   font-style: normal;
   font-weight: 300;
   text-rendering: optimizeLegibility;
@@ -79,7 +79,7 @@
 @font-face {
   font-family: "Lato";
   src: url("/fonts/eot/Lato-LightItalic.eot");
-  src: url("/fonts/eot/Lato-LightItalic.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */ url("/fonts/woff/Lato-LightItalic.woff") format("woff"), /* Modern Browsers */ url("/fonts/ttf/Lato-LightItalic.ttf") format("truetype");
+  src: url("/fonts/svg/lato-lightitalic.svg") format("svg"), url("/fonts/eot/Lato-LightItalic.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */ url("/fonts/woff/Lato-LightItalic.woff") format("woff"), /* Modern Browsers */ url("/fonts/ttf/Lato-LightItalic.ttf") format("truetype");
   font-style: italic;
   font-weight: 300;
   text-rendering: optimizeLegibility;
@@ -90,7 +90,7 @@
 @font-face {
   font-family: "Lato";
   src: url("/fonts/eot/Lato-Regular.eot");
-  src: url("/fonts/eot/Lato-Regular.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */ url("/fonts/woff/Lato-Regular.woff") format("woff"), /* Modern Browsers */ url("/fonts/ttf/Lato-Regular.ttf") format("truetype");
+  src: url("/fonts/svg/lato-regular.svg") format("svg"), url("/fonts/woff/Lato-Regular.woff") format("woff"), /* Modern Browsers */ url("/fonts/eot/Lato-Regular.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */ url("/fonts/ttf/Lato-Regular.ttf") format("truetype");
   font-style: normal;
   font-weight: 400;
   text-rendering: optimizeLegibility;
@@ -101,7 +101,7 @@
 @font-face {
   font-family: "Lato";
   src: url("/fonts/eot/Lato-Italic.eot");
-  src: url("/fonts/eot/Lato-Italic.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */ url("/fonts/woff/Lato-Italic.woff") format("woff"), /* Modern Browsers */ url("/fonts/ttf/Lato-Italic.ttf") format("truetype");
+  src: url('/fonts/svg/lato-italic.svg') format('svg'), url("/fonts/woff/Lato-Italic.woff") format("woff"), /* Modern Browsers */ url("/fonts/eot/Lato-Italic.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */ url("/fonts/ttf/Lato-Italic.ttf") format("truetype");
   font-style: italic;
   font-weight: 400;
   text-rendering: optimizeLegibility;
@@ -191,13 +191,13 @@
 }
 .cl .cl-header-row {
   height: 2.5em;
-  letter-spacing: 2px;
+  letter-spacing: 0.12em;
 }
 .cl .cl-left-spacer {
   width: 8em;
 }
 .cl .cl-time-label {
-  letter-spacing: 1px;
+  letter-spacing: 0.06em;
   width: 5.25em;
   padding-right: 1em;
   text-align: right;
@@ -243,11 +243,11 @@
 }
 .cl .cl-entry .cl-title {
   font-weight: 700;
-  letter-spacing: 1px;
+  letter-spacing: 0.06em;
   line-height: 15px;
 }
 .cl .cl-entry .cl-desc {
-  letter-spacing: 1.5px;
+  letter-spacing: 0.08em;
   font-weight: 500;
   font-size: 0.8em;
   margin-top: 8px;

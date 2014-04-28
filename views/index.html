@@ -88,13 +88,15 @@
 
 						<section id="printSidebar" class="sidebar print">
 							<article class="sidebar-section-group complete">
-
 								<h1>Congratulations!</h1>
 								<h2>Your schedule is now complete.</h2>
 
-								<div id="savePdfButton" class="save">SAVE PDF</div>
-								<div id="printPdfButton" class="print">PRINT SCHEDULE</div>
-
+								<div id="savePdfButton" class="button save">SAVE PDF</div>
+								<div id="printPdfButton" class="button print">PRINT SCHEDULE</div>
+								<div id="shareButton" class="button share">
+									<span class="fb-logo"></span>
+									<span class="label">SHARE</span>
+								</div>
 							</article>
 						</section>
 					</section>
@@ -216,6 +218,9 @@
 				<span data-id="remove" class="action">&#xD7;</span>
 			</li>
 		</script>
+
+
+		<script type="text/javascript" src="http://connect.facebook.net/en_US/all.js"></script>
 
 		<script type="text/javascript" src="lib/jquery-2.1.0.min.js"></script>
 		<script type="text/javascript" src="lib/underscore.min.js"></script>

@@ -18,6 +18,42 @@ Scheduler.views.PrintSidebar = Scheduler.views.Sidebar.extend({
 			self.convertToPdf(true);
 			// window.print();
 		});
+
+		this.setUpFacebook();
+	},
+
+	"setUpFacebook": function () {
+		FB.Event.subscribe("auth.authResponseChange", function (aResp) {
+		});
+
+		FB.init({
+			"appId": "1390085397942073",
+			"status": true,
+			"cookie": true,
+			"xfbml": true
+		});
+
+		FB.ui({
+			"method": "feed",
+			"link": "www.google.com",
+			"caption": "Test"
+		}, function (aResp) {
+			console.log(aResp);
+		});
+
+		FB.getLoginStatus(function (aResp) {
+			if (aResp.status === "connected") {
+				console.log("connected");
+
+				FB.api('/me', function(response) {
+					console.log(response);
+				});
+			} else if (aResp.status === "not_authorized") {
+				console.log("not authorized");
+			} else {
+				console.log("not logged in");
+			}
+		});
 	},
 
 	"convertToPdf": function (aPrint) {

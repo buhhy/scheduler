@@ -1,4 +1,4 @@
-complete {
+.sidebar.print {
 	padding: 25px 20px;
 	letter-spacing: 1px;
 
@@ -13,7 +13,7 @@ complete {
 		font-weight: 300;
 	}
 
-	> div {
+	.button {
 		padding: 15px 25px;
 		background-color: #878787;
 		margin-bottom: 15px;
@@ -23,12 +23,45 @@ complete {
 		cursor: pointer;
 		font-weight: 500;
 
+		.transition(~"all 200ms ease");
+
 		&:hover {
 			background-color: #919191;
 		}
 
 		&:active {
 			background-color: #999;
+		}
+
+		&.share {
+			.linear-gradient(vertical, #4c69ba, #3b55a0);
+			.border-radius(2px);
+
+			cursor: pointer;
+
+			span {
+				display: inline-block;
+				vertical-align: middle;
+			}
+
+			.fb-logo {
+				background-image: url("https://fbstatic-a.akamaihd.net/rsrc.php/v2/y1/r/LVx-xkvaJ0b.png");
+				background-size: auto;
+				background-repeat: no-repeat;
+				height: 14px;
+				width: 14px;
+				background-position: 0 -42px;
+			}
+
+			.label {
+				margin-left: 0.2em;
+				position: relative;
+				top: 1px;
+			}
+
+			&:hover {
+				.linear-gradient(vertical, #5b7bd5, #4864b1);
+			}
 		}
 	}
 }

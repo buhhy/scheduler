@@ -3,6 +3,8 @@ var spawn = require('child_process').spawn;
 var slang = require('slang');
 
 var OBJ_CONSTRUCTOR = {}.constructor;
+var pdfCommand = "wkhtmltopdf";
+var imageCommand = "wkhtmltoimage";
 
 function pushArgument (aArgs, aValue) {
 	if (typeof aValue !== 'boolean') {
@@ -24,7 +26,7 @@ function pushArgument (aArgs, aValue) {
 	}
 };
 
-function wkhtmltopdf(input, options, callback) {
+function htmlToX(command, input, options, callback) {
 	if (!options) {
 		options = { quiet: true, logging: false, };
 	} else if (typeof options == 'function') {
@@ -38,7 +40,7 @@ function wkhtmltopdf(input, options, callback) {
 	delete options.output;
 
 	var args = [];
-	args.push(wkhtmltopdf.command );
+	args.push(command);
 
 	if (options.quiet)
 		args.push('--quiet');
@@ -123,5 +125,10 @@ function logError(child) {
 	});
 }
 
-wkhtmltopdf.command = 'wkhtmltopdf';
-module.exports = wkhtmltopdf;
+exports.toPdf = function (aInput, aOptions, aCallback) {
+	return htmlToX(pdfCommand, aInput, aOptions, aCallback);
+};
+
+exports.toImage = function (aInput, aOptions, aCallback) {
+	return htmlToX(imageCommand, aInput, aOptions, aCallback);
+};

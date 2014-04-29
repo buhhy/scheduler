@@ -547,6 +547,11 @@ input.searchbutton:hover {
   text-align: center;
   cursor: pointer;
   font-weight: 500;
+  border-radius: 2px;
+  -o-border-radius: 2px;
+  -ms-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
   transition: all 200ms ease;
   -o-transition: all 200ms ease;
   -ms-transition: all 200ms ease;
@@ -555,6 +560,7 @@ input.searchbutton:hover {
 }
 .sidebar.print .button:hover {
   background-color: #919191;
+  color: white;
 }
 .sidebar.print .button:active {
   background-color: #999;
@@ -566,12 +572,6 @@ input.searchbutton:hover {
   background: -moz-linear-gradient(top, #4c69ba, #3b55a0);
   background: -ms-linear-gradient(top, #4c69ba, #3b55a0);
   background: -o-linear-gradient(top, #4c69ba, #3b55a0);
-  border-radius: 2px;
-  -o-border-radius: 2px;
-  -ms-border-radius: 2px;
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-  cursor: pointer;
 }
 .sidebar.print .button.share span {
   display: inline-block;

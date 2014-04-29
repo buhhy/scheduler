@@ -16,6 +16,11 @@ var mongoStore = require(path.join(srcDir, "mongoStore"));
 var printer = require(path.join(srcDir, "printer"));
 var searchIndex = require(path.join(srcDir, "searchIndex"));
 
+
+var IMG_OUTPUT_DIR = path.join(assetDir, "gen", "img");
+var PDF_OUTPUT_DIR = path.join(assetDir, "gen", "pdf");
+
+
 var app = express();
 var port = process.env.PORT || 4888;
 
@@ -62,6 +67,9 @@ app.get("/", function (aReq, aRes) {
 
 app.get("/preview/:hash", function (aReq, aRes) {
 	var hash = aReq.params.hash;
+	var width = aReq.query.width || printer.PAPER_SIZES.A4.width;
+	var height = aReq.query.height || printer.PAPER_SIZES.A4.height;
+
 	mongoStore.findUserSchedule(hash, function (aData) {
 		if (!aData) {
 			aRes.send(404, sprintf.s("Could not find schedule with url hash `%s`.", hash));
@@ -169,7 +177,7 @@ app.get("/preview/:hash", function (aReq, aRes) {
 			});
 
 			// Landscape, hence reversed page sizes
-			var pageSizeStyle = sprintf.s("width: %dmm;height: %dmm;", pageSize.height, pageSize.width);
+			var pageSizeStyle = sprintf.s("width: %s; height: %s;", width, height);
 
 			var renderParams = {
 				"timeLabels": timeLabels,
@@ -216,17 +224,40 @@ app.get("/api/term", function (aReq, aRes) {
 	});
 });
 
-app.post("/api/print/:hash", function (aReq, aRes) {
+app.post("/api/pdfify/:hash", function (aReq, aRes) {
 	// TODO: Less hackery here too plz
 	var hash = aReq.params.hash;
 
-	mongoStore.storeUserSchedule(JSON.parse(aReq.body.data), undefined, function (aResult) {
-		try {
-			var previewUrl = sprintf.s("%s/preview/%s", getHostFromRequest(aReq), aResult.hash);
+	mongoStore.upsertUserSchedule(JSON.parse(aReq.body.data), function (aResult) {
+		var size = printer.PAPER_SIZES.A4.flip();
+		console.log(typeof size.toQuery);
+		console.log(size.toQuery());
+		var previewUrl = sprintf.s("%s/preview/%s?%s",
+			getHostFromRequest(aReq), aResult.hash, size.toQuery());
+		console.log(previewUrl);
+		printer.toPdf(previewUrl, size).pipe(aRes);
+	});
+});
+
+app.post("/api/imgify/:hash", function (aReq, aRes) {
+	// TODO: Less hackery here too plz
+	var hash = aReq.params.hash;
+
+	mongoStore.findUserSchedule(hash, function (aSchedule, aError) {
+		if (!aSchedule) {
+			aRes.json({
+				"error": aError
+			});
+		} else {
+			var size = printer.IMAGE_SIZES.medium;
+			var previewUrl = sprintf.s("%s/preview/%s?%s",
+				getHostFromRequest(aReq), hash, size.toQuery());
+			var imgPath = path.join(IMG_OUTPUT_DIR, sprintf.s("img-%s.png", hash));
 			console.log(previewUrl);
-			printer.print(previewUrl).pipe(aRes);
-		} catch (err) {
-			console.log(err);
+			printer.toImage(previewUrl, imgPath, size);
+			aRes.json({
+				"path": imgPath
+			});
 		}
 	});
 });

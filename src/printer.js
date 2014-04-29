@@ -3,25 +3,46 @@ var fs = require('fs');
 var sprintf = require('./lib/sprintf');
 var wkhtmltopdf = require("./lib/wkhtmltopdf");
 
-var size = function (aWidth, aHeight) { return { "width": aWidth, "height": aHeight }; };
-var mm = function (aNum) { return sprintf.s("%dmm", aNum); };
-
-var PAPER_SIZES = {
-	"A4": size(210, 297),
-	"letter": size(279.4, 215.9)
+var Size = function (aWidth, aHeight, aUnit) {
+	this.width = aWidth;
+	this.height = aHeight;
+	this.unit = aUnit || "px";
 };
 
-exports.print = function (aUrl, aPageSize) {
+Size.prototype.widthStr = function () { return sprintf.s("%d%s", this.width, this.unit); };
+Size.prototype.heightStr = function () { return sprintf.s("%d%s", this.height, this.unit); };
+Size.prototype.flip = function () { return new Size(this.height, this.width, this.unit); };
+
+Size.prototype.toCss = function () {
+	return sprintf.s("width: %s; height: %s;", this.widthStr(), this.heightStr());
+};
+
+Size.prototype.toQuery = function () {
+	return sprintf.s("width=%s&height=%s", this.widthStr(), this.heightStr());
+};
+
+var PAPER_SIZES = {
+	"A4": new Size(210, 297, "mm"),
+	"letter": new Size(279.4, 215.9, "mm")
+};
+
+var IMAGE_SIZES = {
+	"thumbnail": new Size(200, 200),
+	"small": new Size(960, 540),
+	"medium": new Size(1280, 720),
+	"large": new Size(1600, 900)
+};
+
+exports.toPdf = function (aUrl, aPageSize) {
 	pageSize = aPageSize || PAPER_SIZES.A4;
 
-	return wkhtmltopdf(aUrl, {
-		"pageWidth": mm(pageSize.width),
-		"pageHeight": mm(pageSize.height),
+	return wkhtmltopdf.toPdf(aUrl, {
+		"pageWidth": pageSize.widthStr(),
+		"pageHeight": pageSize.heightStr(),
 		"dpi": "96",
 		"disable-smart-shrinking": true,
 		"disable-javascript": false,
 		"debug-javascript": true,
-		"orientation": "landscape",
 		"marginTop": "0",
 		"marginBottom": "0",
 		"marginLeft": "0",
@@ -31,4 +52,19 @@ exports.print = function (aUrl, aPageSize) {
 	});
 };
 
+exports.toImage = function (aUrl, aImagePath, aImageSize) {
+	imageSize = aImageSize || IMAGE_SIZES.medium;
+
+	return wkhtmltopdf.toImage(aUrl, {
+		"output": aImagePath,
+		"width": imageSize.width,
+		"height": imageSize.height,
+		"disable-javascript": false,
+		"debug-javascript": true,
+		"logging": true,
+		"custom-header": ["CONTENT-TYPE", "application/x-www-form-urlencoded"]
+	});
+};
+
 exports.PAPER_SIZES = PAPER_SIZES;
+exports.IMAGE_SIZES = IMAGE_SIZES;

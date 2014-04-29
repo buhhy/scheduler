@@ -1,6 +1,8 @@
 Scheduler.views.PrintSidebar = Scheduler.views.Sidebar.extend({
 	"defaults": {
-		"userData": undefined
+		"userData": undefined,
+		"imgUrl": "/api/imgify/%s",
+		"pdfUrl": "/api/pdfify/%s"
 	},
 
 	"initialize": function (aOpts) {
@@ -9,6 +11,13 @@ Scheduler.views.PrintSidebar = Scheduler.views.Sidebar.extend({
 		var self = this;
 
 		this.options = opts;
+
+		this.setUpListeners();
+		this.setUpFacebook();
+	},
+
+	"setUpListeners": function () {
+		var self = this;
 
 		this.$el.find("#savePdfButton").click(function () {
 			self.convertToPdf(false);
@@ -19,12 +28,24 @@ Scheduler.views.PrintSidebar = Scheduler.views.Sidebar.extend({
 			// window.print();
 		});
 
-		this.setUpFacebook();
+		this.$el.find("#shareButton").click(function () {
+			self.convertToImage(function (aItem) {
+				console.log(aItem);
+			});
+			// FB.ui({
+			// 	"app_id": "1390085397942073",
+			// 	"method": "feed",
+			// 	"link": "www.google.com",
+			// 	"caption": "Test",
+			// 	"description": "Another test"
+			// }, function (aResp) {
+			// });
+		});
 	},
 
 	"setUpFacebook": function () {
-		FB.Event.subscribe("auth.authResponseChange", function (aResp) {
-		});
+		// FB.Event.subscribe("auth.authResponseChange", function (aResp) {
+		// });
 
 		FB.init({
 			"appId": "1390085397942073",
@@ -33,34 +54,39 @@ Scheduler.views.PrintSidebar = Scheduler.views.Sidebar.extend({
 			"xfbml": true
 		});
 
-		FB.ui({
-			"method": "feed",
-			"link": "www.google.com",
-			"caption": "Test"
-		}, function (aResp) {
-			console.log(aResp);
-		});
+		// FB.getLoginStatus(function (aResp) {
+		// 	if (aResp.status === "connected") {
+		// 		console.log("connected");
 
-		FB.getLoginStatus(function (aResp) {
-			if (aResp.status === "connected") {
-				console.log("connected");
+		// 		FB.api('/me', function(response) {
+		// 			console.log(response);
+		// 		});
+		// 	} else if (aResp.status === "not_authorized") {
+		// 		console.log("not authorized");
+		// 	} else {
+		// 		console.log("not logged in");
+		// 	}
+		// });
+	},
 
-				FB.api('/me', function(response) {
-					console.log(response);
-				});
-			} else if (aResp.status === "not_authorized") {
-				console.log("not authorized");
-			} else {
-				console.log("not logged in");
-			}
+	"convertToImage": function (aCallback) {
+		var hash = "c";
+		$.ajax({
+			"method": "POST",
+			"contentType": "application/json",
+			"url": sprintf(this.options.imgUrl, hash)
+		}).done(function (aResp) {
+			aCallback(aResp);
 		});
 	},
 
 	"convertToPdf": function (aPrint) {
 		// TODO: this is really hacky lol, change this at some point
+		var hash = "c";
+
 		if (!this.hiddenForm) {
 			var hiddenForm = document.createElement("form");
-			hiddenForm.action = "/api/print/5";
+			hiddenForm.action = sprintf(this.options.pdfUrl, hash);
 			hiddenForm.method = "POST";
 			hiddenForm.target = "_blank";
 			hiddenForm.style.display = "none";

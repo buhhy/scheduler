@@ -1,8 +1,6 @@
 Scheduler.views.PrintSidebar = Scheduler.views.Sidebar.extend({
 	"defaults": {
-		"userData": undefined,
-		"imgUrl": "/api/imgify/%s",
-		"pdfUrl": "/api/pdfify/%s"
+		"userData": undefined
 	},
 
 	"initialize": function (aOpts) {
@@ -20,18 +18,15 @@ Scheduler.views.PrintSidebar = Scheduler.views.Sidebar.extend({
 		var self = this;
 
 		this.$el.find("#savePdfButton").click(function () {
-			self.convertToPdf(false);
+			self.options.userData.pdfify();
 		});
 
 		this.$el.find("#printPdfButton").click(function () {
-			self.convertToPdf(true);
-			// window.print();
+			self.options.userData.pdfify();
 		});
 
 		this.$el.find("#shareButton").click(function () {
-			self.convertToImage(function (aItem) {
-				console.log(aItem);
-			});
+			self.options.userData.imgify();
 			// FB.ui({
 			// 	"app_id": "1390085397942073",
 			// 	"method": "feed",
@@ -67,51 +62,5 @@ Scheduler.views.PrintSidebar = Scheduler.views.Sidebar.extend({
 		// 		console.log("not logged in");
 		// 	}
 		// });
-	},
-
-	"convertToImage": function (aCallback) {
-		var hash = "c";
-		$.ajax({
-			"method": "POST",
-			"contentType": "application/json",
-			"url": sprintf(this.options.imgUrl, hash)
-		}).done(function (aResp) {
-			aCallback(aResp);
-		});
-	},
-
-	"convertToPdf": function (aPrint) {
-		// TODO: this is really hacky lol, change this at some point
-		var hash = "c";
-
-		if (!this.hiddenForm) {
-			var hiddenForm = document.createElement("form");
-			hiddenForm.action = sprintf(this.options.pdfUrl, hash);
-			hiddenForm.method = "POST";
-			hiddenForm.target = "_blank";
-			hiddenForm.style.display = "none";
-
-			var jsonInput = document.createElement("input");
-			jsonInput.name = "data";
-
-			var printAfter = document.createElement("input");
-			printAfter.name = "print";
-
-			hiddenForm.appendChild(jsonInput);
-			hiddenForm.appendChild(printAfter);
-
-			this.hiddenForm = hiddenForm;
-			this.jsonInput = jsonInput;
-			this.printAfter = printAfter;
-			document.body.appendChild(hiddenForm);
-		}
-
-		this.jsonInput.value = JSON.stringify(this.options.userData);
-		this.printAfter.value = !!aPrint;
-
-		this.hiddenForm.submit();
-
-		console.log(hiddenForm);
-		console.log(JSON.stringify(this.options.userData, null, "  "));
 	}
 });

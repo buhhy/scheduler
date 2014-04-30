@@ -33,10 +33,11 @@ var IMAGE_SIZES = {
 	"large": new Size(1600, 900)
 };
 
-exports.toPdf = function (aUrl, aPageSize) {
+exports.toPdf = function (aUrl, aPdfPath, aPageSize) {
 	pageSize = aPageSize || PAPER_SIZES.A4;
 
 	return wkhtmltopdf.toPdf(aUrl, {
+		"output": aPdfPath,
 		"pageWidth": pageSize.widthStr(),
 		"pageHeight": pageSize.heightStr(),
 		"dpi": "96",

@@ -224,18 +224,30 @@ app.get("/api/term", function (aReq, aRes) {
 	});
 });
 
+app.post("/api/user/schedule", function (aReq, aRes) {
+	mongoStore.upsertUserSchedule(aReq.body, function (aResult) {
+		aRes.json({
+			"hash": aResult.hash
+		});
+	});
+});
+
 app.post("/api/pdfify/:hash", function (aReq, aRes) {
 	// TODO: Less hackery here too plz
 	var hash = aReq.params.hash;
 
-	mongoStore.upsertUserSchedule(JSON.parse(aReq.body.data), function (aResult) {
-		var size = printer.PAPER_SIZES.A4.flip();
-		console.log(typeof size.toQuery);
-		console.log(size.toQuery());
-		var previewUrl = sprintf.s("%s/preview/%s?%s",
-			getHostFromRequest(aReq), aResult.hash, size.toQuery());
-		console.log(previewUrl);
-		printer.toPdf(previewUrl, size).pipe(aRes);
+	mongoStore.findUserSchedule(hash, function (aSchedule, aError) {
+		if (!aSchedule) {
+			aRes.json({ "error": aError });
+		} else {
+			var size = printer.PAPER_SIZES.A4.flip();
+			var previewUrl = sprintf.s("%s/preview/%s?%s",
+				getHostFromRequest(aReq), hash, size.toQuery());
+			var pdfPath = path.join(PDF_OUTPUT_DIR, sprintf.s("%s.pdf", hash));
+			console.log(sprintf.s("Generating PDF from `%s`.", previewUrl));
+			printer.toPdf(previewUrl, pdfPath, size);
+			aRes.json({ "path": pdfPath });
+		}
 	});
 });
 
@@ -245,19 +257,15 @@ app.post("/api/imgify/:hash", function (aReq, aRes) {
 
 	mongoStore.findUserSchedule(hash, function (aSchedule, aError) {
 		if (!aSchedule) {
-			aRes.json({
-				"error": aError
-			});
+			aRes.json({ "error": aError });
 		} else {
 			var size = printer.IMAGE_SIZES.medium;
 			var previewUrl = sprintf.s("%s/preview/%s?%s",
 				getHostFromRequest(aReq), hash, size.toQuery());
-			var imgPath = path.join(IMG_OUTPUT_DIR, sprintf.s("img-%s.png", hash));
-			console.log(previewUrl);
+			var imgPath = path.join(IMG_OUTPUT_DIR, sprintf.s("%s.png", hash));
+			console.log(sprintf.s("Generating PNG from `%s`.", previewUrl));
 			printer.toImage(previewUrl, imgPath, size);
-			aRes.json({
-				"path": imgPath
-			});
+			aRes.json({ "path": imgPath });
 		}
 	});
 });

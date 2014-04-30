@@ -2,7 +2,9 @@ $(function () {
 
 	var courseData = new Scheduler.models.ClassData();
 
-	var userData = new Scheduler.models.UserData();
+	var userData = new Scheduler.models.UserData({
+		"hash": hash
+	});
 
 	var themeData = new Scheduler.models.ThemeData();
 

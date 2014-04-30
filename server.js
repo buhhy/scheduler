@@ -67,7 +67,11 @@ var classQueryResponse = function (aResponse, aTerm, aQuery) {
 
 
 app.get("/", function (aReq, aRes) {
-	aRes.render("index.html", { /* params */ });
+	aRes.render("index.ejs", { "hash": undefined });
+});
+
+app.get("/:hash", function (aReq, aRes) {
+	aRes.render("index.ejs", { "hash": aReq.params.hash });
 });
 
 app.get("/preview/:hash", function (aReq, aRes) {

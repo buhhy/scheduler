@@ -176,8 +176,8 @@ var insertUserSchedule = function (aSchedule, aCallback) {
 	});
 };
 
-var updateUserSchedule = function (aSchedule, aCallback) {
-	if (aSchedule._id === undefined || aSchedule._id === null) {
+var updateUserSchedule = function (aSchedule, aId, aCallback) {
+	if (aId === undefined || aId === null) {
 		console.log("Cannot update schedule with non-existent ID.");
 	} else {
 		aSchedule.hash = hashId(aSchedule._id);
@@ -206,7 +206,7 @@ var upsertUserSchedule = function (aSchedule, aCallback) {
 				insertUserSchedule(aSchedule, aCallback);
 			} else {
 				// update existing schedule
-				updateUserSchedule(aSchedule, aCallback);
+				updateUserSchedule(aSchedule, aItem._id, aCallback);
 			}
 		});
 	}

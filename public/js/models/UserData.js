@@ -15,14 +15,15 @@ Scheduler.models.UserData = Scheduler.models.Model.extend({
 		Scheduler.models.Model.prototype.initialize.call(this);
 	},
 
-	"save": function (aCallback) {
+	"save": function (aSync, aCallback) {
 		var self = this;
 
 		$.ajax({
 			"method": "POST",
 			"contentType": "application/json",
 			"url": "/api/user/schedule",
-			"data": JSON.stringify(this)
+			"data": JSON.stringify(this),
+			"async": !aSync
 		}).done(function (aResp) {
 			self.set("hash", aResp.hash);
 			if (aCallback)
@@ -30,21 +31,22 @@ Scheduler.models.UserData = Scheduler.models.Model.extend({
 		});
 	},
 
-	"saveAndSend": function (aUrl, aCallback) {
+	"saveAndSend": function (aUrl, aSync, aCallback) {
 		var self = this;
 
-		this.save(function (aHash) {
+		this.save(aSync, function (aHash) {
 			$.ajax({
 				"method": "POST",
 				"contentType": "application/json",
-				"url": sprintf(aUrl, aHash)
+				"url": sprintf(aUrl, aHash),
+				"async": !aSync
 			}).done(function (aResp) {
 				if (aCallback)
-					aCallback(aResp);
+					aCallback(aResp.path);
 			});
 		});
 	},
 
-	"pdfify": function (aCallback) { this.saveAndSend(this.pdfUrl, aCallback); },
-	"imgify": function (aCallback) { this.saveAndSend(this.imgUrl, aCallback); }
+	"pdfify": function (aSync, aCallback) { this.saveAndSend(this.pdfUrl, aSync, aCallback); },
+	"imgify": function (aSync, aCallback) { this.saveAndSend(this.imgUrl, aSync, aCallback); }
 });

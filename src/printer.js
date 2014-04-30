@@ -27,10 +27,9 @@ var PAPER_SIZES = {
 };
 
 var IMAGE_SIZES = {
-	"thumbnail": new Size(200, 200),
-	"small": new Size(960, 540),
-	"medium": new Size(1280, 720),
-	"large": new Size(1600, 900)
+	"small": new Size(600, 315),
+	"medium": new Size(1200, 650),
+	"large": new Size(1600, 850)
 };
 
 exports.toPdf = function (aUrl, aPdfPath, aPageSize) {

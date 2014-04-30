@@ -166,12 +166,12 @@ var insertUserSchedule = function (aSchedule, aCallback) {
 					console.log(aError);
 					aCallback(null, aError);
 				} else if (aCallback) {
+					console.log(
+						sprintf.s("Inserted new schedule with ID `%d` and hash `%s`.",
+							aSchedule._id, aSchedule.hash));
 					aCallback(aResult[0]);
 				}
 			});
-			console.log(
-				sprintf.s("Inserted new schedule with ID `%d` and hash `%s` into database.",
-					aSchedule._id, aSchedule.hash));
 		}
 	});
 };
@@ -180,18 +180,19 @@ var updateUserSchedule = function (aSchedule, aId, aCallback) {
 	if (aId === undefined || aId === null) {
 		console.log("Cannot update schedule with non-existent ID.");
 	} else {
-		aSchedule.hash = hashId(aSchedule._id);
+		aSchedule.hash = hashId(aId);
 		userSchedule.update({
 			"_id": aId
 		}, aSchedule, function (aError) {
+			console.log("test");
 			if (aError) {
 				console.log(aError);
 				aCallback(null, aError);
 			} else if (aCallback) {
+				console.log(sprintf.s("Updated schedule with ID `%s`.", aId));
 				aCallback(aSchedule);
 			}
 		});
-		console.log(sprintf.s("Updated schedule with ID `%d` in database.", aSchedule._id));
 	}
 };
 

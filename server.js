@@ -5,21 +5,26 @@ var path = require("path");
 var ejs = require('ejs');
 var fs = require('fs');
 
-var srcDir = path.join(__dirname, "src");
-var assetDir = path.join(__dirname, "public");
-var viewDir = path.join(__dirname, "views");
+var pathify = function (aDir) { return path.join(__dirname, aDir); };
+
+// Directory names
+var srcDir = "src";
+var assetDir = "public";
+var viewDir = "views";
+
+// Absolute file system paths
+var srcPath = pathify(srcDir);
+var assetPath = pathify(assetDir);
+var viewPath = pathify(viewDir);
+var genPath = path.join(assetPath, "gen");
+
 var encoding = "UTF-8";
 
-var sprintf = require(path.join(srcDir, "lib", "sprintf"));
-var classData = require(path.join(srcDir, "classData"));
-var mongoStore = require(path.join(srcDir, "mongoStore"));
-var printer = require(path.join(srcDir, "printer"));
-var searchIndex = require(path.join(srcDir, "searchIndex"));
-
-
-var IMG_OUTPUT_DIR = path.join(assetDir, "gen", "img");
-var PDF_OUTPUT_DIR = path.join(assetDir, "gen", "pdf");
-
+var sprintf = require(path.join(srcPath, "lib", "sprintf"));
+var classData = require(path.join(srcPath, "classData"));
+var mongoStore = require(path.join(srcPath, "mongoStore"));
+var printer = require(path.join(srcPath, "printer"));
+var searchIndex = require(path.join(srcPath, "searchIndex"));
 
 var app = express();
 var port = process.env.PORT || 4888;
@@ -30,7 +35,7 @@ ejs.close = "}}";
 
 app.engine('.html', require('ejs').__express);
 app.set("view engine", "ejs");
-app.set("views", viewDir);
+app.set("views", viewPath);
 
 app.configure(function () {
 	// Put other configurations here:
@@ -38,14 +43,14 @@ app.configure(function () {
 	// TODO: Remove force: true, add once: true, change compress: true
 	app.use(lessMiddleware("../less", {
 		"dest": "css",
-		"pathRoot": assetDir,
+		"pathRoot": assetPath,
 		"force": true,
 		"compress": false,
 		"debug": true
 	}));
 
 	app.use(express.bodyParser());
-	app.use(express.static(assetDir));
+	app.use(express.static(assetPath));
 	app.use(cors());
 });
 
@@ -241,12 +246,17 @@ app.post("/api/pdfify/:hash", function (aReq, aRes) {
 			aRes.json({ "error": aError });
 		} else {
 			var size = printer.PAPER_SIZES.A4.flip();
-			var previewUrl = sprintf.s("%s/preview/%s?%s",
-				getHostFromRequest(aReq), hash, size.toQuery());
-			var pdfPath = path.join(PDF_OUTPUT_DIR, sprintf.s("%s.pdf", hash));
-			console.log(sprintf.s("Generating PDF from `%s`.", previewUrl));
+			var host = getHostFromRequest(aReq);
+			var previewUrl = sprintf.s("%s/preview/%s?%s", host, hash, size.toQuery());
+			var pdfName = sprintf.s("%s.pdf", hash);
+			var pdfUrl = sprintf.s("%s/gen/pdf/%s", host, pdfName);
+			var pdfPath = path.join(assetDir, "gen", "pdf", pdfName);
+
+			console.log(sprintf.s("Generating PDF from `%s` to `%s` with URL `%s`.",
+				previewUrl, pdfPath, pdfUrl));
+
 			printer.toPdf(previewUrl, pdfPath, size);
-			aRes.json({ "path": pdfPath });
+			aRes.json({ "path": pdfUrl });
 		}
 	});
 });
@@ -260,12 +270,17 @@ app.post("/api/imgify/:hash", function (aReq, aRes) {
 			aRes.json({ "error": aError });
 		} else {
 			var size = printer.IMAGE_SIZES.medium;
-			var previewUrl = sprintf.s("%s/preview/%s?%s",
-				getHostFromRequest(aReq), hash, size.toQuery());
-			var imgPath = path.join(IMG_OUTPUT_DIR, sprintf.s("%s.png", hash));
-			console.log(sprintf.s("Generating PNG from `%s`.", previewUrl));
-			printer.toImage(previewUrl, imgPath, size);
-			aRes.json({ "path": imgPath });
+			var host = getHostFromRequest(aReq);
+			var previewUrl = sprintf.s("%s/preview/%s?%s", host, hash, size.toQuery());
+			var imageName = sprintf.s("%s.png", hash);
+			var imageUrl = sprintf.s("%s/gen/img/%s", host, imageName);
+			var imagePath = path.join(assetDir, "gen", "img", imageName);
+
+			console.log(sprintf.s("Generating PNG from `%s` to `%s` with URL `%s`.",
+				previewUrl, imagePath, imageUrl));
+
+			printer.toImage(previewUrl, imagePath, size);
+			aRes.json({ "path": imageUrl });
 		}
 	});
 });

@@ -28,26 +28,10 @@ Scheduler.models.UserData = Scheduler.models.Model.extend({
 		return aResp;
 	},
 
-	"save": function (aSync, aCallback) {
-		var self = this;
-
-		$.ajax({
-			"method": "POST",
-			"contentType": "application/json",
-			"url": "/api/user/schedule",
-			"data": JSON.stringify(this),
-			"async": !aSync
-		}).done(function (aResp) {
-			self.set("hash", aResp.hash);
-			if (aCallback)
-				aCallback(aResp.hash);
-		});
-	},
-
 	"saveAndSend": function (aUrl, aSync, aCallback) {
 		var self = this;
 
-		this.save({
+		this.save(null, {
 			"async": !aSync,
 			"success": function (aModel) {
 				$.ajax({

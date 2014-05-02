@@ -141,7 +141,7 @@ app.get("/preview/:hash", function (aReq, aRes) {
 
 			// Retrives for each day, a list of classes that occur on that day
 			userClassList.forEach(function (aSection) {
-				aSection.classes.forEach(function (aClass) {
+				aSection.classList.forEach(function (aClass) {
 					aClass.indexedWeekdays.forEach(function (aIndex) {
 						var classesByDay = classesByDays[aIndex] || [];
 

@@ -118,9 +118,9 @@ function logError(child) {
 	//   console.log(data);
 	// });
 
-	child.stderr.setEncoding('utf8');
-	child.stderr.on('data', function (data) {
-		console.log('(ERROR) WKHTML ERROR --------------------------- \n');
+	child.stderr.setEncoding("utf8");
+	child.stderr.on("data", function (data) {
+		console.log("(INFO) WKHTML INFO ---------------------------");
 		console.log(data);
 	});
 }

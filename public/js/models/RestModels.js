@@ -144,7 +144,7 @@ Scheduler.models.Section = Scheduler.models.Model.extend({
 	 */
 	"aggregateClasses": function () {
 		var baseClasses = this.get("classList").filter(function (aClass) {
-			var dates = aClass.get("dates");
+			var dates = aClass.get("date");
 			return dates.start_time && dates.end_time && dates.weekdays;
 		});
 
@@ -259,7 +259,7 @@ Scheduler.models.Class = Scheduler.models.Model.extend({
 
 		This array will need to be filtered, and converted into a list of day indices.
 		 */
-		var dates = this.get("dates");
+		var dates = this.get("date");
 
 		if (dates.weekdays) {
 			// Convert weekday letters to an array index, with Sunday being 0

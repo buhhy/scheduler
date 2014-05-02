@@ -219,9 +219,7 @@ app.get("/api/:term/class", function (aReq, aRes) {
 	var query = aReq.param("search");
 
 	if (isNaN(term) || term === null || term === undefined) {
-		aRes.json({
-			"error": sprintf.s("Invalid term identifier: %s", aReq.params.term)
-		});
+		aRes.send(404, sprintf.s("Invalid term identifier: %s", aReq.params.term));
 	} else {
 		classQueryResponse(aRes, term, query);
 	}
@@ -230,7 +228,7 @@ app.get("/api/:term/class", function (aReq, aRes) {
 var sendMongoResult = function (aRes) {
 	return function (aResult, aError) {
 		if (aError)
-			aRes.json({ "error": aError });
+			aRes.send(400, aError);
 		else
 			aRes.json(aResult);
 	};
@@ -259,8 +257,8 @@ app.post("/api/pdfify/:hash", function (aReq, aRes) {
 	var hash = aReq.params.hash;
 
 	mongoStore.findUserSchedule(hash, function (aSchedule, aError) {
-		if (!aSchedule) {
-			aRes.json({ "error": aError });
+		if (aError) {
+			aRes.send(400, aError);
 		} else {
 			var size = printer.PAPER_SIZES.A4.flip();
 			var host = getHostFromRequest(aReq);
@@ -272,8 +270,9 @@ app.post("/api/pdfify/:hash", function (aReq, aRes) {
 			console.log(sprintf.s("Generating PDF from `%s` to `%s` with URL `%s`.",
 				previewUrl, pdfPath, pdfUrl));
 
-			printer.toPdf(previewUrl, pdfPath, size);
-			aRes.json({ "path": pdfUrl });
+			printer.toPdf(previewUrl, pdfPath, size, function () {
+				aRes.json({ "path": pdfUrl });
+			});
 		}
 	});
 });
@@ -283,8 +282,8 @@ app.post("/api/imgify/:hash", function (aReq, aRes) {
 	var hash = aReq.params.hash;
 
 	mongoStore.findUserSchedule(hash, function (aSchedule, aError) {
-		if (!aSchedule) {
-			aRes.json({ "error": aError });
+		if (aError) {
+			aRes.send(400, aError);
 		} else {
 			var size = printer.IMAGE_SIZES.medium;
 			var host = getHostFromRequest(aReq);
@@ -296,8 +295,9 @@ app.post("/api/imgify/:hash", function (aReq, aRes) {
 			console.log(sprintf.s("Generating PNG from `%s` to `%s` with URL `%s`.",
 				previewUrl, imagePath, imageUrl));
 
-			printer.toImage(previewUrl, imagePath, size);
-			aRes.json({ "path": imageUrl });
+			printer.toImage(previewUrl, imagePath, size, function () {
+				aRes.json({ "path": imageUrl });
+			});
 		}
 	});
 });

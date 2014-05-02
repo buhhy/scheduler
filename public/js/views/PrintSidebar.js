@@ -18,7 +18,10 @@ Scheduler.views.PrintSidebar = Scheduler.views.Sidebar.extend({
 		var self = this;
 
 		this.$el.find("#savePdfButton").click(function () {
-			self.options.userData.pdfify();
+			self.options.userData.pdfify(function (aUrl) {
+				console.log(aUrl);
+				window.open(aUrl, "_blank");
+			}, true);
 		});
 
 		this.$el.find("#printPdfButton").click(function () {
@@ -26,7 +29,7 @@ Scheduler.views.PrintSidebar = Scheduler.views.Sidebar.extend({
 		});
 
 		this.$el.find("#shareButton").click(function () {
-			self.options.userData.imgify(true, function (aPath) {
+			self.options.userData.imgify(function (aPath) {
 				FB.ui({
 					"app_id": "1390085397942073",
 					"picture": aPath,
@@ -37,7 +40,7 @@ Scheduler.views.PrintSidebar = Scheduler.views.Sidebar.extend({
 				}, function (aResp) {
 					console.log(aResp);
 				});
-			});
+			}, true);
 		});
 	},
 

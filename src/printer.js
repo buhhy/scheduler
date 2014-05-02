@@ -32,7 +32,7 @@ var IMAGE_SIZES = {
 	"large": new Size(1600, 850)
 };
 
-exports.toPdf = function (aUrl, aPdfPath, aPageSize) {
+exports.toPdf = function (aUrl, aPdfPath, aPageSize, aCallback) {
 	pageSize = aPageSize || PAPER_SIZES.A4;
 
 	return wkhtmltopdf.toPdf(aUrl, {
@@ -49,10 +49,10 @@ exports.toPdf = function (aUrl, aPdfPath, aPageSize) {
 		"marginRight": "0",
 		"logging": true,
 		"custom-header": ["CONTENT-TYPE", "application/x-www-form-urlencoded"]
-	});
+	}, aCallback);
 };
 
-exports.toImage = function (aUrl, aImagePath, aImageSize) {
+exports.toImage = function (aUrl, aImagePath, aImageSize, aCallback) {
 	imageSize = aImageSize || IMAGE_SIZES.medium;
 
 	return wkhtmltopdf.toImage(aUrl, {
@@ -63,7 +63,7 @@ exports.toImage = function (aUrl, aImagePath, aImageSize) {
 		"debug-javascript": true,
 		"logging": true,
 		"custom-header": ["CONTENT-TYPE", "application/x-www-form-urlencoded"]
-	});
+	}, aCallback);
 };
 
 exports.PAPER_SIZES = PAPER_SIZES;

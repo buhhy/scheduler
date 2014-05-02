@@ -28,17 +28,17 @@ Scheduler.models.UserData = Scheduler.models.Model.extend({
 		return aResp;
 	},
 
-	"saveAndSend": function (aUrl, aSync, aCallback) {
+	"saveAndSend": function (aUrl, aCallback, aSync) {
 		var self = this;
 
 		this.save(null, {
-			"async": !aSync,
+			"async": false,
 			"success": function (aModel) {
 				$.ajax({
 					"method": "POST",
 					"contentType": "application/json",
 					"url": sprintf(aUrl, aModel.get("hash")),
-					"async": !aSync
+					"async": false
 				}).done(function (aResp) {
 					if (aCallback)
 						aCallback(aResp.path);
@@ -50,6 +50,6 @@ Scheduler.models.UserData = Scheduler.models.Model.extend({
 		});
 	},
 
-	"pdfify": function (aSync, aCallback) { this.saveAndSend(this.pdfUrl, aSync, aCallback); },
-	"imgify": function (aSync, aCallback) { this.saveAndSend(this.imgUrl, aSync, aCallback); }
+	"pdfify": function (aCallback, aSync) { this.saveAndSend(this.pdfUrl, aCallback, aSync); },
+	"imgify": function (aCallback, aSync) { this.saveAndSend(this.imgUrl, aCallback, aSync); }
 });

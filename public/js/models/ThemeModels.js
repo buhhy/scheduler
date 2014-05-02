@@ -34,5 +34,13 @@ Scheduler.models.GlobalTheme = Scheduler.models.Model.extend({
 
 	"initialize": function () {
 		Scheduler.models.Model.prototype.initialize.call(this);
-	}
+	},
+
+	"parse": function (aResp) {
+		aResp.tableTheme = this.getAndSet("tableTheme", aResp);
+		aResp.daysTheme = this.getAndSet("daysTheme", aResp);
+		aResp.timeTheme = this.getAndSet("timeTheme", aResp);
+
+		return aResp;
+	},
 });

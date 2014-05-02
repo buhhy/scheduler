@@ -22,7 +22,7 @@ Scheduler.views.CalendarEntryGroup = Scheduler.views.View.extend({
 	},
 
 	"buildElements": function (aSectionModel) {
-		var baseClasses = aSectionModel.get("classes").filter(function (aClass) {
+		var baseClasses = aSectionModel.get("classList").filter(function (aClass) {
 			return aClass.get("startTime") && aClass.get("endTime");
 		});
 		var self = this;

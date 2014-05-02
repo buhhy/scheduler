@@ -98,19 +98,22 @@ Post-processing:
 Scheduler.models.Section = Scheduler.models.Model.extend({
 	"defaults": function () {
 		return {
-			"theme": new Scheduler.models.Theme()
+			"theme": undefined,
+			"classList": undefined
 		};
 	},
 
 	"idAttribute": "uid",
 
+	"constructor": function (aArgs) {
+		// Initialize Backbone collection of classes.
+		aArgs.classList = new Scheduler.models.ClassCollection(aArgs.classes);
+		aArgs.theme = new Scheduler.models.Theme(aArgs.theme);
+		Scheduler.models.Model.call(this, aArgs);
+	},
+
 	"initialize": function () {
 		Scheduler.models.Model.prototype.initialize.call(this);
-
-		// Initialize Backbone collection of classes.
-		var collection = new Scheduler.models.ClassCollection();
-		collection.reset(this.get("classes"));
-		this.set("classes", collection);
 
 		// Split section into type and number.
 		var section = this.get("section").split(" ");
@@ -129,11 +132,18 @@ Scheduler.models.Section = Scheduler.models.Model.extend({
 		this.aggregateClasses();
 	},
 
+	"parse": function (aResp) {
+		aResp.theme = this.getAndSet("theme", aResp);
+		aResp.classList = this.getAndSet("classList", aResp);
+
+		return aResp;
+	},
+
 	/**
 	 * Aggregates a list of classes into a single class instance.
 	 */
 	"aggregateClasses": function () {
-		var baseClasses = this.get("classes").filter(function (aClass) {
+		var baseClasses = this.get("classList").filter(function (aClass) {
 			var dates = aClass.get("dates");
 			return dates.start_time && dates.end_time && dates.weekdays;
 		});
@@ -141,7 +151,7 @@ Scheduler.models.Section = Scheduler.models.Model.extend({
 		var self = this;
 		var aggregates = {};
 
-		this.set("aggregatedClasses", this.get("classes").reduce(function (aAggregate, aClass) {
+		this.set("aggregatedClasses", this.get("classList").reduce(function (aAggregate, aClass) {
 			var push = true;
 			for (var i = 0; i < aAggregate.length; i++) {
 				if (aAggregate[i].equals(aClass))
@@ -217,6 +227,14 @@ Post-processing:
  */
 
 Scheduler.models.Class = Scheduler.models.Model.extend({
+	"defaults": {
+		"indexedWeekdays": undefined,
+		"startTime": undefined,
+		"endTime": undefined,
+		"building": undefined,
+		"room": undefined
+	},
+
 	"WEEKDAYS_REGEX": /^(m?)((?:t(?:(?!h)))?)(w?)((?:th)?)(f?)((?:s(?:(?!u)))?)((?:su)?)$/,
 	"WEEKDAYS_INDEX_LOOKUP": {
 		"su": 0,

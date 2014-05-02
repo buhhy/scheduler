@@ -4,6 +4,15 @@ var Scheduler = {
 };
 
 Scheduler.models.Model = Backbone.Model.extend({
+	"getAndSet": function (aKey, aValue) {
+		var model = this.get(aKey);
+		model.reset(aValue[aKey]);
+		return model;
+	},
+
+	"reset": function (aValue) {
+		this.set(this.parse(aValue));
+	}
 });
 
 Scheduler.models.Collection = Backbone.Collection.extend({

@@ -141,7 +141,7 @@ app.get("/preview/:hash", function (aReq, aRes) {
 
 			// Retrives for each day, a list of classes that occur on that day
 			userClassList.forEach(function (aSection) {
-				aSection.classes.forEach(function (aClass) {
+				aSection.classList.forEach(function (aClass) {
 					aClass.indexedWeekdays.forEach(function (aIndex) {
 						var classesByDay = classesByDays[aIndex] || [];
 
@@ -227,18 +227,31 @@ app.get("/api/:term/class", function (aReq, aRes) {
 	}
 });
 
+var sendMongoResult = function (aRes) {
+	return function (aResult, aError) {
+		if (aError)
+			aRes.json({ "error": aError });
+		else
+			aRes.json(aResult);
+	};
+}
+
 app.get("/api/term", function (aReq, aRes) {
-	classData.currentTerms(function (aData) {
-		aRes.json(aData);
-	});
+	classData.currentTerms(sendMongoResult(aRes));
 });
 
 app.post("/api/user/schedule", function (aReq, aRes) {
-	mongoStore.upsertUserSchedule(aReq.body, function (aResult) {
-		aRes.json({
-			"hash": aResult.hash
-		});
-	});
+	mongoStore.upsertUserSchedule(aReq.body, sendMongoResult(aRes));
+});
+
+app.put("/api/user/schedule/:hash", function (aReq, aRes) {
+	var schedule = aReq.body;
+	schedule.hash = aReq.params.hash;
+	mongoStore.upsertUserSchedule(schedule, sendMongoResult(aRes));
+});
+
+app.get("/api/user/schedule/:hash", function (aReq, aRes) {
+	mongoStore.findUserSchedule(aReq.params.hash, sendMongoResult(aRes));
 });
 
 app.post("/api/pdfify/:hash", function (aReq, aRes) {

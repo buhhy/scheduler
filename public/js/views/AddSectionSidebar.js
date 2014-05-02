@@ -60,6 +60,10 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 			self.removeAddedClassEntry(aRemoved, true);
 		});
 
+		userClassList.on("reset", function (aModels) {
+			self.resetClassEntries(aModels, false);
+		});
+
 		// Removing auto-search on type because of performance, and because that feature sucks
 		// this.$searchBox.keyup($.debounce(250, $.proxy(this.search, this)));
 		this.$searchBox.keyup(function (aEvent) {
@@ -177,5 +181,16 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 		var uid = aSection.get("uid");
 		this.addedEntryMap[uid].detach();
 		this.addedEntryMap[uid] = undefined;
+	},
+
+	"resetClassEntries": function (aSections, aAnimated) {
+		var self = this;
+		_.forEach(_.values(this.addedEntryMap), function (aSection) {
+			aSection.detach();
+		});
+		this.addedEntryMap = {};
+		aSections.forEach(function (aSection) {
+			self.addAddedClassEntry(aSection, aAnimated);
+		});
 	}
 });

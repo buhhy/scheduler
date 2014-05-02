@@ -10,40 +10,43 @@ Scheduler.models.UserData = Scheduler.models.Model.extend({
 
 	"imgUrl": "/api/imgify/%s",
 	"pdfUrl": "/api/pdfify/%s",
+	"urlRoot": "/api/user/schedule",
+	"idAttribute": "hash",
 
 	"initialize": function () {
 		Scheduler.models.Model.prototype.initialize.call(this);
+
+		if (this.get("hash") !== undefined)
+			this.fetch();
 	},
 
-	"save": function (aSync, aCallback) {
-		var self = this;
+	"parse": function (aResp) {
+		aResp.globalTheme = this.getAndSet("globalTheme", aResp);
+		aResp.calendarSettings = this.getAndSet("calendarSettings", aResp);
+		aResp.userClassList = this.getAndSet("userClassList", aResp);
 
-		$.ajax({
-			"method": "POST",
-			"contentType": "application/json",
-			"url": "/api/user/schedule",
-			"data": JSON.stringify(this),
-			"async": !aSync
-		}).done(function (aResp) {
-			self.set("hash", aResp.hash);
-			if (aCallback)
-				aCallback(aResp.hash);
-		});
+		return aResp;
 	},
 
 	"saveAndSend": function (aUrl, aSync, aCallback) {
 		var self = this;
 
-		this.save(aSync, function (aHash) {
-			$.ajax({
-				"method": "POST",
-				"contentType": "application/json",
-				"url": sprintf(aUrl, aHash),
-				"async": !aSync
-			}).done(function (aResp) {
-				if (aCallback)
-					aCallback(aResp.path);
-			});
+		this.save(null, {
+			"async": !aSync,
+			"success": function (aModel) {
+				$.ajax({
+					"method": "POST",
+					"contentType": "application/json",
+					"url": sprintf(aUrl, aModel.get("hash")),
+					"async": !aSync
+				}).done(function (aResp) {
+					if (aCallback)
+						aCallback(aResp.path);
+				});
+			},
+			"error": function (aError) {
+				console.log(aError);
+			}
 		});
 	},
 

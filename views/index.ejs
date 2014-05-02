@@ -181,9 +181,15 @@
 			<div class="cl-grid">
 				<table data-id="dayTable" class="cl-day-table">
 					<tr class="cl-header-row">
-						<th data-id="dayLabel" class="cl-header-cell cl-left-spacer"></th>
+						<th data-id="dayLabel" class="cl-header-cell cl-left-spacer">
+							<div class="background"></div>
+						</th>
 						<% for (var i = 0; i < dayLabels.length; i++) { %>
-							<th data-id="dayLabel" class="cl-header-cell"><%= dayLabels[i] %></th>
+							<th data-id="dayLabel" class="cl-header-cell">
+								<div class="background">
+									<%= dayLabels[i] %>
+								</div>
+							</th>
 						<% } %>
 					</tr>
 					<tr class="cl-content-row">

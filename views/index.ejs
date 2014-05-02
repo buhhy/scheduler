@@ -1,0 +1,266 @@
+<!DOCTYPE HTML>
+
+<html>
+	<header>
+		<link type="text/css" rel="stylesheet" href="css/reset.css" />
+		<link type="text/css" rel="stylesheet" href="css/editor.css" />
+		<link type="text/css" rel="stylesheet" href="css/print.css" media="print" />
+
+		<!-- Remove these later. --><!--
+		<link type="text/css" rel="stylesheet" href="css/calendar.css" />
+		<link type="text/css" rel="stylesheet" href="css/dropdown.css" />
+		<link type="text/css" rel="stylesheet" href="css/sidebar.css" />
+		<link type="text/css" rel="stylesheet" href="css/sidebar.addsection.css" />
+		<link type="text/css" rel="stylesheet" href="css/sidebar.print.css" /> -->
+
+		<title>uwaterlooScheduler</title>
+	</header>
+	<body>
+		<section class="topbar">
+			<span class="logo"><a href="#">uwScheduler</a></span>
+			<ol id="sectionIndicatorGroup" class="steps">
+				<li id="addSectionIndicator" class="indicator">1. ADD</li>
+				<li id="customizeIndicator" class="indicator">2. CUSTOMIZE</li>
+				<li id="printIndicator" class="indicator">3. PRINT</li>
+			</ol>
+		</section>
+		<section class="content">
+	        <div class="position-container">
+	        	<nav id="sidebarGroup" class="sidebar-group">
+	        		<section id="sidebarSlider" class="sidebar-slider">
+						<section id="addSectionSidebar" class="sidebar class">
+							<article class="sidebar-section-group class-search">
+								<p>
+									<h1>SEARCH</h1>
+									<!-- <div class="dropdown">
+										<span>SELECT TERM</span>
+										<span class="arrow"></span>
+										<ul class="terms">
+											<li>WINTER 2014</li>
+											<li>SPRING 2014</li>
+											<li>FALL 2014</li>
+										</ul>
+									</div> -->
+								</p>
+								<p>
+									<input
+										id="sectionSearchBox"
+										class="searchbox"
+										placeholder="Search course code">
+									<input
+										id="sectionSearchButton"
+										class="searchbutton"
+										type="button"
+										value="SEARCH">
+								</p>
+							</article>
+
+							<article class="sidebar-section-group">
+								<h1>RESULTS</h1>
+
+								<ul id="searchResultList" class="course-results-list"></ul>
+							</article>
+
+							<article class="sidebar-section-group">
+								<h1>ADDED</h1>
+
+								<ul id="addedList" class="class-added-list"></ul>
+							</article>
+						</section>
+
+
+						<section id="customizeSidebar" class="sidebar customize">
+							<article class="sidebar-section-group">
+								<h1>CUSTOMIZE</h1>
+								<p id="sectionThemeContainer" class="sidebar-subsection-group">
+									<h2>COURSE THEMES</h2>
+									<ul id="customizeSectionDropdownList">
+									</ul>
+								</p>
+								<p class="sidebar-subsection-group">
+									<h2>GLOBAL THEMES</h2>
+									<ul id="customizeGlobalDropdownList">
+									</ul>
+								</p>
+							</article>
+						</section>
+
+
+						<section id="printSidebar" class="sidebar print">
+							<article class="sidebar-section-group complete">
+								<h1>Congratulations!</h1>
+								<h2>Your schedule is now complete.</h2>
+
+								<div id="savePdfButton" class="button save">SAVE SCHEDULE</div>
+								<div id="printPdfButton" class="button print">PRINT TO PDF</div>
+								<div id="shareButton" class="button share">
+									<span class="fb-logo"></span>
+									<span class="label">SHARE</span>
+								</div>
+							</article>
+						</section>
+					</section>
+				</nav>
+
+				<section class="preview">
+					<div class="preview-container">
+						<h1 class="preview-title">PREVIEW</h1>
+						<section id="scheduleContainer" class = "print-content">
+						</section>
+					</div>
+				</section>
+            </div>
+		</section>
+
+		<!-- Begin common dropdown templates: -->
+
+		<script id="templateDropdown" type="text/template">
+			<header data-id="header" class="dd-header <%- titleClass %>">
+				<%= titleHtml %>
+				<div class="indicator">
+					<% if (typeof(titleIndicatorHtml) !== "undefined") {
+						print(titleIndicatorHtml);
+					} else { %>
+						<span class="arrow"></span>
+					<% } %>
+				</div>
+			</header>
+			<div data-id="optionListContainer" class="dd-options-container">
+				<ul data-id="optionList" class="dd-options-list">
+				</ul>
+			</div>
+		</script>
+
+		<script id="templateDropdownOption" type="text/template">
+			<li data-id="option" class="dd-option <%- optionClass %>"></li>
+		</script>
+
+		<script id="templateExpandableContainer" type="text/template">
+			<section data-id="container" class="ec-container"></section>
+		</script>
+		<!-- End common dropdown templates. -->
+
+		<!-- A template that represents a list item that will be turned into a dropdown. -->
+		<script id="templateDropdownListEntry" type="text/template">
+			<li class="dropdown-list-entry"></li>
+		</script>
+
+		<!-- Used to draw a color selection palette. -->
+		<script id="templatePalette" type="text/template">
+			<% for (var i = 0; i < colors.length; i++) { %>
+				<div data-id="color-indicator-container"
+						class="color-indicator-container">
+					<span data-id="color-indicator" data-color="<%= colors[i] %>"
+							class="color-indicator" style="background-color: <%= colors[i] %>;">
+					</span>
+				</div>
+			<% }%>
+		</script>
+
+		<script id="templateSearchResultEntry" type="text/template">
+			<span class="text"><%- catalog %></span>
+			<span class="text"> <%- times %></span>
+			<span class="text action">&#x2B;</span>
+		</script>
+
+		<script id="templateCalendar" type="text/template">
+			<div class="cl-horizontal-lines">
+				<table data-id="timeTable" class="cl-time-table">
+					<tr class="cl-header-row">
+						<th class="cl-time-label"></th>
+						<th class="cl-time-divider"></th>
+					</tr>
+					<% for (var i = 0; i < timeLabels.length; i++) { %>
+						<tr data-id="timeLabel" class="cl-content-row">
+							<td class="cl-time-label"><%= timeLabels[i] %></td>
+							<td class="cl-time-divider"><hr></td>
+						</tr>
+					<% } %>
+				</table>
+			</div>
+			<div class="cl-grid">
+				<table data-id="dayTable" class="cl-day-table">
+					<tr class="cl-header-row">
+						<th data-id="dayLabel" class="cl-header-cell cl-left-spacer"></th>
+						<% for (var i = 0; i < dayLabels.length; i++) { %>
+							<th data-id="dayLabel" class="cl-header-cell"><%= dayLabels[i] %></th>
+						<% } %>
+					</tr>
+					<tr class="cl-content-row">
+						<td></td>
+						<% for (var i = 0; i < dayLabels.length; i++) { %>
+							<td class="cl-content-cell">
+								<div data-id="positionContainer" class="position-container"></div>
+							</td>
+						<% } %>
+					</tr>
+				</table>
+			</div>
+
+		</script>
+
+
+		<script id="templateCalendarEntry" type="text/template">
+			<article class="cl-entry">
+				<section class="cl-marquee"></section>
+				<h1 class="cl-title"><%= name %></h1>
+				<h2 class="cl-desc"><%= subject %> <%= catalog %> - <%= section %> <%= type %></h2>
+				<h2 class="cl-desc"><%= location["building"] %> <%= location["room"] %></h2>
+			</article>
+		</script>
+
+
+
+		<script id="templateAddSectionAddedListEntry" type="text/template">
+			<li class="class-added-entry">
+				<span class="section"><%= subject %> <%= catalog %> - <%= section %> <%= type %> </span>
+				<span class="time"> <%= times %></span>
+				<span data-id="remove" class="action">&#xD7;</span>
+			</li>
+		</script>
+
+
+		<!-- Server-side generation of hash value outputted here -->
+		<script type="text/javascript">
+			{{ if (hash !== undefined) { }}
+				var hash = "{{= hash }}";
+			{{ } else { }}
+				var hash = undefined;
+			{{ } }}
+		</script>
+
+
+		<script type="text/javascript" src="http://connect.facebook.net/en_US/all.js"></script>
+
+		<script type="text/javascript" src="lib/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="lib/underscore.min.js"></script>
+		<script type="text/javascript" src="lib/backbone.min.js"></script>
+		<script type="text/javascript" src="lib/sprintf.min.js"></script>
+		<script type="text/javascript" src="lib/jquery.throttle-debounce.min.js"></script>
+		<script type="text/javascript" src="lib/jquery.print-preview.js"></script>
+
+		<script type="text/javascript" src="js/common/Dropdown.js"></script>
+		<script type="text/javascript" src="js/common/TimeUtils.js"></script>
+
+
+		<script type="text/javascript" src="js/scheduler.js"></script>
+		<script type="text/javascript" src="js/models/RestModels.js"></script>
+		<script type="text/javascript" src="js/models/ThemeModels.js"></script>
+		<script type="text/javascript" src="js/models/ClassData.js"></script>
+		<script type="text/javascript" src="js/models/UserData.js"></script>
+		<script type="text/javascript" src="js/models/ThemeData.js"></script>
+		<script type="text/javascript" src="js/models/CalendarSettings.js"></script>
+		<script type="text/javascript" src="js/views/Sidebar.js"></script>
+		<script type="text/javascript" src="js/views/SidebarGroup.js"></script>
+		<script type="text/javascript" src="js/views/AddSectionSidebar.js"></script>
+		<script type="text/javascript" src="js/views/CustomizeSidebar.js"></script>
+		<script type="text/javascript" src="js/views/PrintSidebar.js"></script>
+		<script type="text/javascript" src="js/views/SearchResultEntry.js"></script>
+		<script type="text/javascript" src="js/views/SearchResultList.js"></script>
+		<script type="text/javascript" src="js/views/CalendarEntry.js"></script>
+		<script type="text/javascript" src="js/views/CalendarEntryGroup.js"></script>
+		<script type="text/javascript" src="js/views/Calendar.js"></script>
+		<script type="text/javascript" src="js/views/Palette.js"></script>
+		<script type="text/javascript" src="js/entrypoint.js"></script>
+	</body>
+</html>

@@ -25,7 +25,10 @@ Scheduler.views.PrintSidebar = Scheduler.views.Sidebar.extend({
 		});
 
 		this.$el.find("#printPdfButton").click(function () {
-			self.options.userData.pdfify();
+			self.options.userData.pdfify(function (aUrl) {
+				console.log(aUrl);
+				self.printPdf(aUrl);
+			});
 		});
 
 		this.$el.find("#shareButton").click(function () {
@@ -51,5 +54,29 @@ Scheduler.views.PrintSidebar = Scheduler.views.Sidebar.extend({
 			"cookie": true,
 			"xfbml": true
 		});
+	},
+
+	"printPdf": function (aUrl) {
+		var $iFrame = $('<iframe></iframe>');
+
+		$iFrame[0].onload = function () {
+			var tempFrame = $iFrame[0];
+			var tempFrameWindow = tempFrame.contentWindow? tempFrame.contentWindow : tempFrame.contentDocument.defaultView;
+			tempFrameWindow.focus();
+			tempFrameWindow.print();
+			$iFrame.detach();
+		};
+
+		$iFrame
+				.attr("id", "printframe")
+				.attr("name", "printframe")
+				.attr("src", aUrl)
+				.css("width", "0")
+				.css("height", "0")
+				.css("position", "absolute")
+				.css("left", "-1000px")
+				.css("top", "0");
+
+		setTimeout(function() { $iFrame.appendTo($("body")); }, 25);
 	}
 });

@@ -32,17 +32,31 @@ Scheduler.views.PrintSidebar = Scheduler.views.Sidebar.extend({
 		});
 
 		this.$el.find("#shareButton").click(function () {
+			// TODO: add loading page here
+			var dialogParams = [
+				"directories=no",
+				"titlebar=no",
+				"toolbar=no",
+				"location=no",
+				"status=no",
+				"menubar=no",
+				"scrollbars=no",
+				"resizable=yes",
+				"width=600",
+				"height=300"
+			].join(",");
+			var dialog = window.open("about:blank", "", dialogParams);
+
 			self.options.userData.imgify(function (aPath) {
-				FB.ui({
-					"app_id": "1390085397942073",
-					"picture": aPath,
-					"method": "feed",
-					"link": aPath,
-					"caption": "Class schedule",
-					"description": "Here is my beautiful class schedule!"
-				}, function (aResp) {
-					console.log(aResp);
-				});
+				dialog.location.href = [
+					"https://www.facebook.com/dialog/share?",
+					"app_id=1390085397942073",
+					"&display=popup",
+					"&action_type=og.likes",
+					"&href=", aPath,
+					"&redirect_uri=", window.location.href
+				].join("");
+				dialog.focus();
 			}, true);
 		});
 	},
@@ -59,13 +73,13 @@ Scheduler.views.PrintSidebar = Scheduler.views.Sidebar.extend({
 	"printPdf": function (aUrl) {
 		var $iFrame = $('<iframe></iframe>');
 
-		$iFrame[0].onload = function () {
+		$iFrame.ready(function () {
 			var tempFrame = $iFrame[0];
 			var tempFrameWindow = tempFrame.contentWindow? tempFrame.contentWindow : tempFrame.contentDocument.defaultView;
 			tempFrameWindow.focus();
 			tempFrameWindow.print();
 			$iFrame.detach();
-		};
+		});
 
 		$iFrame
 				.attr("id", "printframe")
@@ -75,8 +89,7 @@ Scheduler.views.PrintSidebar = Scheduler.views.Sidebar.extend({
 				.css("height", "0")
 				.css("position", "absolute")
 				.css("left", "-1000px")
-				.css("top", "0");
-
-		setTimeout(function() { $iFrame.appendTo($("body")); }, 25);
+				.css("top", "0")
+				.appendTo($("body"));
 	}
 });

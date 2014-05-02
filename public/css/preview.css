@@ -107,6 +107,8 @@
 .cl table td,
 .cl table th {
   vertical-align: middle;
+  padding: 0;
+  margin: 0;
 }
 .cl .cl-horizontal-lines {
   height: 100%;
@@ -139,22 +141,40 @@
 .cl .cl-day-table th:first-child {
   border-left: none;
 }
-.cl .cl-day-table .cl-header-row {
-  background-color: #c9c9ca;
-}
 .cl .cl-day-table .cl-header-row .cl-header-cell {
   font-weight: 300;
-  padding-right: 1.2em;
   text-align: right;
   font-size: 0.75em;
+  font-weight: 500;
   transition: background 200ms ease;
   -o-transition: background 200ms ease;
   -ms-transition: background 200ms ease;
   -moz-transition: background 200ms ease;
   -webkit-transition: background 200ms ease;
 }
+.cl .cl-day-table .cl-header-row .cl-header-cell:first-child .background {
+  border-radius: 3px 0 0 0;
+  -o-border-radius: 3px 0 0 0;
+  -ms-border-radius: 3px 0 0 0;
+  -moz-border-radius: 3px 0 0 0;
+  -webkit-border-radius: 3px 0 0 0;
+}
+.cl .cl-day-table .cl-header-row .cl-header-cell:last-child .background {
+  border-radius: 0 3px 0 0;
+  -o-border-radius: 0 3px 0 0;
+  -ms-border-radius: 0 3px 0 0;
+  -moz-border-radius: 0 3px 0 0;
+  -webkit-border-radius: 0 3px 0 0;
+}
 .cl .cl-day-table .cl-header-row .cl-header-cell b {
-  font-weight: 700;
+  font-weight: 900;
+}
+.cl .cl-day-table .cl-header-row .cl-header-cell .background {
+  background-color: #c9c9ca;
+  padding: 1em;
+}
+.cl .cl-day-table .cl-left-spacer {
+  width: 9.2em;
 }
 .cl .cl-day-table .cl-content-row {
   height: 100%;
@@ -162,6 +182,7 @@
 .cl .cl-header-row {
   height: 2.5em;
   letter-spacing: 0.12em;
+  border-radius: 2px;
 }
 .cl .cl-left-spacer {
   width: 8em;
@@ -171,6 +192,7 @@
   width: 5.25em;
   padding-right: 1em;
   text-align: right;
+  font-weight: 400;
 }
 .cl .cl-time-divider {
   width: auto;

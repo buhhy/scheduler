@@ -59,30 +59,25 @@
 				font-weight: 300;
 				text-align: right;
 				font-size: 0.75em;
+				font-weight: 500;
 
 				.transition(~"background 200ms ease");
 
 				&:first-child .background {
-					.border-radius(2px 0 0 2px);
-					}
+					.border-radius(3px 0 0 0);
+				}
 
 				&:last-child .background {
-						.border-radius(0 2px 2px 0);
-					}
+					.border-radius(0 3px 0 0);
+				}
 
 				b {
-					font-weight: 700;
+					font-weight: 900;
 				}
 
 				.background {
 					background-color: #c9c9ca;
-					width: 100%;
-					height: 100%;
-					vertical-align: middle;
-					display: table;
-					padding: 10px;
-
-
+					padding: 1em;
 				}
 			}
 		}
@@ -112,6 +107,7 @@
 		width: 5.25em;
 		padding-right: 1em;
 		text-align: right;
+		font-weight: 400;
 	}
 
 	.cl-time-divider {

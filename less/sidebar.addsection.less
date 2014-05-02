@@ -21,6 +21,8 @@ input.searchbox {
 	padding-left: 10px;
 	width: 194px;
 	margin-top: 15px;
+	.border-radius(2px);
+	color: #727272;
 }
 
 input.searchbutton {
@@ -29,15 +31,18 @@ input.searchbutton {
 	height: 26px;
 	width: 75px;
 	font-family: 'Lato';
-	font-size: 0.7em;
+	font-size: 0.75em;
 	letter-spacing: 0.7px;
 	color: #727272;
 	cursor: pointer;
 	margin-left: 5px;
-	background-color: #e2e2e2;
+	background-color: #d1d1d1;
+	.border-radius(2px);
+	.transition(~"all 400ms ease");
 
 	&:hover {
-		background-color: #d3d3d3;
+		background-color: #9fccd6;
+		color: #5b5b5b;
 	}
 }
 

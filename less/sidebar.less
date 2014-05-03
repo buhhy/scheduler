@@ -34,7 +34,7 @@
 	}
 
 	.sidebar-section-group {
-		padding: 22px 18px;
+		padding: 24px 18px;
 
 		.divider;
 
@@ -43,11 +43,19 @@
 		}
 	}
 
+	.customizeSectionDropdownList {
+		margin-top: 1.2em;
+	}
+
 	.dropdown-list-entry {
 		font-size: 0.85em;
 		font-weight: 500;
-		margin-top: 20px;
+		margin-top: 1.7em;
 		list-style: none;
+
+		&:first-child {
+			margin-top:0;
+		}
 	}
 
 	.heading-1 {
@@ -80,15 +88,22 @@
 		width: 220px;
 		padding: 10px 12px;
 
+		.search-result {
+			display: table;
+			width: 100%;
+		}
+
 		.text {
-			padding-right: 20px;
+			display: table-cell;
+
+			&:first-child {
+				width: 3.45em;
+			}
 
 			&.action {
-				float: right;
-				position: relative;
-				left: 15px;
 				font-size: 1.2em;
 				font-weight: 900;
+				text-align: right;
 			}
 		}
 
@@ -96,7 +111,7 @@
 			cursor: pointer;
 
 			&:hover {
-				background-color: #ededed;
+				background-color: #dfeeef;
 			}
 		}
 	}

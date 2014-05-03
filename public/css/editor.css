@@ -313,11 +313,11 @@
   height: 0;
   top: 50%;
   margin-top: -4px;
-  -webkit-transform-origin: 0% 20%;
-  -moz-transform-origin: 0% 20%;
-  -ms-transform-origin: 0% 20%;
-  -o-transform-origin: 0% 20%;
-  transform-origin: 0% 20%;
+  -webkit-transform-origin: 50% 50%;
+  -moz-transform-origin: 50% 50%;
+  -ms-transform-origin: 50% 50%;
+  -o-transform-origin: 50% 50%;
+  transform-origin: 50% 50%;
   transition: all 250ms ease;
   -o-transition: all 250ms ease;
   -ms-transition: all 250ms ease;
@@ -364,17 +364,23 @@
   -webkit-box-sizing: border-box;
 }
 .sidebar-group .sidebar-section-group {
-  padding: 22px 18px;
+  padding: 24px 18px;
   border-top: 1px solid #D8D8D8;
 }
 .sidebar-group .sidebar-section-group:first-child {
   border-top: none;
 }
+.sidebar-group .customizeSectionDropdownList {
+  margin-top: 1.2em;
+}
 .sidebar-group .dropdown-list-entry {
   font-size: 0.85em;
   font-weight: 500;
-  margin-top: 20px;
+  margin-top: 1.7em;
   list-style: none;
+}
+.sidebar-group .dropdown-list-entry:first-child {
+  margin-top: 0;
 }
 .sidebar-group .heading-1 {
   padding: 12px;
@@ -406,21 +412,26 @@
   width: 220px;
   padding: 10px 12px;
 }
+.sidebar-group .heading-3 .search-result {
+  display: table;
+  width: 100%;
+}
 .sidebar-group .heading-3 .text {
-  padding-right: 20px;
+  display: table-cell;
+}
+.sidebar-group .heading-3 .text:first-child {
+  width: 3.45em;
 }
 .sidebar-group .heading-3 .text.action {
-  float: right;
-  position: relative;
-  left: 15px;
   font-size: 1.2em;
   font-weight: 900;
+  text-align: right;
 }
 .sidebar-group .heading-3.clickable {
   cursor: pointer;
 }
 .sidebar-group .heading-3.clickable:hover {
-  background-color: #ededed;
+  background-color: #dfeeef;
 }
 section.searchbox {
   background-color: #FFFFFF;
@@ -456,8 +467,8 @@ input.searchbox {
 input.searchbutton {
   border-style: none;
   display: inline-block;
-  height: 26px;
-  width: 75px;
+  height: 2.5em;
+  width: 6.3em;
   font-family: 'Lato';
   font-size: 0.75em;
   letter-spacing: 0.7px;
@@ -495,7 +506,10 @@ input.searchbutton:hover {
   left: 0;
 }
 .course-results-list {
-  min-height: 300px;
+  height: 21.5em;
+  overflow: auto;
+  width: 20.9em;
+  margin-top: 1.2em;
 }
 .class-added-list {
   max-height: 300px;

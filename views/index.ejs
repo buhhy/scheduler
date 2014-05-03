@@ -13,13 +13,13 @@
 		<link type="text/css" rel="stylesheet" href="css/sidebar.addsection.css" />
 		<link type="text/css" rel="stylesheet" href="css/sidebar.print.css" /> -->
 
-		<title>uWaterloo Scheduler</title>
+		<title>Pinecone</title>
 	</header>
 	<body>
 		<section class="topbar">
 			<span class="logo"><a href="#">Pinecone</a></span>
 			<ol id="sectionIndicatorGroup" class="steps">
-				UWATERLOO SCHEDULER
+				UW COURSE SCHEDULER
 				<li id="addSectionIndicator" class="indicator">1. ADD</li>&#x25B6;
 				<li id="customizeIndicator" class="indicator">2. CUSTOMIZE</li>&#x25B6;
 				<li id="printIndicator" class="indicator">3. PRINT</li>
@@ -32,7 +32,7 @@
 						<section id="addSectionSidebar" class="sidebar class">
 							<article class="sidebar-section-group class-search">
 								<p>
-									<h1>SEARCH</h1>
+									<h1>ADD A COURSE</h1>
 									<!-- <div class="dropdown">
 										<span>SELECT TERM</span>
 										<span class="arrow"></span>
@@ -57,13 +57,13 @@
 							</article>
 
 							<article class="sidebar-section-group">
-								<h1>RESULTS</h1>
+								<h1>SEARCH RESULTS</h1>
 
 								<ul id="searchResultList" class="course-results-list"></ul>
 							</article>
 
 							<article class="sidebar-section-group">
-								<h1>ADDED</h1>
+								<h1>ADDED COURSES</h1>
 
 								<ul id="addedList" class="class-added-list"></ul>
 							</article>
@@ -72,15 +72,15 @@
 
 						<section id="customizeSidebar" class="sidebar customize">
 							<article class="sidebar-section-group">
-								<h1>CUSTOMIZE</h1>
+								<h1>CUSTOMIZE COLOURS</h1>
 								<p id="sectionThemeContainer" class="sidebar-subsection-group">
 									<h2>COURSE THEMES</h2>
-									<ul id="customizeSectionDropdownList">
+									<ul id="customizeSectionDropdownList" class="customizeSectionDropdownList">
 									</ul>
 								</p>
 								<p class="sidebar-subsection-group">
 									<h2>GLOBAL THEMES</h2>
-									<ul id="customizeGlobalDropdownList">
+									<ul id="customizeGlobalDropdownList" class="customizeSectionDropdownList">
 									</ul>
 								</p>
 							</article>
@@ -159,9 +159,11 @@
 		</script>
 
 		<script id="templateSearchResultEntry" type="text/template">
-			<span class="text"><%- catalog %></span>
-			<span class="text"> <%- times %></span>
-			<span class="text action">&#x2B;</span>
+			<div class="search-result">
+				<span class="text"><%- catalog %></span>
+				<span class="text"> <%- times %></span>
+				<span class="text action">&#x2B;</span>
+			</div>
 		</script>
 
 		<script id="templateCalendar" type="text/template">

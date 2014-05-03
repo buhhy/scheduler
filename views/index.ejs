@@ -159,7 +159,7 @@
 		</script>
 
 		<script id="templateSearchResultEntry" type="text/template">
-			<div class="search-result">
+			<div class="table-three">
 				<span class="text"><%- catalog %></span>
 				<span class="text"> <%- times %></span>
 				<span class="text action">&#x2B;</span>
@@ -222,9 +222,11 @@
 
 		<script id="templateAddSectionAddedListEntry" type="text/template">
 			<li class="class-added-entry">
-				<span class="section"><%= subject %> <%= catalog %> - <%= section %> <%= type %> </span>
-				<span class="time"> <%= times %></span>
-				<span data-id="remove" class="action">&#xD7;</span>
+				<div class="table-three">
+					<span class="section"><%= subject %> <%= catalog %> - <%= section %> <%= type %> </span>
+					<span class="time"> <%= times %></span>
+					<span data-id="remove" class="action">&#xD7;</span>
+				</div>
 			</li>
 		</script>
 

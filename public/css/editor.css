@@ -265,8 +265,10 @@
 }
 .cl .cl-entry .cl-title {
   font-weight: 700;
-  letter-spacing: 0.06em;
-  line-height: 15px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1.25em;
+  font-size: 0.8em;
 }
 .cl .cl-entry .cl-desc {
   letter-spacing: 0.08em;
@@ -412,10 +414,6 @@
   width: 220px;
   padding: 10px 12px;
 }
-.sidebar-group .heading-3 .search-result {
-  display: table;
-  width: 100%;
-}
 .sidebar-group .heading-3 .text {
   display: table-cell;
 }
@@ -432,6 +430,10 @@
 }
 .sidebar-group .heading-3.clickable:hover {
   background-color: #dfeeef;
+}
+.table-three {
+  display: table;
+  width: 100%;
 }
 section.searchbox {
   background-color: #FFFFFF;
@@ -523,6 +525,11 @@ input.searchbutton:hover {
   font-size: 0.85em;
   font-weight: 500;
   margin-top: 20px;
+  transition: all 400ms ease;
+  -o-transition: all 400ms ease;
+  -ms-transition: all 400ms ease;
+  -moz-transition: all 400ms ease;
+  -webkit-transition: all 400ms ease;
   box-sizing: border-box;
   -o-box-sizing: border-box;
   -ms-box-sizing: border-box;
@@ -530,17 +537,20 @@ input.searchbutton:hover {
   -webkit-box-sizing: border-box;
 }
 .class-added-list .class-added-entry:hover {
-  background-color: #c4c4c4;
+  background-color: #9fccd6;
 }
 .class-added-list .class-added-entry span {
-  padding-right: 20px;
+  display: table-cell;
+}
+.class-added-list .class-added-entry .section {
+  width: 41%;
 }
 .class-added-list .class-added-entry .action {
-  float: right;
-  left: 20px;
-  position: relative;
   font-size: 1.2em;
   font-weight: 900;
+  text-align: right;
+  position: relative;
+  top: 1px;
 }
 .color-indicator-container {
   display: inline-block;

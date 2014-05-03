@@ -52,8 +52,7 @@ Scheduler.views.PrintSidebar = Scheduler.views.Sidebar.extend({
 					"https://www.facebook.com/dialog/share?",
 					"app_id=1390085397942073",
 					"&display=popup",
-					"&action_type=og.likes",
-					"&href=", aPath,
+					"&href=", sprintf("%s//%s/preview/%s/img", window.location.protocol, window.location.host, self.options.userData.get("hash")), // TODO: less hacky here plz
 					"&redirect_uri=", window.location.href
 				].join("");
 				dialog.focus();

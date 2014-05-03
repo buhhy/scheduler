@@ -32,7 +32,7 @@ var port = process.env.PORT || 4888;
 var localUrl = sprintf.s("http://%s:%d", "localhost", port);
 
 var serverUrl = function(aReq) {
-	return sprintf("%s://%s", aReq.protocol, aReq.get('host'));
+	return sprintf.s("%s://%s", aReq.protocol, aReq.get('host'));
 };
 
 // Prevents conflicts with underscore.js templates since both use <% ... %>

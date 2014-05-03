@@ -224,6 +224,7 @@ app.get("/preview/:hash/img", function (aReq, aRes) {
 				"title": "My schedule", // TODO: more term specific info here
 				"url": serverUrl(aReq), // TODO: better URL here
 				"desc": "Create and customize your University of Waterloo class schedules!",
+				"type": "object",
 				"imgSrc": sprintf.s("%s/gen/img/%s.png", serverUrl(aReq), hash)
 			});
 		}

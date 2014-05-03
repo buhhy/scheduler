@@ -29,6 +29,7 @@ var searchIndex = require(path.join(srcPath, "searchIndex"));
 var app = express();
 var port = process.env.PORT || 4888;
 
+var fbAppId = "1390085397942073";
 var localUrl = sprintf.s("http://%s:%d", "localhost", port);
 
 var serverUrl = function(aReq) {
@@ -210,6 +211,25 @@ app.get("/preview/:hash", function (aReq, aRes) {
 	});
 });
 
+app.get("/preview/:hash/img", function (aReq, aRes) {
+	var hash = aReq.params.hash;
+	mongoStore.findUserSchedule(hash, function (aSchedule, aError) {
+		if (aError) {
+			aRes.send(404, aError);
+		} else {
+			// TODO: store the url
+			aRes.render("image-preview.ejs", {
+				"appId": fbAppId,
+				"siteName": "Pinecone - UW schedule customizer",
+				"title": "My schedule", // TODO: more term specific info here
+				"url": serverUrl(aReq), // TODO: better URL here
+				"desc": "Create and customize your University of Waterloo class schedules!",
+				"imgSrc": sprintf.s("%s/gen/img/%s.png", serverUrl(aReq), hash)
+			});
+		}
+	});
+});
+
 app.get("/api/class", function (aReq, aRes) {
 	var query = aReq.param("search");
 
@@ -259,7 +279,6 @@ app.get("/api/user/schedule/:hash", function (aReq, aRes) {
 });
 
 app.post("/api/pdfify/:hash", function (aReq, aRes) {
-	// TODO: Less hackery here too plz
 	var hash = aReq.params.hash;
 
 	mongoStore.findUserSchedule(hash, function (aSchedule, aError) {
@@ -283,7 +302,6 @@ app.post("/api/pdfify/:hash", function (aReq, aRes) {
 });
 
 app.post("/api/imgify/:hash", function (aReq, aRes) {
-	// TODO: Less hackery here too plz
 	var hash = aReq.params.hash;
 
 	mongoStore.findUserSchedule(hash, function (aSchedule, aError) {

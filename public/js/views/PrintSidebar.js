@@ -1,6 +1,7 @@
 Scheduler.views.PrintSidebar = Scheduler.views.Sidebar.extend({
 	"defaults": {
-		"userData": undefined
+		"userData": undefined,
+		"appId": undefined
 	},
 
 	"initialize": function (aOpts) {
@@ -50,7 +51,7 @@ Scheduler.views.PrintSidebar = Scheduler.views.Sidebar.extend({
 			self.options.userData.imgify(function (aPath) {
 				dialog.location.href = [
 					"https://www.facebook.com/dialog/share?",
-					"app_id=1390085397942073",
+					"app_id=", self.options.appId,
 					"&display=popup",
 					"&href=", sprintf("%s//%s/preview/%s/img", window.location.protocol, window.location.host, self.options.userData.get("hash")), // TODO: less hacky here plz
 					"&redirect_uri=", window.location.href
@@ -62,7 +63,7 @@ Scheduler.views.PrintSidebar = Scheduler.views.Sidebar.extend({
 
 	"setUpFacebook": function () {
 		FB.init({
-			"appId": "1390085397942073",
+			"appId": this.options.appId,
 			"status": true,
 			"cookie": true,
 			"xfbml": true

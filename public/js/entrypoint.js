@@ -1,5 +1,4 @@
 $(function () {
-
 	var courseData = new Scheduler.models.ClassData();
 
 	var userData = new Scheduler.models.UserData({
@@ -34,6 +33,7 @@ $(function () {
 			new Scheduler.views.PrintSidebar({
 				"el": "#printSidebar",
 				"indicator": "#printIndicator",
+				"appId": fbAppId,
 				"userData": userData
 			})
 		]

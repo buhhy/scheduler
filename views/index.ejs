@@ -231,6 +231,7 @@
 
 		<!-- Server-side generation of hash value outputted here -->
 		<script type="text/javascript">
+			var fbAppId = "{{= appId}}";
 			{{ if (hash !== undefined) { }}
 				var hash = "{{= hash }}";
 			{{ } else { }}

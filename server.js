@@ -21,16 +21,21 @@ var genPath = path.join(assetPath, "gen");
 var encoding = "UTF-8";
 
 var sprintf = require(path.join(srcPath, "lib", "sprintf"));
-var classData = require(path.join(srcPath, "classData"));
-var mongoStore = require(path.join(srcPath, "mongoStore"));
-var printer = require(path.join(srcPath, "printer"));
-var searchIndex = require(path.join(srcPath, "searchIndex"));
+var classData = require(path.join(srcPath, "ClassData"));
+var mongoStore = require(path.join(srcPath, "MongoStore"));
+var printer = require(path.join(srcPath, "Printer"));
+var searchIndex = require(path.join(srcPath, "SearchIndex"));
+
+
+var DataController = require("./src/controllers/DataController");
+var GenerationController = require("./src/controllers/GenerationController");
+var UserController = require("./src/controllers/UserController");
+var RouteUtils = require("./src/utils/RouteUtils");
+
 
 var app = express();
-var port = process.env.PORT || 4888;
 
 var fbAppId = "1390085397942073";
-var localUrl = sprintf.s("http://%s:%d", "localhost", port);
 
 var serverUrl = function(aReq) {
 	return sprintf.s("%s://%s", aReq.protocol, aReq.get('host'));
@@ -62,23 +67,12 @@ app.configure(function () {
 });
 
 
-var classQueryResponse = function (aResponse, aTerm, aQuery) {
-	if (aQuery && aQuery.length) {
-		aResponse.json(searchIndex.search(aTerm, aQuery));
-	} else {
-		mongoStore.findClasses(aTerm, function (aClasses) {
-			aResponse.json(aClasses || []);
-		});
-	}
-}
-
-
 app.get("/", function (aReq, aRes) {
-	aRes.render("index.ejs", { "hash": undefined });
+	aRes.render("index.ejs", { "hash": undefined, "appId": fbAppId });
 });
 
 app.get("/:hash", function (aReq, aRes) {
-	aRes.render("index.ejs", { "hash": aReq.params.hash });
+	aRes.render("index.ejs", { "hash": aReq.params.hash, "appId": fbAppId });
 });
 
 app.get("/preview/:hash", function (aReq, aRes) {
@@ -231,103 +225,21 @@ app.get("/preview/:hash/img", function (aReq, aRes) {
 	});
 });
 
-app.get("/api/class", function (aReq, aRes) {
-	var query = aReq.param("search");
 
-	console.log(query);
+app.get("/api/class", DataController.getClasses);
+app.get("/api/:term/class", DataController.getClassesByTerm);
+app.get("/api/term", DataController.getTerms);
 
-	classData.currentTerm(function (aCurrentTerm) {
-		classQueryResponse(aRes, aCurrentTerm, query);
-	});
-});
+app.post("/api/user/schedule", UserController.insertUserSchedule);
+app.put("/api/user/schedule/:hash", UserController.updateUserSchedule);
+app.get("/api/user/schedule/:hash", UserController.getUserSchedule);
 
-app.get("/api/:term/class", function (aReq, aRes) {
-	var term = parseInt(aReq.params.term);
-	var query = aReq.param("search");
+app.post("/api/pdfify/:hash", GenerationController.genPdf);
+app.post("/api/imgify/:hash", GenerationController.genImg);
 
-	if (isNaN(term) || term === null || term === undefined) {
-		aRes.send(404, sprintf.s("Invalid term identifier: %s", aReq.params.term));
-	} else {
-		classQueryResponse(aRes, term, query);
-	}
-});
+app.listen(RouteUtils.port);
 
-var sendMongoResult = function (aRes) {
-	return function (aResult, aError) {
-		if (aError)
-			aRes.send(400, aError);
-		else
-			aRes.json(aResult);
-	};
-}
-
-app.get("/api/term", function (aReq, aRes) {
-	classData.currentTerms(sendMongoResult(aRes));
-});
-
-app.post("/api/user/schedule", function (aReq, aRes) {
-	mongoStore.upsertUserSchedule(aReq.body, sendMongoResult(aRes));
-});
-
-app.put("/api/user/schedule/:hash", function (aReq, aRes) {
-	var schedule = aReq.body;
-	schedule.hash = aReq.params.hash;
-	mongoStore.upsertUserSchedule(schedule, sendMongoResult(aRes));
-});
-
-app.get("/api/user/schedule/:hash", function (aReq, aRes) {
-	mongoStore.findUserSchedule(aReq.params.hash, sendMongoResult(aRes));
-});
-
-app.post("/api/pdfify/:hash", function (aReq, aRes) {
-	var hash = aReq.params.hash;
-
-	mongoStore.findUserSchedule(hash, function (aSchedule, aError) {
-		if (aError) {
-			aRes.send(400, aError);
-		} else {
-			var size = printer.PAPER_SIZES.A4.flip();
-			var previewUrl = sprintf.s("%s/preview/%s?%s", localUrl, hash, size.toQuery());
-			var pdfName = sprintf.s("%s.pdf", hash);
-			var pdfUrl = sprintf.s("%s/gen/pdf/%s", serverUrl(aReq), pdfName);
-			var pdfPath = path.join(assetDir, "gen", "pdf", pdfName);
-
-			console.log(sprintf.s("Generating PDF from `%s` to `%s` with URL `%s`.",
-				previewUrl, pdfPath, pdfUrl));
-
-			printer.toPdf(previewUrl, pdfPath, size, function () {
-				aRes.json({ "path": pdfUrl });
-			});
-		}
-	});
-});
-
-app.post("/api/imgify/:hash", function (aReq, aRes) {
-	var hash = aReq.params.hash;
-
-	mongoStore.findUserSchedule(hash, function (aSchedule, aError) {
-		if (aError) {
-			aRes.send(400, aError);
-		} else {
-			var size = printer.IMAGE_SIZES.medium;
-			var previewUrl = sprintf.s("%s/preview/%s?%s", localUrl, hash, size.toQuery());
-			var imageName = sprintf.s("%s.png", hash);
-			var imageUrl = sprintf.s("%s/gen/img/%s", serverUrl(aReq), imageName);
-			var imagePath = path.join(assetDir, "gen", "img", imageName);
-
-			console.log(sprintf.s("Generating PNG from `%s` to `%s` with URL `%s`.",
-				previewUrl, imagePath, imageUrl));
-
-			printer.toImage(previewUrl, imagePath, size, function () {
-				aRes.json({ "path": imageUrl });
-			});
-		}
-	});
-});
-
-app.listen(port);
-
-console.log("Starting server on port " +  port);
+console.log("Starting server on port " +  RouteUtils.port);
 
 
 

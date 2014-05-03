@@ -1,5 +1,7 @@
 @import "mixins.less";
 
+@calendar-corner: 3px;
+
 .cl {
 	font-size: 1em;
 	height: 100%;
@@ -64,11 +66,11 @@
 				.transition(~"background 200ms ease");
 
 				&:first-child .background {
-					.border-radius(3px 0 0 0);
+					.border-radius(@calendar-corner 0 0 0);
 				}
 
 				&:last-child .background {
-					.border-radius(0 3px 0 0);
+					.border-radius(0 @calendar-corner 0 0);
 				}
 
 				b {
@@ -78,6 +80,7 @@
 				.background {
 					background-color: #c9c9ca;
 					padding: 1em;
+					line-height: 1.5em;
 				}
 			}
 		}

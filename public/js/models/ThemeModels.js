@@ -5,9 +5,9 @@
 
 Scheduler.models.Theme = Scheduler.models.Model.extend({
 	"defaults": {
-		"backgroundColor": "#eee",
+		"backgroundColor": "#fff",
 		"fontColor": "#444",
-		"borderColor": "#ddd"
+		"borderColor": "#6d6d6d"
 	},
 
 	"initialize": function () {
@@ -24,6 +24,8 @@ Scheduler.models.GlobalTheme = Scheduler.models.Model.extend({
 		return {
 			"tableTheme": new Scheduler.models.Theme(),
 			"daysTheme": new Scheduler.models.Theme({
+				"backgroundColor": "#677FBD",
+				"fontColor": "#fff",
 				"borderColor": ""
 			}),
 			"timeTheme": new Scheduler.models.Theme({

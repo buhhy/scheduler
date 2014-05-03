@@ -269,7 +269,7 @@ app.post("/api/pdfify/:hash", function (aReq, aRes) {
 			var size = printer.PAPER_SIZES.A4.flip();
 			var previewUrl = sprintf.s("%s/preview/%s?%s", localUrl, hash, size.toQuery());
 			var pdfName = sprintf.s("%s.pdf", hash);
-			var pdfUrl = sprintf.s("%s/gen/pdf/%s", serverUrl(aRes), pdfName);
+			var pdfUrl = sprintf.s("%s/gen/pdf/%s", serverUrl(aReq), pdfName);
 			var pdfPath = path.join(assetDir, "gen", "pdf", pdfName);
 
 			console.log(sprintf.s("Generating PDF from `%s` to `%s` with URL `%s`.",
@@ -293,7 +293,7 @@ app.post("/api/imgify/:hash", function (aReq, aRes) {
 			var size = printer.IMAGE_SIZES.medium;
 			var previewUrl = sprintf.s("%s/preview/%s?%s", localUrl, hash, size.toQuery());
 			var imageName = sprintf.s("%s.png", hash);
-			var imageUrl = sprintf.s("%s/gen/img/%s", serverUrl(aRes), imageName);
+			var imageUrl = sprintf.s("%s/gen/img/%s", serverUrl(aReq), imageName);
 			var imagePath = path.join(assetDir, "gen", "img", imageName);
 
 			console.log(sprintf.s("Generating PNG from `%s` to `%s` with URL `%s`.",

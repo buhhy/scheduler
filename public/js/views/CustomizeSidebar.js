@@ -47,11 +47,11 @@ Scheduler.views.CustomizeSidebar = Scheduler.views.Sidebar.extend({
 					themeData.get("section"),
 					"backgroundColor"),
 				this.buildMultiPaletteDropdown(
-					"FONT COLOR",
+					"FONT",
 					themeData.get("section"),
 					"fontColor"),
 				this.buildMultiPaletteDropdown(
-					"BORDER COLOR",
+					"BORDER",
 					themeData.get("section"),
 					"borderColor")
 			]
@@ -69,12 +69,12 @@ Scheduler.views.CustomizeSidebar = Scheduler.views.Sidebar.extend({
 						globalTheme.get("tableTheme"),
 						"backgroundColor"),
 					this.buildSinglePaletteDropdown(
-						"FONT COLOR",
+						"FONT",
 						themeData.get("table"),
 						globalTheme.get("tableTheme"),
 						"fontColor"),
 					this.buildSinglePaletteDropdown(
-						"BORDER COLOR",
+						"BORDER",
 						themeData.get("table"),
 						globalTheme.get("tableTheme"),
 						"borderColor")
@@ -91,7 +91,7 @@ Scheduler.views.CustomizeSidebar = Scheduler.views.Sidebar.extend({
 						globalTheme.get("daysTheme"),
 						"backgroundColor"),
 					this.buildSinglePaletteDropdown(
-						"FONT COLOR",
+						"FONT",
 						themeData.get("days"),
 						globalTheme.get("daysTheme"),
 						"fontColor")
@@ -108,7 +108,7 @@ Scheduler.views.CustomizeSidebar = Scheduler.views.Sidebar.extend({
 						globalTheme.get("timeTheme"),
 						"backgroundColor"),
 					this.buildSinglePaletteDropdown(
-						"FONT COLOR",
+						"FONT",
 						themeData.get("time"),
 						globalTheme.get("timeTheme"),
 						"fontColor")

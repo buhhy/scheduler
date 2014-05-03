@@ -28,6 +28,7 @@ var searchIndex = require(path.join(srcPath, "searchIndex"));
 
 var app = express();
 var port = process.env.PORT || 4888;
+var localUrl = sprintf.s("http://%s:%d", "localhost", port);
 
 // Prevents conflicts with underscore.js templates since both use <% ... %>
 ejs.open = "{{";
@@ -261,10 +262,9 @@ app.post("/api/pdfify/:hash", function (aReq, aRes) {
 			aRes.send(400, aError);
 		} else {
 			var size = printer.PAPER_SIZES.A4.flip();
-			var host = getHostFromRequest(aReq);
-			var previewUrl = sprintf.s("%s/preview/%s?%s", host, hash, size.toQuery());
+			var previewUrl = sprintf.s("%s/preview/%s?%s", localUrl, hash, size.toQuery());
 			var pdfName = sprintf.s("%s.pdf", hash);
-			var pdfUrl = sprintf.s("%s/gen/pdf/%s", host, pdfName);
+			var pdfUrl = sprintf.s("%s/gen/pdf/%s", localUrl, pdfName);
 			var pdfPath = path.join(assetDir, "gen", "pdf", pdfName);
 
 			console.log(sprintf.s("Generating PDF from `%s` to `%s` with URL `%s`.",
@@ -286,10 +286,9 @@ app.post("/api/imgify/:hash", function (aReq, aRes) {
 			aRes.send(400, aError);
 		} else {
 			var size = printer.IMAGE_SIZES.medium;
-			var host = getHostFromRequest(aReq);
-			var previewUrl = sprintf.s("%s/preview/%s?%s", host, hash, size.toQuery());
+			var previewUrl = sprintf.s("%s/preview/%s?%s", localUrl, hash, size.toQuery());
 			var imageName = sprintf.s("%s.png", hash);
-			var imageUrl = sprintf.s("%s/gen/img/%s", host, imageName);
+			var imageUrl = sprintf.s("%s/gen/img/%s", localUrl, imageName);
 			var imagePath = path.join(assetDir, "gen", "img", imageName);
 
 			console.log(sprintf.s("Generating PNG from `%s` to `%s` with URL `%s`.",
@@ -305,10 +304,6 @@ app.post("/api/imgify/:hash", function (aReq, aRes) {
 app.listen(port);
 
 console.log("Starting server on port " +  port);
-
-var getHostFromRequest = function(aReq) {
-	return aReq.protocol + '://' + aReq.get('host');
-}
 
 
 

@@ -184,7 +184,6 @@ var updateUserSchedule = function (aSchedule, aId, aCallback) {
 		userSchedule.update({
 			"_id": aId
 		}, aSchedule, function (aError) {
-			console.log("test");
 			if (aError) {
 				console.log(aError);
 				aCallback(null, aError);

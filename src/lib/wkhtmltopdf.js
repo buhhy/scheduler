@@ -75,8 +75,7 @@ function htmlToX(command, input, options, callback) {
 	}
 
 	var isUrl = /^(https?|file):\/\//.test(input);
-	if (process.platform === 'win32')
-		input = '"' + input + '"';
+	input = '"' + input + '"';
 
 	args.push(isUrl ? input : '-'); // stdin if HTML given directly
 	args.push(output || '-');       // stdout if no output file

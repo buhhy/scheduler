@@ -222,7 +222,7 @@ app.get("/preview/:hash/img", function (aReq, aRes) {
 				"appId": fbAppId,
 				"siteName": "Pinecone - UW schedule customizer",
 				"title": "My schedule", // TODO: more term specific info here
-				"url": aReq.href,
+				"url": serverUrl(aReq) + aReq.url,
 				"desc": "Create and customize your University of Waterloo class schedules!",
 				"type": "object",
 				"imgSrc": sprintf.s("%s/gen/img/%s.png", serverUrl(aReq), hash)

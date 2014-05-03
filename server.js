@@ -5,6 +5,8 @@ var path = require("path");
 var ejs = require('ejs');
 var fs = require('fs');
 
+var sprintf = require("./src/lib/sprintf");
+
 var pathify = function (aDir) { return path.join(__dirname, aDir); };
 
 // Directory names
@@ -13,33 +15,26 @@ var assetDir = "public";
 var viewDir = "views";
 
 // Absolute file system paths
-var srcPath = pathify(srcDir);
 var assetPath = pathify(assetDir);
 var viewPath = pathify(viewDir);
-var genPath = path.join(assetPath, "gen");
 
 var encoding = "UTF-8";
 
-var sprintf = require(path.join(srcPath, "lib", "sprintf"));
-var classData = require(path.join(srcPath, "ClassData"));
-var mongoStore = require(path.join(srcPath, "MongoStore"));
-var printer = require(path.join(srcPath, "Printer"));
-var searchIndex = require(path.join(srcPath, "SearchIndex"));
+var ClassData = require("./src/ClassData");
+var MongoStore = require("./src/MongoStore");
+var Printer = require("./src/Printer");
+var SearchIndex = require("./src/SearchIndex");
 
+var RouteUtils = require("./src/utils/RouteUtils");
 
 var DataController = require("./src/controllers/DataController");
 var GenerationController = require("./src/controllers/GenerationController");
 var UserController = require("./src/controllers/UserController");
-var RouteUtils = require("./src/utils/RouteUtils");
 
 
 var app = express();
 
 var fbAppId = "1390085397942073";
-
-var serverUrl = function(aReq) {
-	return sprintf.s("%s://%s", aReq.protocol, aReq.get('host'));
-};
 
 // Prevents conflicts with underscore.js templates since both use <% ... %>
 ejs.open = "{{";
@@ -75,17 +70,25 @@ app.get("/:hash", function (aReq, aRes) {
 	aRes.render("index.ejs", { "hash": aReq.params.hash, "appId": fbAppId });
 });
 
+app.get("/loading/img", function (aReq, aRes) {
+	aRes.render("loading.ejs", { "msg": "Generating schedule preview..." });
+});
+
+app.get("/loading/pdf", function (aReq, aRes) {
+	aRes.render("loading.ejs", { "msg": "Generating schedule PDF..." });
+});
+
 app.get("/preview/:hash", function (aReq, aRes) {
 	var hash = aReq.params.hash;
-	var width = aReq.query.width || printer.PAPER_SIZES.A4.width;
-	var height = aReq.query.height || printer.PAPER_SIZES.A4.height;
+	var width = aReq.query.width || Printer.PAPER_SIZES.A4.width;
+	var height = aReq.query.height || Printer.PAPER_SIZES.A4.height;
 
-	mongoStore.findUserSchedule(hash, function (aData) {
+	MongoStore.findUserSchedule(hash, function (aData) {
 		if (!aData) {
 			aRes.send(404, sprintf.s("Could not find schedule with url hash `%s`.", hash));
 		} else {
-			// TODO: Less hackery here plz, retrieve page size from request
-			var pageSize = printer.PAPER_SIZES.A4;
+			// TODO: Less hackery here plz
+			var pageSize = Printer.PAPER_SIZES.A4;
 			var globalTheme = aData.globalTheme;
 			var userClassList = aData.userClassList;
 
@@ -207,7 +210,7 @@ app.get("/preview/:hash", function (aReq, aRes) {
 
 app.get("/preview/:hash/img", function (aReq, aRes) {
 	var hash = aReq.params.hash;
-	mongoStore.findUserSchedule(hash, function (aSchedule, aError) {
+	MongoStore.findUserSchedule(hash, function (aSchedule, aError) {
 		if (aError) {
 			aRes.send(404, aError);
 		} else {
@@ -216,10 +219,10 @@ app.get("/preview/:hash/img", function (aReq, aRes) {
 				"appId": fbAppId,
 				"siteName": "Pinecone - UW schedule customizer",
 				"title": "My schedule", // TODO: more term specific info here
-				"url": serverUrl(aReq) + aReq.url,
+				"url": RouteUtils.getFullUrlFromRequest(aReq),
 				"desc": "Create and customize your University of Waterloo class schedules!",
 				"type": "object",
-				"imgSrc": sprintf.s("%s/gen/img/%s.png", serverUrl(aReq), hash)
+				"imgSrc": sprintf.s("%s/gen/img/%s.png", RouteUtils.getRootUrlFromRequest(aReq), hash)
 			});
 		}
 	});
@@ -239,29 +242,28 @@ app.post("/api/imgify/:hash", GenerationController.genImg);
 
 app.listen(RouteUtils.port);
 
+
 console.log("Starting server on port " +  RouteUtils.port);
 
 
-
-
 var refreshMongoCache = function (aTerm) {
-	classData.reloadClassData(aTerm, function (aTerm, aData) {
+	ClassData.reloadClassData(aTerm, function (aTerm, aData) {
 		console.log("Fetched " + aData.length + " entries.");
-		mongoStore.storeClasses(aTerm, aData);
-		searchIndex.rebuildIndex(aTerm, aData);
+		MongoStore.storeClasses(aTerm, aData);
+		SearchIndex.rebuildIndex(aTerm, aData);
 	});
 }
 
 var refreshDataCaches = function () {
-	classData.currentTerms(function (aTerms) {
+	ClassData.currentTerms(function (aTerms) {
 		Object.keys(aTerms).forEach(function (aKey) {
 			var termId = aTerms[aKey].id;
 			console.log(sprintf.s("Verifying data for term %d.", termId));
-			mongoStore.findClasses(termId, function (aClasses) {
+			MongoStore.findClasses(termId, function (aClasses) {
 				if (!aClasses || !aClasses.length) {
 					refreshMongoCache(termId);
 				} else {
-					searchIndex.rebuildIndex(termId, aClasses);
+					SearchIndex.rebuildIndex(termId, aClasses);
 				}
 			});
 		});

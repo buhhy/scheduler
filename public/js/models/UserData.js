@@ -32,13 +32,13 @@ Scheduler.models.UserData = Scheduler.models.Model.extend({
 		var self = this;
 
 		this.save(null, {
-			"async": false,
+			"async": !aSync,
 			"success": function (aModel) {
 				$.ajax({
 					"method": "POST",
 					"contentType": "application/json",
 					"url": sprintf(aUrl, aModel.get("hash")),
-					"async": false
+					"async": !aSync
 				}).done(function (aResp) {
 					if (aCallback)
 						aCallback(aResp.path);

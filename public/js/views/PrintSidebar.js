@@ -17,12 +17,25 @@ Scheduler.views.PrintSidebar = Scheduler.views.Sidebar.extend({
 
 	"setUpListeners": function () {
 		var self = this;
+		var dialogParams = [
+			"directories=no",
+			"titlebar=no",
+			"toolbar=no",
+			"location=no",
+			"status=no",
+			"menubar=no",
+			"scrollbars=no",
+			"resizable=yes",
+			"width=600",
+			"height=300"
+		].join(",");
 
 		this.$el.find("#savePdfButton").click(function () {
+			var dialog = window.open("loading/pdf", "", dialogParams);
 			self.options.userData.pdfify(function (aUrl) {
 				console.log(aUrl);
-				window.open(aUrl, "_blank");
-			}, true);
+				dialog.location.href = aUrl;
+			});
 		});
 
 		this.$el.find("#printPdfButton").click(function () {
@@ -34,19 +47,7 @@ Scheduler.views.PrintSidebar = Scheduler.views.Sidebar.extend({
 
 		this.$el.find("#shareButton").click(function () {
 			// TODO: add loading page here
-			var dialogParams = [
-				"directories=no",
-				"titlebar=no",
-				"toolbar=no",
-				"location=no",
-				"status=no",
-				"menubar=no",
-				"scrollbars=no",
-				"resizable=yes",
-				"width=600",
-				"height=300"
-			].join(",");
-			var dialog = window.open("about:blank", "", dialogParams);
+			var dialog = window.open("loading/img", "", dialogParams);
 
 			self.options.userData.imgify(function (aPath) {
 				dialog.location.href = [
@@ -57,7 +58,7 @@ Scheduler.views.PrintSidebar = Scheduler.views.Sidebar.extend({
 					"&redirect_uri=", window.location.href
 				].join("");
 				dialog.focus();
-			}, true);
+			});
 		});
 	},
 

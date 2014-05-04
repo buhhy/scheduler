@@ -5,12 +5,23 @@ Scheduler.views.Sidebar = Scheduler.views.View.extend({
 
 	"index": 0,
 
+	"contextGroup": undefined,
+
 	"$indicator": undefined,
 
 	"initialize": function (aOpts) {
 		var opts = _.defaults(aOpts, this.defaults);
+		var self = this;
 
 		this.$indicator = $(opts.indicator);
+
+		this.$el.find("[data-id='nextBtn']").click(function () {
+			self.contextGroup.next();
+		});
+
+		this.$el.find("[data-id='backBtn']").click(function () {
+			self.contextGroup.previous();
+		});
 	},
 
 	"show": function (aAnimated) {
@@ -42,6 +53,10 @@ Scheduler.views.Sidebar = Scheduler.views.View.extend({
 		this.index = aIndex;
 
 		this.$el.css("left", aIndex * 100 + "%");
+	},
+
+	"setContextGroup": function (aContextGroup) {
+		this.contextGroup = aContextGroup;
 	},
 
 	"getDropdownListEntryHtml": function () {

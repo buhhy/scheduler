@@ -23,6 +23,7 @@ Scheduler.views.SidebarGroup = Scheduler.views.View.extend({
 
 		$.each(this.sidebars, function (aIndex, aView) {
 			aView.setIndex(aIndex);
+			aView.setContextGroup(self);
 
 			if (aIndex === self.currentPage) {
 				aView.show();

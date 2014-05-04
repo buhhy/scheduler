@@ -69,6 +69,11 @@ a, .logo {
  	font-weight: 400;
  	font-size: 1.2em;
  	text-shadow: 0 1px 0px white; 
+ 	.transition(~"all 230ms ease");
+
+ 	&:hover {
+ 		color: #9fccd6;
+ 	}
 }
 
 ol.steps {
@@ -100,12 +105,16 @@ ol.steps {
 			color: #515151;
 			background-color: #9fccd6;
 			.border-radius(3px);
+			box-shadow: 0 1px 0.3px #8aadb2;
 		}
 
 		&:hover {
 			color: #515151;
 			background-color: #c6d9db;
 			.border-radius(3px);
+			top: 1px;
+			position: relative;
+			box-shadow: inset 0 1.3px 1px #8aadb2;
 		}
 	}
 
@@ -119,9 +128,7 @@ section.preview {
 	.preview-container {
 		width: 100%;
 		height: 100%;
-
 		position: relative;
-
 		padding-top: 2em;
 	}
 
@@ -144,15 +151,19 @@ article.button-navigation-group {
 		background-color: #9fccd6;
 		color: #515151;
 		font-size: 0.85em;
-		letter-spacing: 1.7px;
+		letter-spacing: 0.1em;
 		cursor: pointer;
 		font-weight: 500;
+		box-shadow: 0 1px 0.3px #8aadb2;
 
 		.border-radius(2px);
-		.transition(~"all 300ms ease");
+		.transition(~"all 250ms ease");
 
 		&:hover {
 			background-color: #c6d9db;
+			top: 1px;
+			position: relative;
+			box-shadow: inset 0 1.3px 1px #8aadb2;
 		}
 
 		&:first-child {

@@ -27,7 +27,7 @@ Scheduler.models.GlobalTheme = Scheduler.models.Model.extend({
 				"fontColor": null
 			}),
 			"daysTheme": new Scheduler.models.Theme({
-				"backgroundColor": "#677FBD",
+				"backgroundColor": "#66A7CB",
 				"fontColor": "#fff",
 				"borderColor": null
 			}),

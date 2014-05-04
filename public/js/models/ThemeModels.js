@@ -3,11 +3,12 @@
  * which colors can be changed and the list of selectable colors.
  */
 
+// TODO: add default revertable theme settings
 Scheduler.models.Theme = Scheduler.models.Model.extend({
 	"defaults": {
-		"backgroundColor": "#eee",
+		"backgroundColor": "#fff",
 		"fontColor": "#444",
-		"borderColor": "#ddd"
+		"borderColor": "#6d6d6d"
 	},
 
 	"initialize": function () {
@@ -22,12 +23,16 @@ Scheduler.models.ThemeCollection = Scheduler.models.Collection.extend({
 Scheduler.models.GlobalTheme = Scheduler.models.Model.extend({
 	"defaults": function () {
 		return {
-			"tableTheme": new Scheduler.models.Theme(),
+			"tableTheme": new Scheduler.models.Theme({
+				"fontColor": null
+			}),
 			"daysTheme": new Scheduler.models.Theme({
-				"borderColor": ""
+				"backgroundColor": "#677FBD",
+				"fontColor": "#fff",
+				"borderColor": null
 			}),
 			"timeTheme": new Scheduler.models.Theme({
-				"borderColor": ""
+				"borderColor": null
 			})
 		}
 	},

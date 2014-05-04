@@ -1,3 +1,4 @@
+// TODO: pull from server
 var temp = [
 				"#CC5C5C",
 				"#CC5E85",

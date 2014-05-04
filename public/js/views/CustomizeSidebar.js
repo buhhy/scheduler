@@ -69,11 +69,6 @@ Scheduler.views.CustomizeSidebar = Scheduler.views.Sidebar.extend({
 						globalTheme.get("tableTheme"),
 						"backgroundColor"),
 					this.buildSinglePaletteDropdown(
-						"FONT",
-						themeData.get("table"),
-						globalTheme.get("tableTheme"),
-						"fontColor"),
-					this.buildSinglePaletteDropdown(
 						"BORDER",
 						themeData.get("table"),
 						globalTheme.get("tableTheme"),

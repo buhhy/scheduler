@@ -13,7 +13,7 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 	"$timeTable": undefined,
 	"$dayTable": undefined,
 	"$timeLabels": undefined,
-	"$dayLabels": undefined,
+	"$dayLabelBackgrounds": undefined,
 
 	"startTime": 0,						// Calendar start time in minutes
 	"endTime": 24 * 60,					// Calendar end time in minutes
@@ -60,7 +60,10 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 		this.$timeTable = this.$el.find("[data-id='timeTable']");
 		this.$dayTable = this.$el.find("[data-id='dayTable']");
 		this.$timeLabels = this.$el.find("[data-id='timeLabel']");
-		this.$dayLabels = this.$el.find("[data-id='dayLabel']");
+
+		this.$timeBackground = this.$el.find("[data-id='timeBackground']");
+		this.$calendarBackground = this.$el.find("[data-id='calendarBackground']");
+		this.$dayLabelBackgrounds = this.$el.find("[data-id='dayLabelBackground']");
 
 
 		// Find the table columns which will be containing all the event views, then wrap them all
@@ -73,6 +76,7 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 				});
 
 		this.bindEvents();
+		this.setUpInitialStyles();
 		this.refreshData();
 		this.refreshSelection();
 	},
@@ -89,30 +93,52 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 		});
 
 		globalTheme.get("tableTheme").on({
-			"change:backgroundColor": function (aModel, aValue) {
-				self.$el.css("background-color", aValue);
-			}
+			"change:backgroundColor": this.fn2(this.setTableBg)
 		});
 
 		globalTheme.get("daysTheme").on({
-			"change:backgroundColor": function (aModel, aValue) {
-				self.$dayLabels.css("background-color", aValue);
-			},
-
-			"change:fontColor": function (aModel, aValue) {
-				self.$dayTable.css("color", aValue);
-			}
+			"change:backgroundColor": this.fn2(this.setDayLabelBg),
+			"change:fontColor": this.fn2(this.setDayLabelFont)
 		});
 
 		globalTheme.get("timeTheme").on({
-			"change:fontColor": function (aModel, aValue) {
-				self.$timeTable.css("color", aValue);
-			}
+			"change:backgroundColor": this.fn2(this.setTimeBg),
+			"change:fontColor": this.fn2(this.setTimeFont)
 		});
 
 		this.options.selectedSectionList.on("all", function () {
 			self.refreshSelection();
 		});
+	},
+
+	"setUpInitialStyles": function () {
+		var globalTheme = this.options.userData.get("globalTheme");
+
+		this.setTableBg(globalTheme.get("tableTheme").get("backgroundColor"));
+		this.setDayLabelBg(globalTheme.get("daysTheme").get("backgroundColor"));
+		this.setDayLabelFont(globalTheme.get("daysTheme").get("fontColor"));
+		this.setTimeBg(globalTheme.get("timeTheme").get("backgroundColor"));
+		this.setTimeFont(globalTheme.get("timeTheme").get("fontColor"));
+	},
+
+	"setTableBg": function (aValue) {
+		this.$calendarBackground.css("background-color", aValue);
+	},
+
+	"setDayLabelBg": function (aValue) {
+		this.$dayLabelBackgrounds.css("background-color", aValue);
+	},
+
+	"setDayLabelFont": function (aValue) {
+		this.$dayLabelBackgrounds.css("color", aValue);
+	},
+
+	"setTimeBg": function (aValue) {
+		this.$timeBackground.css("background-color", aValue);
+	},
+
+	"setTimeFont": function (aValue) {
+		this.$timeTable.css("color", aValue);
 	},
 
 	"refreshData": function () {

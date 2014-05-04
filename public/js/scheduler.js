@@ -34,5 +34,13 @@ Scheduler.views.View = Backbone.View.extend({
 		aElemView.$el.append(this.$el);
 	},
 
+	/**
+	 * Converts a 1 argument function to a 2 argument function that passes on the second parameter.
+	 */
+	"fn2": function (aFn) {
+		var self = this;
+		return function (a, aValue) { aFn.call(self, aValue); };
+	},
+
 	"onDestroy": function () { }
 });

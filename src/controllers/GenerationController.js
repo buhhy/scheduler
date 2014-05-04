@@ -6,7 +6,7 @@ var MongoStore = require("../MongoStore");
 var Printer = require("../Printer");
 var RouteUtils = require("../utils/RouteUtils");
 
-var createRoute = function (aSize, aFileNameTemplate, aFolderName, aCallback) {
+var createRoute = function (aSize, aFileNameTemplate, aFolderName, aFn, aCallback) {
 	var callback = aCallback || function (aContinuationFn) { aContinuationFn(); };
 
 	return function (aReq, aRes) {
@@ -30,7 +30,7 @@ var createRoute = function (aSize, aFileNameTemplate, aFolderName, aCallback) {
 				console.log(sprintf("Generating file from `%s` to directory `%s` with URL `%s`.",
 					previewUrl, filePath, fileUrl));
 
-				Printer.toPdf(previewUrl, filePath, aSize, function () {
+				aFn(previewUrl, filePath, aSize, function () {
 					callback(function () {
 						aRes.json({ "path": fileUrl });
 					});
@@ -40,5 +40,5 @@ var createRoute = function (aSize, aFileNameTemplate, aFolderName, aCallback) {
 	};
 };
 
-exports.genPdf = createRoute(Printer.PAPER_SIZES.A4.flip(), "%s.pdf", "pdf");
-exports.genImg = createRoute(Printer.IMAGE_SIZES.medium, "%s.png", "img");
+exports.genPdf = createRoute(Printer.PAPER_SIZES.A4.flip(), "%s.pdf", "pdf", Printer.toPdf);
+exports.genImg = createRoute(Printer.IMAGE_SIZES.medium, "%s.png", "img", Printer.toImage);

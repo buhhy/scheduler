@@ -80,8 +80,8 @@ app.get("/loading/pdf", function (aReq, aRes) {
 
 app.get("/preview/:hash", function (aReq, aRes) {
 	var hash = aReq.params.hash;
-	var width = aReq.query.width || Printer.PAPER_SIZES.A4.width;
-	var height = aReq.query.height || Printer.PAPER_SIZES.A4.height;
+	var width = aReq.query.width || Printer.PAPER_SIZES.A4.heightStr();
+	var height = aReq.query.height || Printer.PAPER_SIZES.A4.widthStr();
 
 	MongoStore.findUserSchedule(hash, function (aData) {
 		if (!aData) {

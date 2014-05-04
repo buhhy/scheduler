@@ -125,7 +125,7 @@ app.get("/preview/:hash", function (aReq, aRes) {
 				if (aTheme.fontColor)
 					styles.fontColor = sprintf.s("color:%s;", aTheme.fontColor);
 				if (aTheme.borderColor)
-					styles.borderColor = sprintf.s("border-color:%s;", aTheme.borderColor);
+					styles.borderColor = sprintf.s("border-color:%s;", aTheme.borderColor.join(" "));
 
 				return styles;
 			};

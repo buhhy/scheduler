@@ -182,7 +182,7 @@
 						<% for (var i = 0; i < timeLabels.length; i++) { %>
 							<tr data-id="timeLabel" class="cl-content-row">
 								<td class="cl-time-label"><%= timeLabels[i] %></td>
-								<td class="cl-time-divider"><hr></td>
+								<td class="cl-time-divider"><hr data-id="timeDivider"></td>
 							</tr>
 						<% } %>
 					</tbody>
@@ -208,7 +208,7 @@
 						<tr data-id="calendarBackground" class="cl-content-row">
 							<td data-id="timeBackground"></td>
 							<% for (var i = 0; i < dayLabels.length; i++) { %>
-								<td class="cl-content-cell">
+								<td data-id="contentCell" class="cl-content-cell">
 									<div data-id="positionContainer" class="position-container"></div>
 								</td>
 							<% } %>

@@ -1,13 +1,16 @@
 Scheduler.views.Palette = Scheduler.views.View.extend({
 	"defaults": {
 		"colors": [],			// List of colors strings in hex
-		"model": undefined,		// Model to write the color data
-		"colorName": ""			// The color in the model to modify
+		"model": undefined,		// Model bound to color picker
+		"colorName": "",		// The color in the model to modify
+		"colorNameIndex": undefined	// This is for color shorthands arrays of values
 	},
 
-	"colors": undefined,
+	/**
+	 * Collection of color models bound to color picker, this can be used to change the color of multiple
+	 * selected entities, like courses.
+	 */
 	"collection": undefined,
-	"colorName": undefined,
 	"$dots": undefined,
 
 	"initialize": function (aOpts) {
@@ -25,17 +28,21 @@ Scheduler.views.Palette = Scheduler.views.View.extend({
 		this.$dots = this.$el.find("[data-id='color-indicator']");
 		this.$dots.click(function (aEvent) {
 			var colorAttr = $(this).attr("data-color");
-			var allSame = true;
+			var allSetToColor = true;
 
+			// Checks if every bound model is already set to the currently clicked color, if they
+			// are, then deactivate the color on those models / reset to default.
 			self.collection.forEach(function (aModel) {
-				allSame = allSame && (aModel.get(self.options.colorName) === colorAttr);
+				var sameSetting = self.getProperty(aModel) === colorAttr;
+				allSetToColor = allSetToColor && sameSetting;
 			});
 
-			if (allSame)
+			// TODO: set to default instead of clearing property
+			if (allSetToColor)
 				colorAttr = "";
 
 			self.collection.forEach(function (aModel) {
-				aModel.set(self.options.colorName, colorAttr);
+				self.setProperty(aModel, colorAttr);
 			});
 		});
 
@@ -45,8 +52,39 @@ Scheduler.views.Palette = Scheduler.views.View.extend({
 			this.setModels([ opts.model ]);
 	},
 
+	"getProperty": function (aModel) {
+		var key = this.options.colorName;
+		var index = this.options.colorNameIndex;
+
+		if (aModel != null && key != null) {
+			var prop = aModel.get(key);
+			if (index != null)
+				if (prop != null)
+					return prop[index];
+			else
+				return prop;
+		}
+		return null;
+	},
+
+	"setProperty": function (aModel, aValue) {
+		var key = this.options.colorName;
+		var index = this.options.colorNameIndex;
+
+		if (aModel != null && key != null) {
+			if (index != null) {
+				var prop = _.clone(aModel.get(key));
+				prop[index] = aValue;
+				aModel.set(key, prop);
+			} else {
+				aModel.set(key, aValue);
+			}
+		}
+	},
+
 	"setModels": function (aModels) {
 		var self = this;
+		// Unbind events on existing models
 		this.collection.forEach(function (aModel) {
 			aModel.off(null, null, self);
 		});
@@ -55,6 +93,7 @@ Scheduler.views.Palette = Scheduler.views.View.extend({
 
 		this.collection.reset(models);
 
+		// Bind change events to new models
 		this.collection.forEach(function (aModel) {
 			aModel.on("change:" + self.options.colorName, function (aModel, aValue) {
 				self.refreshSelected();
@@ -70,6 +109,7 @@ Scheduler.views.Palette = Scheduler.views.View.extend({
 			curColors[aModel.get(self.options.colorName)] = true;
 		});
 
+		// Add the `active` class to every color dot that is selected in the model collection
 		this.$dots.each(function () {
 			var $this = $(this);
 

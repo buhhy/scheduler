@@ -20,7 +20,7 @@
 						{{ for (var i = 0; i < timeLabels.length; i++) { }}
 							<tr data-id="time-row" class="cl-content-row">
 								<td class="cl-time-label" style="{{= timeStyles.fontColor }}">{{- timeLabels[i] }}</td>
-								<td class="cl-time-divider"><hr></td>
+								<td class="cl-time-divider"><hr data-id="time-divider"></td>
 							</tr>
 						{{ } }}
 					</tbody>

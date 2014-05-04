@@ -8,61 +8,70 @@
 		<article class="cl preview">
 			<div class="cl-horizontal-lines">
 				<table class="cl-time-table">
-					<tr class="cl-header-row">
-						<th class="cl-time-label"></th>
-						<th class="cl-time-divider"></th>
-					</tr>
-					{{ for (var i = 0; i < timeLabels.length; i++) { }}
-						<tr data-id="time-row" class="cl-content-row">
-							<td class="cl-time-label" style="{{= timeStyles.fontColor }}">{{- timeLabels[i] }}</td>
-							<td class="cl-time-divider"><hr data-id="time-divider"></td>
+					<thead>
+						<tr class="cl-header-row">
+							<th class="cl-header-cell cl-left-spacer">
+								<div class="background">&nbsp;</div>
+							</th>
+							<th class="cl-header-cell"></th>
 						</tr>
-					{{ } }}
+					</thead>
+					<tbody>
+						{{ for (var i = 0; i < timeLabels.length; i++) { }}
+							<tr data-id="time-row" class="cl-content-row">
+								<td class="cl-time-label" style="{{= timeStyles.fontColor }}">{{- timeLabels[i] }}</td>
+								<td class="cl-time-divider"><hr></td>
+							</tr>
+						{{ } }}
+					</tbody>
 				</table>
 			</div>
 			<div class="cl-grid">
 				<table class="cl-day-table">
-					<tr style="{{= dayStyles.fontColor}}" class="cl-header-row">
-						<th class="cl-header-cell cl-left-spacer">
-							<div data-id="dayLabelBackground" class="background" style="{{= dayStyles.backgroundColor }}">&nbsp;</div>
-						</th>
-						{{ for (var i = 0; i < dayData.length; i++) { }}
-							<th class="cl-header-cell">
-								<div data-id="dayLabelBackground" class="background" style="{{= dayStyles.backgroundColor }}">
-									{{- dayData[i].label }}
-								</div>
+					<thead>
+						<tr style="{{= dayStyles.fontColor}}" class="cl-header-row">
+							<th class="cl-header-cell cl-left-spacer">
+								<div data-id="dayLabelBackground" class="background" style="{{= dayStyles.backgroundColor }}">&nbsp;</div>
 							</th>
-						{{ } }}
-					</tr>
-					<tr style="{{= tableStyles.backgroundColor }}" class="cl-content-row">
-						<td></td>
-						{{ for (var i = 0; i < dayData.length; i++) { }}
-							<td class="cl-content-cell">
-								<div class="position-container">
-									{{
-									for (var j = 0; j < dayData[i].entries.length; j++) {
-										var en = dayData[i].entries[j];
-									}}
-										<article
-												data-id="item"
-												data-start="{{= en.startTimeBracket }}"
-												data-end="{{= en.endTimeBracket }}"
-												class="cl-entry {{= en.classDuration}}"
-												style="
-													{{= en.styles.fontColor}}
-													{{= en.styles.backgroundColor }}
-													{{= en.styles.borderColor }}
-												">
-											<section class="cl-marquee"></section>
-											<h1 class="cl-title">{{= en.name }}</h1>
-											<h2 class="cl-desc">{{= en.subject }} {{= en.catalog }} - {{= en.section }} {{= en.type }}</h2>
-											<h2 class="cl-desc">{{= en.building }} {{= en.room }}</h2>
-										</article>
-									{{ } }}
-								</div>
-							</td>
-						{{ } }}
-					</tr>
+							{{ for (var i = 0; i < dayData.length; i++) { }}
+								<th class="cl-header-cell">
+									<div data-id="dayLabelBackground" class="background" style="{{= dayStyles.backgroundColor }}">
+										{{- dayData[i].label }}
+									</div>
+								</th>
+							{{ } }}
+						</tr>
+					</thead>
+					<tbody>
+						<tr style="{{= tableStyles.backgroundColor }}" class="cl-content-row">
+							<td style="{{= timeStyles.backgroundColor }}"></td>
+							{{ for (var i = 0; i < dayData.length; i++) { }}
+								<td class="cl-content-cell">
+									<div class="position-container">
+										{{ for (var j = 0; j < dayData[i].entries.length; j++) {
+											var en = dayData[i].entries[j];
+										}}
+											<article
+													data-id="item"
+													data-start="{{= en.startTimeBracket }}"
+													data-end="{{= en.endTimeBracket }}"
+													class="cl-entry {{= en.classDuration}}"
+													style="
+														{{= en.styles.fontColor}}
+														{{= en.styles.backgroundColor }}
+														{{= en.styles.borderColor }}
+													">
+												<section class="cl-marquee"></section>
+												<h1 class="cl-title">{{= en.name }}</h1>
+												<h2 class="cl-desc">{{= en.subject }} {{= en.catalog }} - {{= en.section }} {{= en.type }}</h2>
+												<h2 class="cl-desc">{{= en.building }} {{= en.room }}</h2>
+											</article>
+										{{ } }}
+									</div>
+								</td>
+							{{ } }}
+						</tr>
+					</tbody>
 				</table>
 			</div>
 		</article>

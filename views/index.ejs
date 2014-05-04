@@ -162,40 +162,50 @@
 		<script id="templateCalendar" type="text/template">
 			<div class="cl-horizontal-lines">
 				<table data-id="timeTable" class="cl-time-table">
-					<tr class="cl-header-row">
-						<th class="cl-time-label"></th>
-						<th class="cl-time-divider"></th>
-					</tr>
-					<% for (var i = 0; i < timeLabels.length; i++) { %>
-						<tr data-id="timeLabel" class="cl-content-row">
-							<td class="cl-time-label"><%= timeLabels[i] %></td>
-							<td class="cl-time-divider"><hr></td>
+					<thead>
+						<tr class="cl-header-row">
+							<th class="cl-header-cell cl-left-spacer">
+								<div class="background">&nbsp;</div>
+							</th>
+							<th class="cl-header-cell"></th>
 						</tr>
-					<% } %>
+					</thead>
+					<tbody>
+						<% for (var i = 0; i < timeLabels.length; i++) { %>
+							<tr data-id="timeLabel" class="cl-content-row">
+								<td class="cl-time-label"><%= timeLabels[i] %></td>
+								<td class="cl-time-divider"><hr></td>
+							</tr>
+						<% } %>
+					</tbody>
 				</table>
 			</div>
 			<div class="cl-grid">
 				<table data-id="dayTable" class="cl-day-table">
-					<tr class="cl-header-row">
-						<th data-id="dayLabel" class="cl-header-cell cl-left-spacer">
-							<div data-id="dayLabelBackground" class="background">&nbsp;</div>
-						</th>
-						<% for (var i = 0; i < dayLabels.length; i++) { %>
-							<th data-id="dayLabel" class="cl-header-cell">
-								<div data-id="dayLabelBackground" class="background">
-									<%= dayLabels[i] %>
-								</div>
+					<thead>
+						<tr class="cl-header-row">
+							<th data-id="dayLabel" class="cl-header-cell cl-left-spacer">
+								<div data-id="dayLabelBackground" class="background">&nbsp;</div>
 							</th>
-						<% } %>
-					</tr>
-					<tr data-id="calendarBackground" class="cl-content-row">
-						<td></td>
-						<% for (var i = 0; i < dayLabels.length; i++) { %>
-							<td class="cl-content-cell">
-								<div data-id="positionContainer" class="position-container"></div>
-							</td>
-						<% } %>
-					</tr>
+							<% for (var i = 0; i < dayLabels.length; i++) { %>
+								<th data-id="dayLabel" class="cl-header-cell">
+									<div data-id="dayLabelBackground" class="background">
+										<%= dayLabels[i] %>
+									</div>
+								</th>
+							<% } %>
+						</tr>
+					</thead>
+					<tbody>
+						<tr data-id="calendarBackground" class="cl-content-row">
+							<td data-id="timeBackground"></td>
+							<% for (var i = 0; i < dayLabels.length; i++) { %>
+								<td class="cl-content-cell">
+									<div data-id="positionContainer" class="position-container"></div>
+								</td>
+							<% } %>
+						</tr>
+					</tbody>
 				</table>
 			</div>
 

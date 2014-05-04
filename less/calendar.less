@@ -1,6 +1,7 @@
 @import "mixins.less";
 
 @calendar-corner: 3px;
+@table-border-width: 1px;
 
 .cl {
 	font-size: 1em;
@@ -41,6 +42,14 @@
 	.cl-time-table {
 		font-weight: 300;
 		color: #939292;
+
+		.cl-left-spacer {
+			width: 7.3em;
+		}
+
+		.cl-header-cell {
+
+		}
 	}
 
 	.cl-day-table {
@@ -49,39 +58,31 @@
 		.transition(~"color 200ms ease");
 
 		td, th {
-			border-left: 1px #f7f7f7 solid;
+			border-left: @table-border-width #f7f7f7 solid;
 
 			&:first-child {
 				border-left: none;
 			}
 		}
 
-		.cl-header-row {
-			.cl-header-cell {
-				font-weight: 300;
-				text-align: right;
-				font-size: 0.75em;
-				font-weight: 500;
+		.cl-header-row .cl-header-cell {
+			text-align: right;
+			font-weight: 500;
 
-				.transition(~"background 200ms ease");
+			border-bottom-color: #efefef;
 
-				&:first-child .background {
-					.border-radius(@calendar-corner 0 0 0);
-				}
+			.transition(~"background 200ms ease");
 
-				&:last-child .background {
-					.border-radius(0 @calendar-corner 0 0);
-				}
+			&:first-child .background {
+				.border-radius(@calendar-corner 0 0 0);
+			}
 
-				b {
-					font-weight: 900;
-				}
+			&:last-child .background {
+				.border-radius(0 @calendar-corner 0 0);
+			}
 
-				.background {
-					background-color: #c9c9ca;
-					padding: 1em;
-					line-height: 1.5em;
-				}
+			b {
+				font-weight: 900;
 			}
 		}
 
@@ -96,9 +97,20 @@
 	}
 
 	.cl-header-row {
-		height: 2.5em;
+		font-size: 0.75em;
+		height: 3.25em;
 		letter-spacing: 0.12em;
-		border-radius: 2px;
+
+		.cl-header-cell {
+			border-bottom: @table-border-width solid transparent;
+
+			.background {
+				padding: 0 1em;
+				line-height: 3.25em;
+				display: inline-block;
+				width: 100%;
+			}
+		}
 	}
 
 	.cl-left-spacer {
@@ -107,7 +119,7 @@
 
 	.cl-time-label {
 		letter-spacing: 0.06em;
-		width: 5.25em;
+		width: 7.25em;
 		padding-right: 1em;
 		text-align: right;
 		font-weight: 400;
@@ -118,7 +130,7 @@
 
 		hr {
 			height: 0px;
-			border-top: 1px #e8e8e8 solid;
+			border-top: @table-border-width #e8e8e8 solid;
 		}
 	}
 

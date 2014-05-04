@@ -73,7 +73,7 @@ input.searchbutton {
 }
 
 .class-added-list {
-	height: 20.3em;
+	height: 15em;
 	width: 21em;
 	overflow: auto;
 	margin-top: 1.2em;
@@ -83,7 +83,6 @@ input.searchbutton {
 		background-color: #d1d1d1;
 		width: 23em;
 		display: block;
-		cursor: pointer;
 		font-size: 0.85em;
 		font-weight: 500;
 		margin-top: 20px;
@@ -95,20 +94,26 @@ input.searchbutton {
 			margin-top: 0;
 		}
 
-		&:hover {
-			background-color: #9fccd6;
-		}
-
 		span {
 			display: table-cell;
 		}
 
-		.action {
-			font-size: 1.2em;
-			font-weight: 900;
-			text-align: right;
+		.remove {
+			font-size: 1.4em;
+			font-weight: 700;
+			text-align: center;
 			position: relative;
 			top: 1px;
+			padding: 2px;
+			background-color: white;
+			border-radius: 10px;
+			cursor: pointer;
+			.transition(~"all 300ms ease");
+
+			&:hover {
+				background-color: #9fccd6;
+				color: #515151;
+			}
 		}
 	}
 }

@@ -236,32 +236,29 @@
   position: absolute;
   border: 1px solid #d6d6d5;
   padding: 5px;
+  /*		.cl-marquee {
+			visibility: hidden;
+			position: absolute;
+			opacity: 0.0;
+			width: 100%;
+			height: 100%;
+			top: -6px;
+			left: -6px;
+
+			padding: 5px;
+			border: 1px dashed black;
+
+			.transition(~"all 150ms ease");
+			.box-sizing(content-box);
+			.border-radius(5px);
+		}
+*/
 }
-.cl .cl-entry .cl-marquee {
-  visibility: hidden;
-  position: absolute;
-  opacity: 0.0;
-  width: 100%;
-  height: 100%;
-  top: -6px;
-  left: -6px;
-  padding: 5px;
-  border: 1px dashed black;
-  transition: all 150ms ease;
-  -o-transition: all 150ms ease;
-  -ms-transition: all 150ms ease;
-  -moz-transition: all 150ms ease;
-  -webkit-transition: all 150ms ease;
-  box-sizing: content-box;
-  -o-box-sizing: content-box;
-  -ms-box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  -webkit-box-sizing: content-box;
-  border-radius: 5px;
-  -o-border-radius: 5px;
-  -ms-border-radius: 5px;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
+.cl .cl-entry.short h1.cl-title {
+  display: none;
+}
+.cl .cl-entry.short .cl-desc {
+  font-weight: 700;
 }
 .cl .cl-entry .cl-title {
   font-weight: 700;
@@ -420,13 +417,10 @@
 .sidebar-group .heading-3 .text:first-child {
   width: 3.45em;
 }
-.sidebar-group .heading-3 .text.action {
+.sidebar-group .heading-3 .text.add {
   font-size: 1.2em;
   font-weight: 900;
   text-align: right;
-}
-.sidebar-group .heading-3 .text.remove {
-  padding: 3px;
 }
 .sidebar-group .heading-3.clickable {
   cursor: pointer;
@@ -518,7 +512,7 @@ input.searchbutton:hover {
   margin-top: 1.2em;
 }
 .class-added-list {
-  height: 20.3em;
+  height: 15em;
   width: 21em;
   overflow: auto;
   margin-top: 1.2em;
@@ -527,7 +521,6 @@ input.searchbutton:hover {
   background-color: #d1d1d1;
   width: 23em;
   display: block;
-  cursor: pointer;
   font-size: 0.85em;
   font-weight: 500;
   margin-top: 20px;
@@ -545,18 +538,28 @@ input.searchbutton:hover {
 .class-added-list .class-added-entry:first-child {
   margin-top: 0;
 }
-.class-added-list .class-added-entry:hover {
-  background-color: #9fccd6;
-}
 .class-added-list .class-added-entry span {
   display: table-cell;
 }
-.class-added-list .class-added-entry .action {
-  font-size: 1.2em;
-  font-weight: 900;
-  text-align: right;
+.class-added-list .class-added-entry .remove {
+  font-size: 1.4em;
+  font-weight: 700;
+  text-align: center;
   position: relative;
   top: 1px;
+  padding: 2px;
+  background-color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 300ms ease;
+  -o-transition: all 300ms ease;
+  -ms-transition: all 300ms ease;
+  -moz-transition: all 300ms ease;
+  -webkit-transition: all 300ms ease;
+}
+.class-added-list .class-added-entry .remove:hover {
+  background-color: #9fccd6;
+  color: #515151;
 }
 .color-indicator-container {
   display: inline-block;
@@ -795,4 +798,39 @@ section.preview .preview-title {
   position: absolute;
   left: 0;
   top: 0;
+}
+article.button-navigation-group {
+  padding: 0 2.5em;
+  width: 100%;
+  display: block;
+  position: absolute;
+  bottom: 2.5em;
+}
+article.button-navigation-group span {
+  padding: 6px;
+  background-color: #9fccd6;
+  color: #515151;
+  font-size: 0.85em;
+  letter-spacing: 1.7px;
+  cursor: pointer;
+  font-weight: 500;
+  border-radius: 2px;
+  -o-border-radius: 2px;
+  -ms-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  transition: all 300ms ease;
+  -o-transition: all 300ms ease;
+  -ms-transition: all 300ms ease;
+  -moz-transition: all 300ms ease;
+  -webkit-transition: all 300ms ease;
+}
+article.button-navigation-group span:hover {
+  background-color: #c6d9db;
+}
+article.button-navigation-group span:first-child {
+  float: left;
+}
+article.button-navigation-group span:last-child {
+  float: right;
 }

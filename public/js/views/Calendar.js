@@ -174,7 +174,7 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 			});
 
 			newEntryGroup.click(function (aSection, aCalendarGroup) {
-				self.selectSection(aSection);
+				// self.selectSection(aSection);
 			});
 
 			self.sectionViewList[aSectionModel.id] = newEntryGroup;
@@ -198,14 +198,14 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 		});
 	},
 
-	"selectSection": function (aSection) {
-		// Currently, only one item can be selected at a time. Clicking on a selected item will
-		// deselect it, while clicking on another item will deselect all previous items and select
-		// the newly clicked entry.
-		if (this.options.selectedSectionList.get(aSection)) {
-			this.options.selectedSectionList.remove(aSection)
-		} else {
-			this.options.selectedSectionList.reset(aSection);
-		}
-	}
+	// "selectSection": function (aSection) {
+	// 	// Currently, only one item can be selected at a time. Clicking on a selected item will
+	// 	// deselect it, while clicking on another item will deselect all previous items and select
+	// 	// the newly clicked entry.
+	// 	if (this.options.selectedSectionList.get(aSection)) {
+	// 		this.options.selectedSectionList.remove(aSection)
+	// 	} else {
+	// 		this.options.selectedSectionList.reset(aSection);
+	// 	}
+	// }
 });

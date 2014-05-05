@@ -198,7 +198,7 @@ Scheduler.models.SectionCollection = Scheduler.models.Collection.extend({
 /*
 Pre-processing:
 	{
-		"dates": {
+		"date": {
 			"start_time": "18:30",
 			"end_time": "21:20",
 			"weekdays": "M",

@@ -88,12 +88,12 @@ Scheduler.views.CalendarEntry = Scheduler.views.View.extend({
 			aEvent.stopPropagation();
 			aCallback(self.options.sectionModel, self);
 		});
-	},
-
-	"setSelected": function (aSelected) {
-		if (aSelected)
-			this.$el.addClass("active");
-		else
-			this.$el.removeClass("active");
 	}
+
+	// "setSelected": function (aSelected) {
+	// 	if (aSelected)
+	// 		this.$el.addClass("active");
+	// 	else
+	// 		this.$el.removeClass("active");
+	// }
 });

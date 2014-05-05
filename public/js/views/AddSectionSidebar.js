@@ -47,9 +47,6 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 	"bindEvents": function () {
 		var self = this;
 
-		// this.courseData.on("change:classList", function () {
-		// 	console.log("changed!");
-		// });
 		var userClassList = this.userData.get("userClassList");
 
 		userClassList.on("add", function (aInsert) {

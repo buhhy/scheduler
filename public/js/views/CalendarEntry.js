@@ -25,15 +25,14 @@ Scheduler.views.CalendarEntry = Scheduler.views.View.extend({
 	},
 
 	"buildElement": function (aSectionModel, aClassModel) {
-		var sectionSplit = aSectionModel.get("section").split(" ");
-
 		return $(_.template($("#templateCalendarEntry").html(), {
 			"name": aSectionModel.get("title"),
 			"subject": aSectionModel.get("subject"),
 			"catalog": aSectionModel.get("catalog_number"),
 			"section": aSectionModel.get("sectionNumber"),
 			"type": aSectionModel.get("sectionType"),
-			"location": aClassModel.get("location")
+			"building": aClassModel.get("building"),
+			"room": aClassModel.get("building")
 		}));
 	},
 
@@ -88,12 +87,12 @@ Scheduler.views.CalendarEntry = Scheduler.views.View.extend({
 			aEvent.stopPropagation();
 			aCallback(self.options.sectionModel, self);
 		});
-	},
-
-	"setSelected": function (aSelected) {
-		if (aSelected)
-			this.$el.addClass("active");
-		else
-			this.$el.removeClass("active");
 	}
+
+	// "setSelected": function (aSelected) {
+	// 	if (aSelected)
+	// 		this.$el.addClass("active");
+	// 	else
+	// 		this.$el.removeClass("active");
+	// }
 });

@@ -52,12 +52,12 @@ Verbose:
 }
  */
 
-Scheduler.models.Course = Scheduler.models.Model.extend({
-});
+// Scheduler.models.Course = Scheduler.models.Model.extend({
+// });
 
-Scheduler.models.CourseCollection = Scheduler.models.Collection.extend({
-	"model": Scheduler.models.Course
-});
+// Scheduler.models.CourseCollection = Scheduler.models.Collection.extend({
+// 	"model": Scheduler.models.Course
+// });
 
 /*
 Pre-processing:
@@ -115,19 +115,6 @@ Scheduler.models.Section = Scheduler.models.Model.extend({
 	"initialize": function () {
 		Scheduler.models.Model.prototype.initialize.call(this);
 
-		// Split section into type and number.
-		var section = this.get("section").split(" ");
-		if (section && section.length == 2) {
-			this.set("sectionType", section[0]);
-			this.set("sectionNumber", section[1]);
-		} else {
-			this.set("sectionType", "N/A");
-			this.set("sectionNumber", "N/A");
-		}
-
-		// Changing for consistent naming.
-		this.set("catalogNumber", this.get("catalog_number"));
-
 		// Aggregate multiple classes in a section to a single displayable class.
 		this.aggregateClasses();
 	},
@@ -143,9 +130,9 @@ Scheduler.models.Section = Scheduler.models.Model.extend({
 	 * Aggregates a list of classes into a single class instance.
 	 */
 	"aggregateClasses": function () {
+		// Filter out classes that don't have a time set
 		var baseClasses = this.get("classList").filter(function (aClass) {
-			var dates = aClass.get("date");
-			return dates.start_time && dates.end_time && dates.weekdays;
+			return aClass.get("startTime") && aClass.get("endTime") && aClass.get("indexedWeekdays");
 		});
 
 		var self = this;
@@ -198,7 +185,7 @@ Scheduler.models.SectionCollection = Scheduler.models.Collection.extend({
 /*
 Pre-processing:
 	{
-		"dates": {
+		"date": {
 			"start_time": "18:30",
 			"end_time": "21:20",
 			"weekdays": "M",
@@ -235,57 +222,10 @@ Scheduler.models.Class = Scheduler.models.Model.extend({
 		"room": undefined
 	},
 
-	"WEEKDAYS_REGEX": /^(m?)((?:t(?:(?!h)))?)(w?)((?:th)?)(f?)((?:s(?:(?!u)))?)((?:su)?)$/,
-	"WEEKDAYS_INDEX_LOOKUP": {
-		"su": 0,
-		"m": 1,
-		"t": 2,
-		"w": 3,
-		"th": 4,
-		"f": 5,
-		"s": 6
-	},
-
 	"WEEKDAYS_TEXT_LOOKUP": ["S", "M", "T", "W", "Th", "F", "Su"],
 
 	"initialize": function () {
 		Scheduler.models.Model.prototype.initialize.call(this);
-
-		/*
-		This will return a list of matched strings using regex in this format, assuming the
-		following input string "TThF":
-
-		[ "TThF", "", "T", "", "Th", "F" ]
-
-		This array will need to be filtered, and converted into a list of day indices.
-		 */
-		var dates = this.get("date");
-
-		if (dates.weekdays) {
-			// Convert weekday letters to an array index, with Sunday being 0
-
-			var rawDays = dates.weekdays.toLowerCase().match(this.WEEKDAYS_REGEX).slice(1);
-			var self = this;
-			var days = _.map(
-				_.filter(rawDays, function (aDay) {
-					return aDay || aDay.length;
-				}), function (aDay) {
-					return self.WEEKDAYS_INDEX_LOOKUP[aDay];
-				});
-
-			this.set("indexedWeekdays", days);
-		} else {
-			this.set("indexedWeekdays", []);
-		}
-
-		// Convert start and end time from string to integer of seconds
-		this.set("startTime", TimeUtils.parseTimeToMinutes(dates.start_time || "0:00"));
-		this.set("endTime", TimeUtils.parseTimeToMinutes(dates.end_time || "23:59"));
-
-		// Make sure there is a location.
-		var location = this.get("location") || {};
-		this.set("building", location.building || "N/A");
-		this.set("room", location.room || "N/A");
 	},
 
 	"getAggregateTimeString": function () {

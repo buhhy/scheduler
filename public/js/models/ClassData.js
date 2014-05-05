@@ -53,8 +53,16 @@ Scheduler.models.ClassData = Scheduler.models.Model.extend({
 						"search": aText
 					}
 				}).done(function (aData) {
-					if (aData)
-						aOnResult(new Scheduler.models.SectionCollection(aData));
+					if (aData) {
+						// Wrap the result list of the search groupings in backbone collections
+						_.forEach(aData, function (aGroup) {
+							aGroup.sections =
+								_.object(_.map(aGroup.sections, function (aValue, aKey) {
+									return [ aKey, new Scheduler.models.SectionCollection(aValue)];
+								}));
+						});
+						aOnResult(aData);
+					}
 				});
 			}
 		}

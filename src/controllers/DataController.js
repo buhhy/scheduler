@@ -3,18 +3,11 @@ var sprintf = require("../lib/sprintf").s;
 var ClassData = require("../ClassData");
 var RouteUtils = require("../utils/RouteUtils");
 var SearchIndex = require("../SearchIndex");
-var MongoStore = require("../MongoStore");
 
-exports.DEFAULT_SEARCH_COUNT = 5;
+exports.DEFAULT_SEARCH_COUNT = 15;
 
 var classQueryResponse = function (aResponse, aTerm, aQuery) {
-	if (aQuery && aQuery.length) {
-		aResponse.json(SearchIndex.search(aTerm, aQuery, exports.DEFAULT_SEARCH_COUNT));
-	} else {
-		MongoStore.findClasses(aTerm, function (aClasses) {
-			aResponse.json(aClasses || []);
-		});
-	}
+	aResponse.json(SearchIndex.search(aTerm, aQuery, exports.DEFAULT_SEARCH_COUNT));
 }
 
 exports.getTerms = function (aReq, aRes) {

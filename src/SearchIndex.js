@@ -7,52 +7,69 @@ var lunrIndexMap = {};
 var dataCache = {};
 
 /**
- * Groups a flattened list of classes by subject and then catalog number.
+ * Groups a flattened list of sections by subject (CS) and catalog number (101), then by type (LEC).
  */
-// var groupClassList = function (aClasses) {
-// 	var searchResultMap = {};		// This is used for fast lookup of results.
-// 	var searchResultList = [];		// This stores results in deterministic ordering.
+var groupClassList = function (aSections) {
+	var searchResultMap = {};		// This is used for fast lookup of results.
+	var searchResultList = [];		// This stores results in deterministic ordering.
 
-// 	aData.forEach(function (aElem) {
-// 		var courseKey =
-// 			sprintf("%s %s", aElem.get("subject"), aElem.get("catalog_number"));
-// 		var sectionKey = aElem.get("sectionType");
+	aSections.forEach(function (aSection) {
+		var courseMap = searchResultMap[aSection.courseKey];
+		if (courseMap == null) {
+			courseMap = {};
+			searchResultList.push({
+				"courseName": aSection.courseKey,
+				"subject": aSection.subject,
+				"catalogNumber": aSection.catalogNumber,
+				"sections": courseMap
+			});
+		}
 
-// 		var courseMap = searchResultMap[courseKey];
-// 		if (!courseMap) {
-// 			courseMap = {};
-// 			searchResultList.push({
-// 				"courseName": courseKey,
-// 				"sections": courseMap
-// 			});
-// 		}
+		var sectionList = courseMap[aSection.sectionType] || [];
 
-// 		var sectionList = courseMap[sectionKey];
-// 		if (!sectionList)
-// 			sectionList = [];
+		sectionList.push(aSection);
+		courseMap[aSection.sectionType] = sectionList;
+		searchResultMap[aSection.courseKey] = courseMap;
+	});
 
-// 		sectionList.push(aElem);
-// 		courseMap[sectionKey] = sectionList;
-// 		searchResultMap[courseKey] = courseMap;
-// 	});
+	// Return the grouped sections sorted by subject first, then catalog number
+	return searchResultList.sort(function (aGroup1, aGroup2) {
+		var c1 = 0;
+		if (aGroup1.subject > aGroup2.subject) c1 = 2;
+		else if (aGroup1.subject < aGroup2.subject) c1 = -2;
 
-// 	console.log(searchResultList);
-// 	self.buildSearchResultList(searchResultList);
-// }
+		var c2 = 0;
+		if (aGroup1.catalogNumber > aGroup2.catalogNumber) c2 = 1;
+		else if (aGroup1.catalogNumber < aGroup2.catalogNumber) c2 = -1;
+
+		return c1 + c2;
+	});
+};
 
 exports.search = function (aTerm, aSearchStr, aCount) {
 	console.log(sprintf.s("Searching with query '%s'.", aSearchStr));
 
-	if (lunrIndexMap[aTerm] && aSearchStr && aSearchStr.length) {
-		var ret = lunrIndexMap[aTerm].search(aSearchStr);
+	if (lunrIndexMap[aTerm] != null && dataCache[aTerm] != null) {
+		var results = [];
 		var cache = dataCache[aTerm];
 
-		console.log(sprintf.s("Found %d entries match query '%s'.", ret.length, aSearchStr));
+		if (aSearchStr == null) {
+			results = Object.keys(cache)
+		} else {
+			results = lunrIndexMap[aTerm].search(aSearchStr).map(function (aElem) {
+				return aElem.ref;
+			});
+		}
+
+		console.log(sprintf.s("Found %d entries match query '%s'.", results.length, aSearchStr));
 
 		// Convert from the reference UID to actual class object.
-		var results = ret.map(function (aElem) {
-			return cache[aElem.ref];
+		results = results.map(function (aElem) {
+			return cache[aElem];
 		});
+
+		// Group all LEC, TUT, LAB, etc of a course together
+		results = groupClassList(results);
 
 		if (aCount != null)
 			return results.slice(0, aCount);
@@ -68,15 +85,13 @@ exports.rebuildIndex = function (aTerm, aClasses) {
 
 	newIndex = lunr(function () {
 		this.field("subject", { "boost": 4 });
-		this.field("catalog_number", { "boost": 3 });
+		this.field("catalogNumber", { "boost": 3 });
 		this.field("title", { "boost": 1 });
-		this.field("class_number", { "boost": 6});
+		this.field("classNumber", { "boost": 6});
 		this.ref("uid");
 	});
 
 	aClasses.forEach(function (aElem) {
-		aElem.uid = sprintf.s("%d+%s", aElem.term, aElem.class_number);
-
 		newIndex.add(aElem);
 		newCache[aElem.uid] = aElem;
 	});

@@ -60,12 +60,14 @@ var processSections = function (aSections) {
 			"catalogNumber": aSection.catalog_number,
 			"classes": processClasses(aSection.classes),
 			"classNumber": aSection.class_number,
+			"courseKey": sprintf("%s %s", aSection.subject, aSection.catalog_number),
 			"relatedComponents": relatedComponents,
 			"sectionNumber": section[1] || "N/A",
 			"sectionType": section[0] || "N/A",
 			"subject": aSection.subject,
 			"term": aSection.term,
-			"title": aSection.title
+			"title": aSection.title,
+			"uid": sprintf("%d+%s", aSection.term, aSection.class_number)
 		};
 	});
 };

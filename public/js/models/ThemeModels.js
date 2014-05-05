@@ -8,7 +8,7 @@ Scheduler.models.Theme = Scheduler.models.Model.extend({
 	"defaults": function () {
 		return {
 			"backgroundColor": "#fff",
-			"fontColor": "#444",
+			"fontColor": "#66A7CB",
 			"borderColor": [ "#6d6d6d" ]
 		};
 	},

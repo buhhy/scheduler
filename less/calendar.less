@@ -139,33 +139,70 @@
 		position: absolute;
 		border: 1px solid #d6d6d5;
 		padding: 5px;
+		width: 100%;
 
-		&.short {
+		&.mini {
 			h1.cl-title {
 				display:none;
 			}
-			.cl-desc {
+
+			h2.cl-desc {
 				font-weight: 700;
+			}
+
+			h2.cl-loc {
+				display:none;
+			}
+
+		}
+
+		&.short {
+			vertical-align: top;
+
+			h1.cl-title {
+				display:none;
+			}
+
+			h2.cl-desc {
+				font-weight: 700;
+				display: inline-block;
+			}
+
+			h2.cl-loc {
+				font-weight: 500;
+				display: inline-block;
 			}
 		}
 
-/*		.cl-marquee {
-			visibility: hidden;
-			position: absolute;
-			opacity: 0.0;
-			width: 100%;
-			height: 100%;
-			top: -6px;
-			left: -6px;
 
-			padding: 5px;
-			border: 1px dashed black;
+		&.regular {
+			h1.cl-title {
+				margin-bottom: 0;
+				display: block;
+				max-height: 53%;
+				overflow: hidden;
+				line-height: 1.1em;
+				font-weight: 700;
+			}
 
-			.transition(~"all 150ms ease");
-			.box-sizing(content-box);
-			.border-radius(5px);
+			h2.cl-loc {
+				font-weight: 500;
+			}
 		}
-*/
+
+		&.long {
+			h1.cl-title {
+				line-height: 1.1em;
+				margin-bottom: 0;
+				max-height: 86%;
+				display: block;
+				overflow: hidden;
+			}
+
+			h2.cl-loc {
+				font-weight: 500;
+			}
+		}
 
 		.cl-title {
 			font-weight: 700;
@@ -179,18 +216,17 @@
 			letter-spacing: 0.08em;
 			font-weight: 500;
 			font-size: 0.8em;
-			margin-top: 8px;
 			display: inline-block;
+			width: 100%;
 		}
 
-		h2:last-child {
-			margin-left: 10px;
+		h2 {
+			margin-top: 0;
 		}
 
 		// Selected calendar entry
 		&.active {
 			z-index: 5;
-
 			.cl-marquee {
 				visibility: visible;
 				opacity: 1.0;

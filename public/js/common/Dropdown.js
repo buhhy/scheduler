@@ -15,9 +15,8 @@ Common.Dropdown = Backbone.View.extend({
 		"optionList": []
 	},
 
-	"open": undefined,
-	"optionList": undefined,
-	"optionViewList": undefined,
+	"open": undefined,							// is the dropdown open?
+	"optionList": undefined,				// list of views & wrappers used for dropdown entries
 
 	"$header": undefined,
 	"$optionList": undefined,
@@ -27,7 +26,13 @@ Common.Dropdown = Backbone.View.extend({
 		var opts = _.defaults(aOpts, this.defaults);
 		var self = this;
 
-		this.optionList = opts.optionList.slice();
+		this.optionList = _.map(opts.optionList, function (aElem) {
+			var entry = self.createEntry(aElem);
+			self.$optionList.append(entry.$wrapper);
+			return entry;
+		});
+
+		this.options = opts;
 
 		this.$el.addClass("dropdown");
 		this.$el.append(_.template($("#templateDropdown").html(), {
@@ -44,11 +49,17 @@ Common.Dropdown = Backbone.View.extend({
 			self.setOpen(!self.open, true);
 		});
 
-		this.optionViewList = _.map(this.optionList, function (aElem) {
+		this.setOpen(opts.open, false);
+	},
+
+	/**
+	 * Creates a dropdown entry from the provided view.
+	 * @param  {Object} aView Entry view
+	 * @return {Object} Created entry jQuery element
+	 */
+	"createEntry": function (aView) {
 			// Check if Backbone view.
-			var elem = aElem;
-			if (aElem.$el)
-				elem = aElem.$el;
+			var elem = aView.$el || aView;
 
 			// Silly me, simply using a template to autogenerate HTML unbinds all events
 			// in the child entry view.
@@ -56,12 +67,31 @@ Common.Dropdown = Backbone.View.extend({
 				"optionClass": opts.optionClass
 			}));
 
-			$wrapper.append(elem);
+			return {
+				"view": aView,
+				"$wrapper": $wrapper.append(elem)
+			};
+	},
 
-			self.$optionList.append($wrapper);
-		});
+	"add": function (aView, aIndex, aAnimated) {
+		var index = aIndex;
+		var animate = aAnimated == null? true : !!aAnimated;
+		var newEntry = this.createEntry(aView);
 
-		this.setOpen(opts.open, false);
+		if (index == null) {
+			this.optionList.push(newEntry);
+			this.$optionList.append(newEntry.$wrapper);
+		} else {
+			this.optionList.splice(index, 0, newEntry);
+			if (index === 0)
+				this.$optionList.prepend(newEntry.$wrapper);
+			else
+				this.$optionList.eq(index).after(newEntry.$wrapper);
+		}
+	},
+
+	"remove": function (aIndex) {
+		// TODO: implement
 	},
 
 	"setOpen": function (aOpen, aAnimate) {

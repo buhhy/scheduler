@@ -6,19 +6,18 @@ Scheduler.views.SearchResultEntry = Scheduler.views.View.extend({
 		"section": undefined
 	},
 
-	"section": undefined,
+	"TEMPLATE_ID": "#templateSearchResultEntry",
 
 	"initialize": function (aOpts) {
 		var opts = _.defaults(aOpts, this.defaults);
 
 		this.options = opts;
-		this.section = opts.section;
 
 		this.setElement(this.buildElement(opts.section));
 	},
 
 	"buildElement": function (aSectionModel) {
-		return $(_.template($("#templateSearchResultEntry").html(), {
+		return $(_.template($(this.TEMPLATE_ID).html(), {
 			"catalog": aSectionModel.get("sectionNumber"),
 			"times": aSectionModel.getAggregateTimeString()
 		}));
@@ -29,7 +28,7 @@ Scheduler.views.SearchResultEntry = Scheduler.views.View.extend({
 		if (aCallback) {
 			this.$el.click(function (aEvent) {
 				aEvent.preventDefault();
-				aCallback(self.section);
+				aCallback(self.options.section);
 			});
 		}
 		return this;

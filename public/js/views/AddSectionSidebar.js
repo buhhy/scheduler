@@ -9,8 +9,8 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 	"courseData": undefined,
 	"userData": undefined,
 
-	"addedEntryMap": {},
-	"searchResultDropdowns": [],
+	"addedEntryMap": undefined,
+	"searchResultDropdowns": undefined,
 
 	"$searchBox": undefined,
 	"$searchButton": undefined,

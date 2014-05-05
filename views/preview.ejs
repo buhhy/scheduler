@@ -20,7 +20,7 @@
 						{{ for (var i = 0; i < timeLabels.length; i++) { }}
 							<tr data-id="time-row" class="cl-content-row">
 								<td class="cl-time-label" style="{{= timeStyles.fontColor }}">{{- timeLabels[i] }}</td>
-								<td class="cl-time-divider"><hr data-id="time-divider"></td>
+								<td class="cl-time-divider"><hr style="{{= tableStyles.borderColor }}" data-id="time-divider"></td>
 							</tr>
 						{{ } }}
 					</tbody>
@@ -30,11 +30,11 @@
 				<table class="cl-day-table">
 					<thead>
 						<tr style="{{= dayStyles.fontColor}}" class="cl-header-row">
-							<th class="cl-header-cell cl-left-spacer">
+							<th style="{{= tableStyles.borderColor }}" class="cl-header-cell cl-left-spacer">
 								<div data-id="dayLabelBackground" class="background" style="{{= dayStyles.backgroundColor }}">&nbsp;</div>
 							</th>
 							{{ for (var i = 0; i < dayData.length; i++) { }}
-								<th class="cl-header-cell">
+								<th style="{{= tableStyles.borderColor }}" class="cl-header-cell">
 									<div data-id="dayLabelBackground" class="background" style="{{= dayStyles.backgroundColor }}">
 										{{- dayData[i].label }}
 									</div>
@@ -46,7 +46,7 @@
 						<tr style="{{= tableStyles.backgroundColor }}" class="cl-content-row">
 							<td style="{{= timeStyles.backgroundColor }}"></td>
 							{{ for (var i = 0; i < dayData.length; i++) { }}
-								<td class="cl-content-cell">
+								<td style="{{= tableStyles.borderColor }}" class="cl-content-cell">
 									<div class="position-container">
 										{{ for (var j = 0; j < dayData[i].entries.length; j++) {
 											var en = dayData[i].entries[j];

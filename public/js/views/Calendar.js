@@ -13,6 +13,9 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 	"$timeTable": undefined,
 	"$dayTable": undefined,
 	"$timeLabels": undefined,
+	"$dayLabelCells": undefined,
+	"$contentCells": undefined,
+	"$timeDividers": undefined,
 	"$dayLabelBackgrounds": undefined,
 
 	"startTime": 0,						// Calendar start time in minutes
@@ -60,6 +63,9 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 		this.$timeTable = this.$el.find("[data-id='timeTable']");
 		this.$dayTable = this.$el.find("[data-id='dayTable']");
 		this.$timeLabels = this.$el.find("[data-id='timeLabel']");
+		this.$dayLabelCells = this.$el.find("[data-id='dayLabel']");
+		this.$contentCells = this.$el.find("[data-id='contentCell']");
+		this.$timeDividers = this.$el.find("[data-id='timeDivider']");
 
 		this.$timeBackground = this.$el.find("[data-id='timeBackground']");
 		this.$calendarBackground = this.$el.find("[data-id='calendarBackground']");
@@ -93,7 +99,10 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 		});
 
 		globalTheme.get("tableTheme").on({
-			"change:backgroundColor": this.fn2(this.setTableBg)
+			"change:backgroundColor": this.fn2(this.setTableBg),
+			"change:borderColor": function (aModel, aValue) {
+				self.setTableDividerColors(aValue);
+			}
 		});
 
 		globalTheme.get("daysTheme").on({
@@ -115,6 +124,7 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 		var globalTheme = this.options.userData.get("globalTheme");
 
 		this.setTableBg(globalTheme.get("tableTheme").get("backgroundColor"));
+		this.setTableDividerColors(globalTheme.get("tableTheme").get("borderColor"));
 		this.setDayLabelBg(globalTheme.get("daysTheme").get("backgroundColor"));
 		this.setDayLabelFont(globalTheme.get("daysTheme").get("fontColor"));
 		this.setTimeBg(globalTheme.get("timeTheme").get("backgroundColor"));
@@ -123,6 +133,13 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 
 	"setTableBg": function (aValue) {
 		this.$calendarBackground.css("background-color", aValue);
+	},
+
+	"setTableDividerColors": function (aValue) {
+		var css = aValue.join(" ");
+		this.$dayLabelCells.css("border-color", css);
+		this.$timeDividers.css("border-color", css);
+		this.$contentCells.css("border-color", css);
 	},
 
 	"setDayLabelBg": function (aValue) {

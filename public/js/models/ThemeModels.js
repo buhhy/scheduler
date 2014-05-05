@@ -5,10 +5,12 @@
 
 // TODO: add default revertable theme settings
 Scheduler.models.Theme = Scheduler.models.Model.extend({
-	"defaults": {
-		"backgroundColor": "#fff",
-		"fontColor": "#444",
-		"borderColor": "#6d6d6d"
+	"defaults": function () {
+		return {
+			"backgroundColor": "#fff",
+			"fontColor": "#444",
+			"borderColor": [ "#6d6d6d" ]
+		};
 	},
 
 	"initialize": function () {
@@ -24,6 +26,7 @@ Scheduler.models.GlobalTheme = Scheduler.models.Model.extend({
 	"defaults": function () {
 		return {
 			"tableTheme": new Scheduler.models.Theme({
+				"borderColor": [ "#e8e8e8", "#f7f7f7" ],
 				"fontColor": null
 			}),
 			"daysTheme": new Scheduler.models.Theme({

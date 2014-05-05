@@ -69,10 +69,15 @@ Scheduler.views.CustomizeSidebar = Scheduler.views.Sidebar.extend({
 						globalTheme.get("tableTheme"),
 						"backgroundColor"),
 					this.buildSinglePaletteDropdown(
-						"BORDER",
+						"HORIZONTAL DIVIDERS",
 						themeData.get("table"),
 						globalTheme.get("tableTheme"),
-						"borderColor")
+						"borderColor", 0),
+					this.buildSinglePaletteDropdown(
+						"VERTICAL DIVIDERS",
+						themeData.get("table"),
+						globalTheme.get("tableTheme"),
+						"borderColor", 1)
 				]
 			}),
 			"days": new Common.Dropdown({
@@ -117,11 +122,12 @@ Scheduler.views.CustomizeSidebar = Scheduler.views.Sidebar.extend({
 		this.sectionThemeDropdown.appendTo(this.$customizeSectionDropdownList);
 	},
 
-	"buildPaletteDropdown": function (aTitle, aDefaultColor, aPaletteColors, aThemeModel, aKey) {
+	"buildPaletteDropdown": function (aTitle, aDefaultColor, aPaletteColors, aThemeModel, aKey, aIndex) {
 		var palette = new Scheduler.views.Palette({
 			"colors": aPaletteColors,
 			"model": aThemeModel,
-			"colorName": aKey
+			"colorName": aKey,
+			"colorNameIndex": aIndex
 		});
 
 		return {
@@ -139,16 +145,19 @@ Scheduler.views.CustomizeSidebar = Scheduler.views.Sidebar.extend({
 		};
 	},
 
-	"buildSinglePaletteDropdown": function (aTitle, aThemeData, aThemeModel, aKey) {
-		var dropdown = this.buildPaletteDropdown(aTitle, aThemeModel.get(aKey), aThemeData[aKey],
-			aThemeModel, aKey).dropdown;
+	"buildSinglePaletteDropdown": function (aTitle, aThemeData, aThemeModel, aKey, aIndex) {
+		var defaultColor = aIndex == null? aThemeModel.get(aKey) : aThemeModel.get(aKey)[aIndex];
+		var dropdown = this.buildPaletteDropdown(
+			aTitle, defaultColor, aThemeData[aKey],
+			aThemeModel, aKey, aIndex).dropdown;
 
 		var $indicator = dropdown.$header.find("[data-id='color-indicator']");
 
 		// Bind a change event on the model, so if the global theme changes, then change the color
 		// indicator on the dropdown header.
 		aThemeModel.on("change:" + aKey, function (aModel, aValue) {
-			$indicator.css("background-color", aValue);
+			var value = aIndex == null? aValue : aValue[aIndex];
+			$indicator.css("background-color", value);
 		});
 
 		return dropdown;

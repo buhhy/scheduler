@@ -130,9 +130,9 @@ Scheduler.models.Section = Scheduler.models.Model.extend({
 	 * Aggregates a list of classes into a single class instance.
 	 */
 	"aggregateClasses": function () {
+		// Filter out classes that don't have a time set
 		var baseClasses = this.get("classList").filter(function (aClass) {
-			var dates = aClass.get("date");
-			return dates.start_time && dates.end_time && dates.weekdays;
+			return aClass.get("startTime") && aClass.get("endTime") && aClass.get("indexedWeekdays");
 		});
 
 		var self = this;

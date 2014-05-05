@@ -79,36 +79,8 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 		var self = this;
 
 		if (input && input.length) {
-			// Massage data into correct format: course [] -> section [] -> class
 			this.courseData.search(input, function (aData) {
-				var searchResultMap = {};		// This is used for fast lookup of results.
-				var searchResultList = [];		// This stores results in deterministic ordering.
-
-				aData.forEach(function (aElem) {
-					var courseKey =
-						sprintf("%s %s", aElem.get("subject"), aElem.get("catalog_number"));
-					var sectionKey = aElem.get("sectionType");
-
-					var courseMap = searchResultMap[courseKey];
-					if (!courseMap) {
-						courseMap = {};
-						searchResultList.push({
-							"courseName": courseKey,
-							"sections": courseMap
-						});
-					}
-
-					var sectionList = courseMap[sectionKey];
-					if (!sectionList)
-						sectionList = [];
-
-					sectionList.push(aElem);
-					courseMap[sectionKey] = sectionList;
-					searchResultMap[courseKey] = courseMap;
-				});
-
-				console.log(searchResultList);
-				self.buildSearchResultList(searchResultList);
+				self.buildSearchResultList(aData);
 			});
 		}
 	},
@@ -120,22 +92,22 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 
 		var self = this;
 
-		this.searchResultDropdowns = _.map(aSearchData, function (aElem, aIndex) {
+		this.searchResultDropdowns = _.map(aSearchData, function (aGroup, aIndex) {
 			var rootElem = self.getDropdownListEntryHtml();
 
 			var dropdown = new Common.Dropdown({
 				"el": rootElem,
-				"titleHtml": aElem.courseName,
+				"titleHtml": aGroup.courseName,
 				"titleClass": "heading-1",
-				"optionList": _.map(aElem.sections, function (aElem, aKey) {
+				"optionList": _.map(aGroup.sections, function (aSection, aKey) {
 					return new Common.Dropdown({
 						"el": "<section></section>",
 						"titleHtml": aKey,
 						"titleClass": "heading-2",
 						"optionClass": "heading-3 clickable",
-						"optionList": _.map(aElem, function (aElem) {
+						"optionList": aSection.map(function (aSection) {
 							return new Scheduler.views.SearchResultEntry({
-								"section": aElem
+								"section": aSection
 							}).click($.proxy(self.addSection, self));
 						})
 					});

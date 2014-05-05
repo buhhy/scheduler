@@ -7,6 +7,7 @@ var lunrIndexMap = {};
 var dataCache = {};
 
 /**
+ * Massage data into correct format: course [] -> section [] -> class
  * Groups a flattened list of sections by subject (CS) and catalog number (101), then by type (LEC).
  */
 var groupClassList = function (aSections) {

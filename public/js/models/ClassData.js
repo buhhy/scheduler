@@ -2,7 +2,7 @@ Scheduler.models.ClassData = Scheduler.models.Model.extend({
 	"defaults": {
 		"classList": undefined,
 		"termList": undefined,
-		"selectedTerm": "previousTerm"
+		"selectedTerm": "currentTerm"
 	},
 
 	"DOMAIN": "http://localhost:4888/%s",

@@ -28,11 +28,11 @@ Scheduler.views.CalendarEntry = Scheduler.views.View.extend({
 		return $(_.template($("#templateCalendarEntry").html(), {
 			"name": aSectionModel.get("title"),
 			"subject": aSectionModel.get("subject"),
-			"catalog": aSectionModel.get("catalog_number"),
+			"catalog": aSectionModel.get("catalogNumber"),
 			"section": aSectionModel.get("sectionNumber"),
 			"type": aSectionModel.get("sectionType"),
 			"building": aClassModel.get("building"),
-			"room": aClassModel.get("building")
+			"room": aClassModel.get("room")
 		}));
 	},
 

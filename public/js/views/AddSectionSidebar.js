@@ -132,7 +132,7 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 		var self = this;
 		var $addedEntry = $(_.template($(this.ADDED_LIST_ENTRY_TEMPLATE).html(), {
 			"subject": aSection.get("subject"),
-			"catalog": aSection.get("catalog_number"),
+			"catalog": aSection.get("catalogNumber"),
 			"section": aSection.get("sectionNumber"),
 			"type": aSection.get("sectionType"),
 			"times": aSection.getAggregateTimeString()

@@ -163,19 +163,19 @@
 			<% }%>
 		</script>
 
+		<script id="templateSearchResultGroupHeader" type="text/template">
+			<span>
+				<span><%- subject %> <%- catalog %></span>
+				<span><%- title %></span>
+			</span>
+		</script>
+
 		<script id="templateSearchResultEntry" type="text/template">
 			<div class="table-three">
 				<span class="text"><%- catalog %></span>
 				<span class="text"> <%- times %></span>
 				<span class="text add">&#x2B;</span>
 			</div>
-		</script>
-
-		<script id="templateSearchResultGroupHeader" type="text/template">
-			<span>
-				<span><%- subject %> <%- catalog %></span>
-				<span><%- title %></span>
-			</span>
 		</script>
 
 		<script id="templateCalendar" type="text/template">
@@ -240,12 +240,18 @@
 		</script>
 
 
+		<script id="templateAddSectionAddedListGroupHeader" type="text/template">
+			<span>
+				<span><%- subject %> <%- catalog %></span>
+				<span><%- title %></span>
+			</span>
+		</script>
 
 		<script id="templateAddSectionAddedListEntry" type="text/template">
 			<li class="class-added-entry">
 				<div class="table-three">
-					<span class="text section"><%= subject %> <%= catalog %> - <%= section %> <%= type %> </span>
-					<span class="text time"> <%= times %></span>
+					<span class="text section"><%= type %> <%= section %> </span>
+					<span class="text time"><%= times %></span>
 					<span data-id="remove" class="remove">&#xD7;</span>
 				</div>
 			</li>
@@ -288,6 +294,7 @@
 		<script type="text/javascript" src="js/views/AddSectionSidebar.js"></script>
 		<script type="text/javascript" src="js/views/CustomizeSidebar.js"></script>
 		<script type="text/javascript" src="js/views/PrintSidebar.js"></script>
+		<script type="text/javascript" src="js/views/AddedSectionListEntry.js"></script>
 		<script type="text/javascript" src="js/views/SearchResultEntry.js"></script>
 		<script type="text/javascript" src="js/views/SearchResultList.js"></script>
 		<script type="text/javascript" src="js/views/CalendarEntry.js"></script>

@@ -88,7 +88,7 @@ Common.Dropdown = Backbone.View.extend({
 			else if (index === this.optionList.length - 1)
 				this.$optionList.append(newEntry.$wrapper);
 			else
-				this.$optionList.eq(index).after(newEntry.$wrapper);
+				this.$optionList.children().eq(index).before(newEntry.$wrapper);
 		}
 
 		return this;
@@ -97,7 +97,7 @@ Common.Dropdown = Backbone.View.extend({
 	"remove": function (aIndex, aAnimated) {
 		var animate = aAnimated == null? true : !!aAnimated;
 		this.optionList[aIndex].$wrapper.detach();
-		this.optionList.splice(aIndex, 0);
+		this.optionList.splice(aIndex, 1);
 		return this;
 	},
 

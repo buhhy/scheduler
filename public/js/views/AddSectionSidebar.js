@@ -4,7 +4,6 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 		"userData": undefined
 	},
 
-	"ADDED_LIST_ENTRY_TEMPLATE": "#templateAddSectionAddedListEntry",
 	"SEARCH_RESULT_GROUP_HEADER_TEMPLATE": "#templateSearchResultGroupHeader",
 
 	"courseData": undefined,
@@ -135,32 +134,48 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 
 	"addAddedClassEntry": function (aSection, aAnimated) {
 		var self = this;
-		var $addedEntry = $(_.template($(this.ADDED_LIST_ENTRY_TEMPLATE).html(), {
-			"subject": aSection.get("subject"),
-			"catalog": aSection.get("catalogNumber"),
-			"section": aSection.get("sectionNumber"),
-			"type": aSection.get("sectionType"),
-			"times": aSection.getAggregateTimeString()
-		}));
 
-		$addedEntry.find("[data-id='remove']").click(function (aEvent) {
-			self.removeSection(aSection);
-		});
+		// Sections are grouped by subject and course number (STV 100)
+		var courseKey = aSection.get("courseKey");
+		var sectionGroup = this.addedEntryMap[courseKey];
 
-		this.addedEntryMap[aSection.get("uid")] = $addedEntry;
-		this.$addedList.append($addedEntry);
+		// Create a new group if one does not already exist
+		if (sectionGroup == null) {
+			sectionGroup = new Scheduler.views.AddedSectionListEntry({
+				"subject": aSection.get("subject"),
+				"catalogNumber": aSection.get("catalogNumber"),
+				"title": aSection.get("title"),
+				"defaultModels": [ aSection ],
+				"onClick": function (aSection) {
+					self.removeSection(aSection);
+				}
+			});
+			this.addedEntryMap[courseKey] = sectionGroup;
+			this.$addedList.append(sectionGroup.$el);
+		} else {
+			sectionGroup.addSection(aSection);
+		}
 	},
 
 	"removeAddedClassEntry": function (aSection, aAnimated) {
-		var uid = aSection.get("uid");
-		this.addedEntryMap[uid].detach();
-		this.addedEntryMap[uid] = undefined;
+		var courseKey = aSection.get("courseKey");
+		var sectionGroup = this.addedEntryMap[courseKey];
+
+		if (sectionGroup != null) {
+			sectionGroup.removeSection(aSection);
+
+			// If group is empty, we should remove the entire group
+			if (sectionGroup.size() === 0) {
+				sectionGroup.destroy();
+				this.addedEntryMap[courseKey] = undefined;
+			}
+		}
 	},
 
 	"resetClassEntries": function (aSections, aAnimated) {
 		var self = this;
-		_.forEach(_.values(this.addedEntryMap), function (aSection) {
-			aSection.detach();
+		_.forEach(_.values(this.addedEntryMap), function (aSectionGroup) {
+			aSectionGroup.destroy();
 		});
 		this.addedEntryMap = {};
 		aSections.forEach(function (aSection) {

@@ -5,6 +5,7 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 	},
 
 	"ADDED_LIST_ENTRY_TEMPLATE": "#templateAddSectionAddedListEntry",
+	"SEARCH_RESULT_GROUP_HEADER_TEMPLATE": "#templateSearchResultGroupHeader",
 
 	"courseData": undefined,
 	"userData": undefined,
@@ -97,7 +98,11 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 
 			var dropdown = new Common.Dropdown({
 				"el": rootElem,
-				"titleHtml": aGroup.courseName,
+				"titleHtml": _.template($(self.SEARCH_RESULT_GROUP_HEADER_TEMPLATE).html(), {
+					"subject": aGroup.subject,
+					"catalog": aGroup.catalogNumber,
+					"title": aGroup.title
+				}),
 				"titleClass": "heading-1",
 				"optionList": _.map(aGroup.sections, function (aSection, aKey) {
 					return new Common.Dropdown({

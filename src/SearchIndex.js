@@ -22,6 +22,7 @@ var groupClassList = function (aSections) {
 				"courseName": aSection.courseKey,
 				"subject": aSection.subject,
 				"catalogNumber": aSection.catalogNumber,
+				"title": aSection.title,
 				"sections": courseMap
 			});
 		}

@@ -41,6 +41,49 @@ var parseTimeToMinutes = function (aTimeStr) {
 /**
  * Process the returned data from the Waterloo API into something more digestable.
  */
+/*
+Pre-processing:
+	{
+		"subject": "STV",
+		"catalog_number": "100",
+		"units": 0.5,
+		"title": "Society, Technology and Values: Introduction",
+		"note": null,
+		"class_number": 6928,
+		"section": "LEC 001",
+		"campus": "UW U",
+		"associated_class": 1,
+		"related_component_1": null,
+		"related_component_2": null,
+		"enrollment_capacity": 80,
+		"enrollment_total": 80,
+		"waiting_capacity": 0,
+		"waiting_total": 0,
+		"topic": null,
+		"reserves": [],
+		"classes": [],
+		"held_with": [],
+		"term": 1141,
+		"academic_level": "undergraduate",
+		"last_updated": "2013-12-31T18:02:45-05:00"
+	}
+Post-processing:
+	{
+		"associatedClass": 1,
+		"campus": "UW U",
+		"catalogNumber": "100",
+		"classes": [],
+		"classNumber": 6928,
+		"courseKey": "STV 100",
+		"relatedComponents": [],
+		"sectionNumber": "001",
+		"sectionType": "LEC",
+		"subject": "STV",
+		"term": 1141,
+		"title": "Society, Technology and Values: Introduction",
+		"uid": "1141+6928"
+	}
+ */
 var processSections = function (aSections) {
 	return aSections.map(function (aSection) {
 		// Split the section string into type and number

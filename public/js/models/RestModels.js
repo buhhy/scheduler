@@ -1,98 +1,80 @@
 /*
-Concise:
 {
-	  "course_id":"010374",
-	  "subject":"MATH",
-	  "catalog_number":"51",
-	  "title":"Pre-University Algebra and Geometry",
-	  "units":0,
-	  "description":"Topics covered in the course include operations with vectors, scalar multiplications dot and cross products, projections, equations of lines and planes, systems of equations, Gaussian elimination, operations with matrices, determinants, binomial theorem, proof by mathematical induction, complex numbers.",
-	  "academic_level":"undergraduate"
-}
-
-Verbose:
-{
-	"course_id":"007407",
-	"subject":"PHYS",
-	"catalog_number":"234",
-	"title":"Quantum Physics 1",
-	"units":0.5,
-	"description":"Background of quantum physics. Quantization, waves and particles. The uncertainty principle. The Schroedinger equation for one-dimensional problems: bound states in square wells. Harmonic oscillator; transmission through barriers.",
-	"instructions":[
-	  "LEC",
-	  "TUT"
-	],
-	"prerequisites":"PHYS 112 or 122; MATH 114 or 136; MATH 128 or 138 or 148; One of MATH 228, AMATH 250, AMATH 251.",
-	"antirequisites":"CHEM 256\/356, NE 232",
-	"corequisites":"MATH 228 or AMATH 250.",
-	"crosslistings":null,
-	"terms_offered":[
-	  "W",
-	  "S"
-	],
-	"notes":"[Note: PHYS 236 or knowledge of computational methods recommended. Offered: W, S]",
-	"offerings":{
-	  "online":false,
-	  "online_only":false,
-	  "st_jerome":false,
-	  "st_jerome_only":false,
-	  "renison":false,
-	  "renison_only":false,
-	  "conrad_grebel":false,
-	  "conrad_grebel_only":false
-	},
-	"needs_department_consent":false,
-	"needs_instructor_consent":false,
-	"extra":[
-
-	],
-	"calendar_year":"1415",
-	"url":"http:\/\/www.ucalendar.uwaterloo.ca\/1415\/COURSE\/course-PHYS.html#PHYS234",
-	"academic_level":"undergraduate"
+	"courseName": "STV 100",
+	"subject": "STV",
+	"catalogNumber": "100",
+	"title": "Society, Technology and Values: Introduction",
+	"sections": {
+		"LEC": [ SectionModel ]
+	}
 }
  */
 
-// Scheduler.models.Course = Scheduler.models.Model.extend({
-// });
+Scheduler.models.Course = Scheduler.models.Model.extend({
+	"defaults": function () {
+		return {
+			"courseName": undefined,
+			"subject": undefined,
+			"catalogNumber": undefined,
+			"title": undefined,
+			"sections": {},
+			"idAttribute": "courseName"
+		};
+	}
+});
 
-// Scheduler.models.CourseCollection = Scheduler.models.Collection.extend({
-// 	"model": Scheduler.models.Course
-// });
+Scheduler.models.CourseCollection = Scheduler.models.Collection.extend({
+	"model": Scheduler.models.Course,
+
+	"addSection": function (aSectionModel) {
+		// Get the course model at the course key (CS 100), since they are unique
+		var course = this.get(aSectionModel.get("courseKey"));
+
+		if (course == null) {
+			// Create one if it doesn't exist
+			var sections = {};
+
+			sections[aSectionModel.get("sectionType")] = [ aSectionModel ];
+
+			this.add(new Scheduler.models.Course({
+				"courseName": aSectionModel.get("courseKey"),
+				"subject": aSectionModel.get("subject"),
+				"catalogNumber": aSectionModel.get("catalogNumber"),
+				"title": aSectionModel.get("title"),
+				"sections": sections
+			}));
+		} else {
+			// Ensure the current section doesn't already exist
+			var sections = course.sections[aSectionModel.get("sectionType")];
+
+			if (_.some(sections, function (aExistingSectionModel) {
+				return aSectionModel.equals(aExistingSectionModel);
+			})) {
+				console.log(sprintf("Section %s - %s (%s) is already added.",
+						aSectionModel.get("courseKey"),
+						aSectionModel.get("sectionNumber"),
+						aSectionModel.get("uid")));
+			} else {
+				sections.push(aSectionModel);
+				// Sort by section number
+				course.sections = _.sort(sections, function (aSection1, aSection2) {
+					if (aSection1.get("sectionNumber") > aSection2.get("sectionNumber"))
+						return 1;
+					else if (aSection1.get("sectionNumber") < aSection2.get("sectionNumber"))
+						return -1;
+					return 0;
+				});
+				this.trigger("add");
+			}
+		}
+	},
+
+	"removeSection": function (aSectionModel) {
+// TODO: implement
+	}
+});
 
 /*
-Pre-processing:
-	{
-		"subject": "STV",
-		"catalog_number": "100",
-		"units": 0.5,
-		"title": "Society, Technology and Values: Introduction",
-		"note": null,
-		"class_number": 6928,
-		"section": "LEC 001",
-		"campus": "UW U",
-		"associated_class": 1,
-		"related_component_1": null,
-		"related_component_2": null,
-		"enrollment_capacity": 80,
-		"enrollment_total": 80,
-		"waiting_capacity": 0,
-		"waiting_total": 0,
-		"topic": null,
-		"reserves": [],
-		"classes": [],
-		"held_with": [],
-		"term": 1141,
-		"academic_level": "undergraduate",
-		"last_updated": "2013-12-31T18:02:45-05:00"
-	}
-Post-processing:
-	{
-		"subject": "STV",
-		"catalogNumber": "100",
-		"sectionType": "LEC",
-		"sectionNumber": "001",
-		"classes": []
-	}
 */
 
 Scheduler.models.Section = Scheduler.models.Model.extend({
@@ -159,6 +141,10 @@ Scheduler.models.Section = Scheduler.models.Model.extend({
 			return clazz[0].getAggregateTimeString();
 		else
 			return "none"
+	},
+
+	"equals": function (thatModel) {
+		return thatModel.get("uid") === this.get("uid");
 	}
 });
 

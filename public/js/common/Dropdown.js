@@ -26,12 +26,6 @@ Common.Dropdown = Backbone.View.extend({
 		var opts = _.defaults(aOpts, this.defaults);
 		var self = this;
 
-		this.optionList = _.map(opts.optionList, function (aElem) {
-			var entry = self.createEntry(aElem);
-			self.$optionList.append(entry.$wrapper);
-			return entry;
-		});
-
 		this.options = opts;
 
 		this.$el.addClass("dropdown");
@@ -49,6 +43,12 @@ Common.Dropdown = Backbone.View.extend({
 			self.setOpen(!self.open, true);
 		});
 
+		this.optionList = _.map(opts.optionList, function (aElem) {
+			var entry = self.createEntry(aElem);
+			self.$optionList.append(entry.$wrapper);
+			return entry;
+		});
+
 		this.setOpen(opts.open, false);
 	},
 
@@ -58,19 +58,19 @@ Common.Dropdown = Backbone.View.extend({
 	 * @return {Object} Created entry jQuery element
 	 */
 	"createEntry": function (aView) {
-			// Check if Backbone view.
-			var elem = aView.$el || aView;
+		// Check if Backbone view.
+		var elem = aView.$el || aView;
 
-			// Silly me, simply using a template to autogenerate HTML unbinds all events
-			// in the child entry view.
-			var $wrapper = $(_.template($("#templateDropdownOption").html(), {
-				"optionClass": opts.optionClass
-			}));
+		// Silly me, simply using a template to autogenerate HTML unbinds all events
+		// in the child entry view.
+		var $wrapper = $(_.template($("#templateDropdownOption").html(), {
+			"optionClass": this.options.optionClass
+		}));
 
-			return {
-				"view": aView,
-				"$wrapper": $wrapper.append(elem)
-			};
+		return {
+			"view": aView,
+			"$wrapper": $wrapper.append(elem)
+		};
 	},
 
 	"add": function (aView, aIndex, aAnimated) {
@@ -85,13 +85,20 @@ Common.Dropdown = Backbone.View.extend({
 			this.optionList.splice(index, 0, newEntry);
 			if (index === 0)
 				this.$optionList.prepend(newEntry.$wrapper);
+			else if (index === this.optionList.length - 1)
+				this.$optionList.append(newEntry.$wrapper);
 			else
 				this.$optionList.eq(index).after(newEntry.$wrapper);
 		}
+
+		return this;
 	},
 
-	"remove": function (aIndex) {
-		// TODO: implement
+	"remove": function (aIndex, aAnimated) {
+		var animate = aAnimated == null? true : !!aAnimated;
+		this.optionList[aIndex].$wrapper.detach();
+		this.optionList.splice(aIndex, 0);
+		return this;
 	},
 
 	"setOpen": function (aOpen, aAnimate) {
@@ -129,8 +136,8 @@ Common.Dropdown = Backbone.View.extend({
 					"opacity": targetOpacity
 				});
 			}
-
 		}
+		return this;
 	},
 
 	"destroy": function () {
@@ -138,21 +145,11 @@ Common.Dropdown = Backbone.View.extend({
 		this.$el.fadeTo(200, 0.0, function () {
 			self.$el.detach();
 		});
+		return this;
 	},
 
 	"appendTo": function (aView) {
 		aView.append(this.$el);
+		return this;
 	}
-});
-
-$(function () {
-	// $(".dropdown").click(function (aEvent) {
-	// 	aEvent.stopPropagation();
-	// 	$(this).toggleClass("active");
-	// });
-
-	// $(document).click(function() {
-	// 	// all dropdowns
-	// 	$(".dropdown").removeClass('active');
-	// });
 });

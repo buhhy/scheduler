@@ -31,12 +31,16 @@
 				.box-sizing(border-box);
 			}
 		}
+
+		.group-container {
+			padding-bottom: 5em;
+		}
 	}
 
 	.sidebar-section-group {
 		padding: 1.7em 1.3em 0;
-		max-height: 89%;
-		overflow: hidden;
+		max-height: 100%;
+		overflow: auto;
 
 		.divider;
 
@@ -44,10 +48,6 @@
 			border-top: none;
 			padding-bottom: 1.7em;
 		}
-	}
-
-	.customizeSectionDropdownList {
-		margin-top: 1.2em;
 	}
 
 	.dropdown-list-entry {
@@ -109,6 +109,53 @@
 
 			&:hover {
 				background-color: #dfeeef;
+			}
+		}
+	}
+
+	.button-navigation-group {
+		padding: 1.5em 3.5em 0 2.5em;
+		width: 100%;
+		display: block;
+
+		span {
+			padding: 6px;
+			background-color: #9fccd6;
+			color: #515151;
+			font-size: 0.85em;
+			letter-spacing: 0.1em;
+			cursor: pointer;
+			font-weight: 500;
+			box-shadow: 0 1px 0.3px #8aadb2;
+
+			.border-radius(2px);
+			.transition(~"all 250ms ease");
+
+			&:hover {
+				background-color: #c6d9db;
+				top: 1px;
+				position: relative;
+				box-shadow: inset 0 1.3px 1px #8aadb2;
+			}
+
+			&:first-child {
+				float: left;
+				}
+
+			&:last-child {
+				float: right;
+			}
+
+			&.reset {
+				background-color: #e2c9c9;
+				box-shadow: 0 1px 0.3px #c1b0b0;
+
+				&:hover {
+					background-color: #e8d9d9;
+					top: 1px;
+					position: relative;
+					box-shadow: inset 0 1.3px 1px #c1b0b0;
+				}
 			}
 		}
 	}

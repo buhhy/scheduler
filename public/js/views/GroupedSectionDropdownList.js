@@ -47,9 +47,6 @@ Scheduler.views.GroupedSectionDropdownList = Scheduler.views.View.extend({
 				"catalogNumber": aSection.get("catalogNumber"),
 				"title": aSection.get("title"),
 				"defaultModels": [ aSection ],
-				"onClick": function (aSection) {
-					self.removeSection(aSection);
-				},
 				"createEntryViewFn": this.options.createEntryViewFn
 			});
 			this.addedEntryMap[courseKey] = sectionGroup;

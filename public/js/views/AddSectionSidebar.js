@@ -5,17 +5,17 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 	},
 
 	"SEARCH_RESULT_GROUP_HEADER_TEMPLATE": "#templateSearchResultGroupHeader",
+	"ADDED_SECTION_ENTRY_TEMPLATE": "#templateAddSectionAddedListEntry",
 
 	"courseData": undefined,
 	"userData": undefined,
 
-	"addedEntryMap": undefined,
+	"addedSectionList": undefined,
 	"searchResultDropdowns": undefined,
 
 	"$searchBox": undefined,
 	"$searchButton": undefined,
 	"$searchResultList": undefined,
-	"$addedList": undefined,
 
 	"initialize": function (aOpts) {
 		Scheduler.views.Sidebar.prototype.initialize.call(this, aOpts);
@@ -25,16 +25,32 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 		this.courseData = opts.courseData;
 		this.userData = opts.userData;
 
-		this.addedEntryMap = {};
 		this.searchResultDropdowns = [];
 
 		this.$searchBox = this.$el.find("#sectionSearchBox");
 		this.$searchButton = this.$el.find("#sectionSearchButton");
 		this.$searchResultList = this.$el.find("#searchResultList");
-		this.$addedList = this.$el.find("#addedList");
 
 		this.userData.get("userClassList").each(function (aEntry) {
 			self.addAddedClassEntry(aEntry, false);
+		});
+
+		this.addedSectionList = new Scheduler.views.GroupedSectionDropdownList({
+			"sectionList": this.userData.get("userClassList"),
+			"createEntryViewFn": function (aSectionModel) {
+				var $addedEntry = $(_.template($(self.ADDED_SECTION_ENTRY_TEMPLATE).html(), {
+					"section": aSectionModel.get("sectionNumber"),
+					"type": aSectionModel.get("sectionType"),
+					"times": aSectionModel.getAggregateTimeString()
+				}));
+
+				$addedEntry.find("[data-id='remove']").click(function (aEvent) {
+					self.removeSection(aSectionModel);
+				});
+
+				return $addedEntry;
+			},
+			"el": "#addedList"
 		});
 
 		this.bindEvents();
@@ -46,20 +62,6 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 
 	"bindEvents": function () {
 		var self = this;
-
-		var userClassList = this.userData.get("userClassList");
-
-		userClassList.on("add", function (aInsert) {
-			self.addAddedClassEntry(aInsert, true);
-		});
-
-		userClassList.on("remove", function (aRemoved) {
-			self.removeAddedClassEntry(aRemoved, true);
-		});
-
-		userClassList.on("reset", function (aModels) {
-			self.resetClassEntries(aModels, false);
-		});
 
 		// Removing auto-search on type because of performance, and because that feature sucks
 		// this.$searchBox.keyup($.debounce(250, $.proxy(this.search, this)));
@@ -130,56 +132,5 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 
 	"removeSection": function (aSection) {
 		this.userData.get("userClassList").remove(aSection);
-	},
-
-	"addAddedClassEntry": function (aSection, aAnimated) {
-		var self = this;
-
-		// Sections are grouped by subject and course number (STV 100)
-		var courseKey = aSection.get("courseKey");
-		var sectionGroup = this.addedEntryMap[courseKey];
-
-		// Create a new group if one does not already exist
-		if (sectionGroup == null) {
-			sectionGroup = new Scheduler.views.AddedSectionListEntry({
-				"subject": aSection.get("subject"),
-				"catalogNumber": aSection.get("catalogNumber"),
-				"title": aSection.get("title"),
-				"defaultModels": [ aSection ],
-				"onClick": function (aSection) {
-					self.removeSection(aSection);
-				}
-			});
-			this.addedEntryMap[courseKey] = sectionGroup;
-			this.$addedList.append(sectionGroup.$el);
-		} else {
-			sectionGroup.addSection(aSection);
-		}
-	},
-
-	"removeAddedClassEntry": function (aSection, aAnimated) {
-		var courseKey = aSection.get("courseKey");
-		var sectionGroup = this.addedEntryMap[courseKey];
-
-		if (sectionGroup != null) {
-			sectionGroup.removeSection(aSection);
-
-			// If group is empty, we should remove the entire group
-			if (sectionGroup.size() === 0) {
-				sectionGroup.destroy();
-				this.addedEntryMap[courseKey] = undefined;
-			}
-		}
-	},
-
-	"resetClassEntries": function (aSections, aAnimated) {
-		var self = this;
-		_.forEach(_.values(this.addedEntryMap), function (aSectionGroup) {
-			aSectionGroup.destroy();
-		});
-		this.addedEntryMap = {};
-		aSections.forEach(function (aSection) {
-			self.addAddedClassEntry(aSection, aAnimated);
-		});
 	}
 });

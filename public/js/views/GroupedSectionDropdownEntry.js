@@ -8,12 +8,10 @@ Scheduler.views.GroupedSectionDropdownEntry = Scheduler.views.View.extend({
 		"catalogNumber": undefined,
 		"title": undefined,
 		"defaultModels": undefined,
-		"onClick": undefined,
 		"createEntryViewFn": undefined
 	},
 
 	"HEADER_TEMPLATE_ID": "#templateAddSectionAddedListGroupHeader",
-	"ENTRY_TEMPLATE_ID": "#templateAddSectionAddedListEntry",
 
 	"dropdown": undefined,
 	"palette": undefined,

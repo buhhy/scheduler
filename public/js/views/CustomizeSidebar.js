@@ -7,14 +7,10 @@ Scheduler.views.CustomizeSidebar = Scheduler.views.Sidebar.extend({
 
 	"userData": undefined,
 
-	"globalThemeDropdownMap": {},
-
-	"sectionThemeDropdown": undefined,
-
-	"sectionThemeContainer": undefined,
+	"sectionThemeList": undefined,
+	"sectionThemeMap": undefined,
 
 	"$customizeGlobalDropdownList": undefined,
-	"$customizeSectionDropdownList": undefined,
 
 	"initialize": function (aOpts) {
 		Scheduler.views.Sidebar.prototype.initialize.call(this, aOpts);
@@ -24,11 +20,10 @@ Scheduler.views.CustomizeSidebar = Scheduler.views.Sidebar.extend({
 		this.userData = opts.userData;
 
 		this.$customizeGlobalDropdownList = this.$el.find("#customizeGlobalDropdownList");
-		this.$customizeSectionDropdownList = this.$el.find("#customizeSectionDropdownList");
-		this.sectionThemeContainer = this.$el.find("#sectionThemeContainer");
+
+		this.sectionThemeMap = {};
 
 		this.buildDropdowns();
-		this.bindEvents();
 	},
 
 	"buildDropdowns": function () {
@@ -37,24 +32,10 @@ Scheduler.views.CustomizeSidebar = Scheduler.views.Sidebar.extend({
 		var globalTheme = this.userData.get("globalTheme");
 		var themeData = this.options.themeData;
 
-		this.sectionThemeDropdown = new Common.Dropdown({
-			"el": rootElem,
-			"titleHtml": "COURSE",
-			"titleClass": "heading-1",
-			"optionList": [
-				this.buildMultiPaletteDropdown(
-					"BACKGROUND",
-					themeData.get("section"),
-					"backgroundColor"),
-				this.buildMultiPaletteDropdown(
-					"FONT",
-					themeData.get("section"),
-					"fontColor"),
-				this.buildMultiPaletteDropdown(
-					"BORDER",
-					themeData.get("section"),
-					"borderColor")
-			]
+		this.sectionThemeList = new Scheduler.views.GroupedSectionDropdownList({
+			"sectionList": this.userData.get("userClassList"),
+			"createEntryViewFn": $.proxy(this.buildSectionDropdown, this),
+			"el": "#customizeSectionDropdownList"
 		});
 
 		this.globalThemeDropdownMap = {
@@ -119,7 +100,6 @@ Scheduler.views.CustomizeSidebar = Scheduler.views.Sidebar.extend({
 		_.map(this.globalThemeDropdownMap, function (aElem) {
 			aElem.appendTo(self.$customizeGlobalDropdownList);
 		});
-		this.sectionThemeDropdown.appendTo(this.$customizeSectionDropdownList);
 	},
 
 	"buildPaletteDropdown": function (aTitle, aDefaultColor, aPaletteColors, aThemeModel, aKey, aIndex) {
@@ -163,83 +143,34 @@ Scheduler.views.CustomizeSidebar = Scheduler.views.Sidebar.extend({
 		return dropdown;
 	},
 
-	"buildMultiPaletteDropdown": function (aTitle, aThemeData, aKey) {
-		var unselectedColor = "#fff";
-		var multiSelectedColor = "#ddd";
+	"buildSectionDropdown": function (aSectionModel) {
+		var rootElem = this.getDropdownListEntryHtml();
+		var themeData = this.options.themeData;
 
-		var result = this.buildPaletteDropdown(aTitle, unselectedColor, aThemeData[aKey],
-			undefined, aKey);
-		var dropdown = result.dropdown;
-		var palette = result.palette;
-
-		var $indicator = dropdown.$header.find("[data-id='color-indicator']");
-		var self = this;
-		var selectedSectionList = this.options.selectedSectionList;
-
-		var setIndicatorColor = function (aCollection, aColor) {
-			var collection = aCollection || selectedSectionList;
-			var color = unselectedColor;
-
-			if (collection.size() > 1)
-				color = multiSelectedColor
-			else if (collection.size() === 1)
-				color = aColor || collection.at(0).get("theme").get(aKey);
-
-			$indicator.css("background-color", color);
-		};
-
-		var setPaletteModels = function (aCollection) {
-			var collection = aCollection || selectedSectionList;
-			palette.setModels(collection.pluck("theme"));
-		};
-
-		var attachChangeEvent = function (aSectionModel) {
-			// Bind a change event on the model, so if the global theme changes, then change the
-			// color indicator on the dropdown header.
-			aSectionModel.get("theme").on("change:" + aKey, function (aModel, aValue) {
-				setIndicatorColor(undefined, aValue);
-			}, self);
-		};
-
-		var removeChangeEvent = function (aSectionModel) {
-			aSectionModel.get("theme").off("change:" + aKey, undefined, self);
-		};
-
-		selectedSectionList.each(function (aModel) {
-			attachChangeEvent(aModel);
+		var dropdown = new Common.Dropdown({
+			"el": rootElem,
+			"titleHtml": "COURSE",
+			"titleClass": "heading-1",
+			"optionList": [
+				this.buildSinglePaletteDropdown(
+					"BACKGROUND",
+					themeData.get("section"),
+					aSectionModel.get("theme"),
+					"backgroundColor"),
+				this.buildSinglePaletteDropdown(
+					"FONT",
+					themeData.get("section"),
+					aSectionModel.get("theme"),
+					"fontColor"),
+				this.buildSinglePaletteDropdown(
+					"BORDER",
+					themeData.get("section"),
+					aSectionModel.get("theme"),
+					"borderColor", 0)
+			]
 		});
 
-		selectedSectionList.on("add", function (aModel, aCollection) {
-			attachChangeEvent(aModel);
-			setIndicatorColor(aCollection);
-			setPaletteModels(aCollection);
-		});
-
-		selectedSectionList.on("remove", function (aModel, aCollection) {
-			removeChangeEvent(aModel);
-			setIndicatorColor(aCollection);
-			setPaletteModels(aCollection);
-		});
-
-		selectedSectionList.on("reset", function (aCollection, aOptions) {
-			_.forEach(aOptions.previousModels, function (aModel) {
-				removeChangeEvent(aModel);
-			});
-
-			aCollection.each(function (aModel) {
-				attachChangeEvent(aModel);
-			});
-
-			setIndicatorColor(aCollection);
-			setPaletteModels(aCollection);
-		});
-
-		setIndicatorColor();
-		setPaletteModels();
-
-		return dropdown;
-	},
-
-	"bindEvents": function () {
+		this.sectionThemeMap[aSectionModel.get("uid")] = dropdown;
+		return dropdown.$el;
 	}
 });

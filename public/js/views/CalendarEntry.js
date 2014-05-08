@@ -77,7 +77,7 @@ Scheduler.views.CalendarEntry = Scheduler.views.View.extend({
 		this.$el.css({
 			"background-color": model.get("backgroundColor"),
 			"color": model.get("fontColor"),
-			"border-color": model.get("borderColor")
+			"border-color": model.get("borderColor").join(" ")
 		});
 	},
 

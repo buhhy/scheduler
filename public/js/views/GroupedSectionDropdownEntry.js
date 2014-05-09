@@ -12,6 +12,7 @@ Scheduler.views.GroupedSectionDropdownEntry = Scheduler.views.View.extend({
 	},
 
 	"HEADER_TEMPLATE_ID": "#templateAddSectionAddedListGroupHeader",
+	"DROPDOWN_TEMPLATE_ID": "#templateDropdownListEntry",
 
 	"dropdown": undefined,
 	"palette": undefined,
@@ -31,7 +32,7 @@ Scheduler.views.GroupedSectionDropdownEntry = Scheduler.views.View.extend({
 		var opts = this.options;
 
 		return new Common.Dropdown({
-			"el": "<section></section>",
+			"el": _.template($(this.DROPDOWN_TEMPLATE_ID).html()),
 			"titleHtml": _.template($(this.HEADER_TEMPLATE_ID).html(), {
 				"subject": opts.subject,
 				"catalog": opts.catalogNumber,

@@ -1,5 +1,6 @@
 /public/css
 /public/gen
+/logs
 *.pdf
 *.sublime-workspace
 *.sublime-project

@@ -1,7 +1,8 @@
 Scheduler.views.GroupedSectionDropdownList = Scheduler.views.View.extend({
 	"defaults": {
 		"sectionList": undefined,
-		"createEntryViewFn": undefined
+		"createEntryViewFn": undefined,
+		"nested": false
 	},
 
 	"addedEntryMap": undefined,
@@ -47,7 +48,8 @@ Scheduler.views.GroupedSectionDropdownList = Scheduler.views.View.extend({
 				"catalogNumber": aSection.get("catalogNumber"),
 				"title": aSection.get("title"),
 				"defaultModels": [ aSection ],
-				"createEntryViewFn": this.options.createEntryViewFn
+				"createEntryViewFn": this.options.createEntryViewFn,
+				"nested": this.options.nested
 			});
 			this.addedEntryMap[courseKey] = sectionGroup;
 			this.$el.append(sectionGroup.$el);

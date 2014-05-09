@@ -38,13 +38,6 @@ Scheduler.views.PrintSidebar = Scheduler.views.Sidebar.extend({
 			});
 		});
 
-		this.$el.find("#printPdfButton").click(function () {
-			self.options.userData.pdfify(function (aUrl) {
-				console.log(aUrl);
-				self.printPdf(aUrl);
-			});
-		});
-
 		this.$el.find("#shareButton").click(function () {
 			// TODO: add loading page here
 			var dialog = window.open("loading/img", "", dialogParams);
@@ -60,6 +53,11 @@ Scheduler.views.PrintSidebar = Scheduler.views.Sidebar.extend({
 				dialog.focus();
 			});
 		});
+
+		this.$el.find("[data-id='resetBtn']").click(function () {
+			self.contextGroup.first();
+			self.options.userData.reset();
+		});
 	},
 
 	"setUpFacebook": function () {
@@ -69,28 +67,5 @@ Scheduler.views.PrintSidebar = Scheduler.views.Sidebar.extend({
 			"cookie": true,
 			"xfbml": true
 		});
-	},
-
-	"printPdf": function (aUrl) {
-		var $iFrame = $('<iframe></iframe>');
-
-		$iFrame.ready(function () {
-			var tempFrame = $iFrame[0];
-			var tempFrameWindow = tempFrame.contentWindow? tempFrame.contentWindow : tempFrame.contentDocument.defaultView;
-			tempFrameWindow.focus();
-			tempFrameWindow.print();
-			$iFrame.detach();
-		});
-
-		$iFrame
-				.attr("id", "printframe")
-				.attr("name", "printframe")
-				.attr("src", aUrl)
-				.css("width", "0")
-				.css("height", "0")
-				.css("position", "absolute")
-				.css("left", "-1000px")
-				.css("top", "0")
-				.appendTo($("body"));
 	}
 });

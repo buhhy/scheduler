@@ -50,6 +50,10 @@ Scheduler.models.UserData = Scheduler.models.Model.extend({
 		});
 	},
 
+	"reset": function () {
+		this.get("userClassList").reset();
+	},
+
 	"pdfify": function (aCallback, aSync) { this.saveAndSend(this.pdfUrl, aCallback, aSync); },
 	"imgify": function (aCallback, aSync) { this.saveAndSend(this.imgUrl, aCallback, aSync); }
 });

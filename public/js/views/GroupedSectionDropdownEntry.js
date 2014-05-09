@@ -8,7 +8,8 @@ Scheduler.views.GroupedSectionDropdownEntry = Scheduler.views.View.extend({
 		"catalogNumber": undefined,
 		"title": undefined,
 		"defaultModels": undefined,
-		"createEntryViewFn": undefined
+		"createEntryViewFn": undefined,
+		"nested": false
 	},
 
 	"HEADER_TEMPLATE_ID": "#templateAddSectionAddedListGroupHeader",
@@ -39,7 +40,7 @@ Scheduler.views.GroupedSectionDropdownEntry = Scheduler.views.View.extend({
 				"title": opts.title
 			}),
 			"titleClass": "heading-1",
-			"optionClass": "heading-2",
+			"optionClass": opts.nested? "" : "heading-2 no-padding",
 			"optionList": []
 		});
 	},

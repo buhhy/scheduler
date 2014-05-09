@@ -35,7 +35,8 @@ Scheduler.views.CustomizeSidebar = Scheduler.views.Sidebar.extend({
 		this.sectionThemeList = new Scheduler.views.GroupedSectionDropdownList({
 			"sectionList": this.userData.get("userClassList"),
 			"createEntryViewFn": $.proxy(this.buildSectionDropdown, this),
-			"el": "#customizeSectionDropdownList"
+			"el": "#customizeSectionDropdownList",
+			"nested": true
 		});
 
 		this.globalThemeDropdownMap = {
@@ -102,7 +103,12 @@ Scheduler.views.CustomizeSidebar = Scheduler.views.Sidebar.extend({
 		});
 	},
 
-	"buildPaletteDropdown": function (aTitle, aDefaultColor, aPaletteColors, aThemeModel, aKey, aIndex) {
+	"buildPaletteDropdown": function (
+		aTitle, aDefaultColor,
+		aPaletteColors, aThemeModel,
+		aKey, aIndex,
+		aClass1, aClass2
+	) {
 		var palette = new Scheduler.views.Palette({
 			"colors": aPaletteColors,
 			"model": aThemeModel,
@@ -110,12 +116,15 @@ Scheduler.views.CustomizeSidebar = Scheduler.views.Sidebar.extend({
 			"colorNameIndex": aIndex
 		});
 
+		var class1 = aClass1 || "heading-2";
+		var class2 = aClass2 || "heading-3 no-padding";
+
 		return {
 			"dropdown": new Common.Dropdown({
 				"el": "<section></section>",
 				"titleHtml": aTitle,
-				"titleClass": "heading-2",
-				"optionClass": "heading-3 palette",
+				"titleClass": class1,
+				"optionClass": class2 + " palette",
 				"titleIndicatorHtml": _.template($("#templatePalette").html(), {
 					"colors": [ aDefaultColor ]
 				}),
@@ -125,11 +134,16 @@ Scheduler.views.CustomizeSidebar = Scheduler.views.Sidebar.extend({
 		};
 	},
 
-	"buildSinglePaletteDropdown": function (aTitle, aThemeData, aThemeModel, aKey, aIndex) {
+	"buildSinglePaletteDropdown": function (
+		aTitle, aThemeData,
+		aThemeModel,
+		aKey, aIndex,
+		aClass1, aClass2
+	) {
 		var defaultColor = aIndex == null? aThemeModel.get(aKey) : aThemeModel.get(aKey)[aIndex];
 		var dropdown = this.buildPaletteDropdown(
 			aTitle, defaultColor, aThemeData[aKey],
-			aThemeModel, aKey, aIndex).dropdown;
+			aThemeModel, aKey, aIndex, aClass1, aClass2).dropdown;
 
 		var $indicator = dropdown.$header.find("[data-id='color-indicator']");
 
@@ -149,24 +163,27 @@ Scheduler.views.CustomizeSidebar = Scheduler.views.Sidebar.extend({
 
 		var dropdown = new Common.Dropdown({
 			"el": rootElem,
-			"titleHtml": "COURSE",
-			"titleClass": "heading-1",
+			"titleHtml": sprintf("%s %s", aSectionModel.get("sectionType"), aSectionModel.get("sectionNumber")),
+			"titleClass": "heading-2",
 			"optionList": [
 				this.buildSinglePaletteDropdown(
 					"BACKGROUND",
 					themeData.get("section"),
 					aSectionModel.get("theme"),
-					"backgroundColor"),
+					"backgroundColor", undefined,
+					"heading-3 clickable", "heading-4"),
 				this.buildSinglePaletteDropdown(
 					"FONT",
 					themeData.get("section"),
 					aSectionModel.get("theme"),
-					"fontColor"),
+					"fontColor", undefined,
+					"heading-3 clickable", "heading-4"),
 				this.buildSinglePaletteDropdown(
 					"BORDER",
 					themeData.get("section"),
 					aSectionModel.get("theme"),
-					"borderColor", 0)
+					"borderColor", 0,
+					"heading-3 clickable", "heading-4")
 			]
 		});
 

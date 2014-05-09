@@ -59,12 +59,16 @@
 		&:first-child {
 			margin-top:0;
 		}
+
+		.dd-options-list {
+			padding-right: 2.5em;
+		}
 	}
 
 	.heading-1 {
 		padding: 1em;
 		background-color: #d1d1d1;
-		width: 23em;
+		width: 100%;
 		cursor: pointer;
 		.transition(~"all 400ms ease");
 
@@ -76,9 +80,14 @@
 
 	.heading-2 {
 		padding: 1em;
-		width: 20.6em;
+		width: 100%;
 		background-color: #e2e2e2;
 		cursor: pointer;
+		.transition(~"all 400ms ease");
+
+		&.no-padding {
+			padding: 0;
+		}
 
 		&:hover {
 			background-color: #c6d9db;
@@ -87,8 +96,9 @@
 	}
 
 	.heading-3 {
+		padding: 1em;
 		background-color: #f4f4f4;
-		width: 18.5em;
+		width: 100%;
 
 		.text {
 			display: table-cell;
@@ -104,6 +114,10 @@
 			}
 		}
 
+		&.no-padding {
+			padding: 0;
+		}
+
 		&.clickable {
 			cursor: pointer;
 
@@ -111,6 +125,11 @@
 				background-color: #dfeeef;
 			}
 		}
+	}
+
+	.heading-4 {
+		width: 100%;
+		background-color: #fefefe;
 	}
 
 	.button-navigation-group {
@@ -159,11 +178,10 @@
 			}
 		}
 	}
-}
 
-.table-three {
-	display: table;
-	width: 100%;
-	padding: 0.85em 1.09em;
-
+	.table-three {
+		display: table;
+		width: 100%;
+		padding: 0.85em 1.09em;
+	}
 }

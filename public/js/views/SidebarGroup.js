@@ -47,6 +47,14 @@ Scheduler.views.SidebarGroup = Scheduler.views.View.extend({
 		this.transition(-1);
 	},
 
+	"size": function () {
+		return this.sidebars.length;
+	},
+
+	"first": function () {
+		this.transition(-this.currentPage);
+	},
+
 	"transition": function (aOffset) {
 		if (aOffset) {
 			var newOffset = this.currentPage + aOffset;

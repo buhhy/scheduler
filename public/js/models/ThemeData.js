@@ -1,54 +1,84 @@
 // TODO: pull from server
-var temp = [
-				"#CC5C5C",
-				"#CC5E85",
-				"#A765A8",
-				"#6163AC",
-				"#677FBD",
-				"#66A7CB",
-				"#67C5C4",
-				"#6AC4AA",
-				"#B0B76A",
-				"#B5A86B",
-				"#B1826B",
-				"#AF6C6B",
-				"#DC9F3E",
-				"#CBBF2C",
-				"#6D9841",
-				"#419949",
-				"#32B14A",
-				"#429872",
-				"#409991",
-				"#3F8298",
-				"#3F6599",
-				"#3F4299",
-				"#8B4298",
-				"#AE3670",
-				"#AF3635",
-				"#FFFFFF",
-				"#444444",
-				"#6D6D6D"
-			];
+var colors = [
+	0xFFFFFF,
+	0xFF7D7D,
+	0xFFFCD2,
+	0x7FBC57,
+	0x26B4DB,
+	0xE598D3,
+	0xFFE299,
+	0xBCBCBC,
+	0xE06E6E,
+	0xFFF799,
+	0x60963E,
+	0x3790B7,
+	0xCC71B4,
+	0xF9BF1C,
+	0x6D6D6D,
+	0xBA4343,
+	0xF2E568,
+	0x537C38,
+	0x2D618C,
+	0x894DA0,
+	0xB27200,
+	0x444444,
+	0x893030,
+	0xEAD436,
+	0x40632A,
+	0x1D4872,
+	0x703B8C,
+	0x75421B
+];
+
+var stringifyColors = function (aColors) {
+	return _.map(aColors, function (aColor) {
+		var cstr = aColor.toString(16);
+		while (cstr.length < 6)
+			cstr = "0" + cstr;
+		return sprintf("#%s", cstr);
+	});
+};
+
+var offset = function(aColor, aShift, aAmount) {
+	return Math.max(Math.min(((aColor & (0xFF << aShift)) >>> aShift) + aAmount, 0xff), 0);
+};
+
+var offsetColors = function (aColors, aAmount) {
+
+	return _.map(aColors, function (aColor) {
+		var r = offset(aColor, 16, aAmount);
+		var g = offset(aColor, 8, aAmount);
+		var b = offset(aColor, 0, aAmount);
+
+		var results = r << 16 | g << 8 | b;
+
+		return results;
+	});
+};
+
+var bgColors = stringifyColors(offsetColors(colors, 0x10));
+var fontColors = stringifyColors(offsetColors(colors, -0x10));
+var borderColors = stringifyColors(offsetColors(colors, 0));
 
 Scheduler.models.ThemeData = Scheduler.models.Model.extend({
 	"defaults": {
 		"table": {
-			"backgroundColor": temp,
-			"fontColor": temp,
-			"borderColor": temp
+			"backgroundColor": bgColors,
+			"fontColor": fontColors,
+			"borderColor": borderColors
 		},
 		"days": {
-			"backgroundColor": temp,
-			"fontColor": temp
+			"backgroundColor": bgColors,
+			"fontColor": fontColors
 		},
 		"time": {
-			"backgroundColor": temp,
-			"fontColor": temp
+			"backgroundColor": bgColors,
+			"fontColor": fontColors
 		},
 		"section": {
-			"backgroundColor": temp,
-			"fontColor": temp,
-			"borderColor": temp
+			"backgroundColor": bgColors,
+			"fontColor": fontColors,
+			"borderColor": borderColors
 		}
 	}
 });

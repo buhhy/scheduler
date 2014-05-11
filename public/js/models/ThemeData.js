@@ -50,9 +50,12 @@ var offsetColors = function (aColors, aAmount) {
 		var g = offset(aColor, 8, aAmount);
 		var b = offset(aColor, 0, aAmount);
 
-		var results = r << 16 | g << 8 | b;
-
-		return results;
+		if (r === g && r === b)
+			return aColor;
+		else {
+			var results = r << 16 | g << 8 | b;
+			return results;
+		}
 	});
 };
 

@@ -56,8 +56,8 @@ var offsetColors = function (aColors, aAmount) {
 	});
 };
 
-var bgColors = stringifyColors(offsetColors(colors, 0x10));
-var fontColors = stringifyColors(offsetColors(colors, -0x10));
+var bgColors = stringifyColors(offsetColors(colors, 0x20));
+var fontColors = stringifyColors(offsetColors(colors, -0x20));
 var borderColors = stringifyColors(offsetColors(colors, 0));
 
 Scheduler.models.ThemeData = Scheduler.models.Model.extend({

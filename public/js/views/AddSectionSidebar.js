@@ -32,8 +32,8 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 		this.$searchBox = this.$el.find("#sectionSearchBox");
 		this.$searchButton = this.$el.find("#sectionSearchButton");
 		this.$searchResultList = this.$el.find("[data-id='searchResultList']");
-		this.$searchWarningLabel = this.$el.find("[data-id='searchWarningLabel']").fadeTo(0, 0).hide();
-		this.$addedWarningLabel = this.$el.find("[data-id='addedWarningLabel']").fadeTo(0, 0).hide();
+		this.$searchWarningLabel = this.$el.find("[data-id='searchWarningLabel']");
+		this.$addedWarningLabel = this.$el.find("[data-id='addedWarningLabel']");
 
 		this.userData.get("userClassList").each(function (aEntry) {
 			self.addAddedClassEntry(aEntry, false);
@@ -54,7 +54,8 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 
 				return $addedEntry;
 			},
-			"el": "[data-id='addedList']"
+			"el": "[data-id='addedList']",
+			"$emptyWarningEl": this.$addedWarningLabel
 		});
 
 		this.bindEvents();
@@ -78,6 +79,8 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 			aEvent.preventDefault();
 			self.search();
 		});
+
+		this.userData.get("")
 	},
 
 	"search": function () {
@@ -96,15 +99,14 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 			aView.destroy();
 		});
 
-		var self = this;
-
 		if (aSearchData.length > 0) {
 			// If the search returned results, then build the result list and hide the label
-			this.$searchWarningLabel.fadeTo(100, 0.0, function () {
-				self.$searchWarningLabel.hide();
-			});
-
-			this.$searchWarningLabel.removeClass("active");
+			var self = this;
+			if (this.$searchWarningLabel.hasClass("active")) {
+				this.$searchWarningLabel.fadeTo(100, 0.0, function () {
+					self.$searchWarningLabel.hide();
+				}).removeClass("active");
+			}
 
 			this.searchResultDropdowns = _.map(aSearchData, function (aGroup, aIndex) {
 				var rootElem = self.getDropdownListEntryHtml();
@@ -137,9 +139,10 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 				return dropdown;
 			});
 		} else {
-			// Otherwise, show the no results label and the search query
-			self.$searchWarningLabel.show();
-			self.$searchWarningLabel.fadeTo(100, 1.0);
+			if (!this.$searchWarningLabel.hasClass("active")) {
+				// Otherwise, show the no results label and the search query
+				this.$searchWarningLabel.show().addClass("active").fadeTo(100, 1.0);
+			}
 			this.$searchWarningLabel.text(
 				sprintf("No results found for '%s', try searching by course code (STV 100) or by " +
 						"course name (Society, Technology and Values).", aSearchQuery));

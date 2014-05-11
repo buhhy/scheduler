@@ -2,7 +2,8 @@ Scheduler.views.GroupedSectionDropdownList = Scheduler.views.View.extend({
 	"defaults": {
 		"sectionList": undefined,
 		"createEntryViewFn": undefined,
-		"nested": false
+		"nested": false,
+		"$emptyWarningEl": undefined
 	},
 
 	"addedEntryMap": undefined,
@@ -15,6 +16,7 @@ Scheduler.views.GroupedSectionDropdownList = Scheduler.views.View.extend({
 		aOpts.sectionList.each(function (aEntry) {
 			self.addEntry(aEntry);
 		});
+		this.changeAddedClasses(aOpts.sectionList.size());
 	},
 
 	"bindEvents": function () {
@@ -56,6 +58,7 @@ Scheduler.views.GroupedSectionDropdownList = Scheduler.views.View.extend({
 		} else {
 			sectionGroup.addSection(aSection);
 		}
+		this.changeAddedClasses(this.options.sectionList.size());
 	},
 
 	"removeEntry": function (aSection) {
@@ -71,6 +74,7 @@ Scheduler.views.GroupedSectionDropdownList = Scheduler.views.View.extend({
 				this.addedEntryMap[courseKey] = undefined;
 			}
 		}
+		this.changeAddedClasses(this.options.sectionList.size());
 	},
 
 	"resetEntries": function (aSections) {
@@ -82,5 +86,25 @@ Scheduler.views.GroupedSectionDropdownList = Scheduler.views.View.extend({
 		aSections.forEach(function (aSection) {
 			self.addEntry(aSection);
 		});
-	}
+		this.changeAddedClasses(aSections.size());
+	},
+
+	"changeAddedClasses": function (aCount) {
+		if (this.options.$emptyWarningEl) {
+			if (aCount > 0) {
+				if (this.options.$emptyWarningEl.hasClass("active")) {
+					// If no classes have been added, display this message
+					var self = this;
+					this.options.$emptyWarningEl.fadeTo(100, 0.0, function () {
+						self.options.$emptyWarningEl.hide();
+					}).removeClass("active");
+				}
+			} else {
+				if (!this.options.$emptyWarningEl.hasClass("active")) {
+					// Otherwise, hide the label
+					this.options.$emptyWarningEl.show().addClass("active").fadeTo(100, 1.0);
+				}
+			}
+		}
+	},
 });

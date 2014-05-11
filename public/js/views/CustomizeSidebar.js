@@ -36,6 +36,7 @@ Scheduler.views.CustomizeSidebar = Scheduler.views.Sidebar.extend({
 			"sectionList": this.userData.get("userClassList"),
 			"createEntryViewFn": $.proxy(this.buildSectionDropdown, this),
 			"el": "#customizeSectionDropdownList",
+			"$emptyWarningEl": this.$el.find("[data-id='addedWarningLabel']"),
 			"nested": true
 		});
 

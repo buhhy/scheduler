@@ -3,7 +3,6 @@
  * which colors can be changed and the list of selectable colors.
  */
 
-// TODO: add default revertable theme settings
 Scheduler.models.Theme = Scheduler.models.Model.extend({
 	"defaults": function () {
 		return {

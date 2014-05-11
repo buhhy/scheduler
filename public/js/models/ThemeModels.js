@@ -8,8 +8,8 @@ Scheduler.models.Theme = Scheduler.models.Model.extend({
 	"defaults": function () {
 		return {
 			"backgroundColor": "#fff",
-			"fontColor": "#66A7CB",
-			"borderColor": [ "#6d6d6d" ]
+			"fontColor": "#177097",
+			"borderColor": [ "#3790b7" ]
 		};
 	},
 
@@ -30,12 +30,14 @@ Scheduler.models.GlobalTheme = Scheduler.models.Model.extend({
 				"fontColor": null
 			}),
 			"daysTheme": new Scheduler.models.Theme({
-				"backgroundColor": "#66A7CB",
-				"fontColor": "#fff",
+				"backgroundColor": "#57b0d7",
+				"fontColor": "#177097",
 				"borderColor": null
 			}),
 			"timeTheme": new Scheduler.models.Theme({
-				"borderColor": null
+				"borderColor": null,
+				"backgroundColor": "#fffff2",
+				"fontColor": "#0694bb"
 			})
 		}
 	},

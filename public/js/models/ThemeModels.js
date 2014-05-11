@@ -13,8 +13,11 @@ Scheduler.models.Theme = Scheduler.models.Model.extend({
 		};
 	},
 
-	"initialize": function () {
-		Scheduler.models.Model.prototype.initialize.call(this);
+	"defaultValues": undefined,
+
+	"initialize": function (aOpts) {
+		Scheduler.models.Model.prototype.initialize.call(this, aOpts);
+		this.defaultValues = aOpts;
 	}
 });
 
@@ -26,6 +29,7 @@ Scheduler.models.GlobalTheme = Scheduler.models.Model.extend({
 	"defaults": function () {
 		return {
 			"tableTheme": new Scheduler.models.Theme({
+				"backgroundColor": "#fff",
 				"borderColor": [ "#e8e8e8", "#f7f7f7" ],
 				"fontColor": null
 			}),

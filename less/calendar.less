@@ -10,7 +10,9 @@
 	position: relative;
 	overflow: hidden;
 
-	.transition(~"background 200ms ease");
+	.editable-property {
+		.transition(~"all 200ms ease");
+	}
 
 	table {
 		font-size: inherit;
@@ -51,8 +53,6 @@
 	.cl-day-table {
 		color: #f7f8f8;
 
-		.transition(~"color 200ms ease");
-
 		td, th {
 			border-left: @table-border-width transparent solid;
 
@@ -66,8 +66,6 @@
 			font-weight: 500;
 
 			border-bottom-color: transparent;
-
-			.transition(~"background 200ms ease");
 
 			&:first-child .background {
 				.border-radius(@calendar-corner 0 0 0);

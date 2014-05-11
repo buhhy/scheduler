@@ -42,7 +42,10 @@ Scheduler.views.Palette = Scheduler.views.View.extend({
 				colorAttr = "";
 
 			self.collection.forEach(function (aModel) {
-				self.setProperty(aModel, colorAttr);
+				if (allSetToColor)
+					self.resetProperty(aModel);
+				else
+					self.setProperty(aModel, colorAttr);
 			});
 		});
 
@@ -58,9 +61,8 @@ Scheduler.views.Palette = Scheduler.views.View.extend({
 
 		if (aModel != null && key != null) {
 			var prop = aModel.get(key);
-			if (index != null)
-				if (prop != null)
-					return prop[index];
+			if (index != null && prop != null)
+				return prop[index];
 			else
 				return prop;
 		}
@@ -79,6 +81,18 @@ Scheduler.views.Palette = Scheduler.views.View.extend({
 			} else {
 				aModel.set(key, aValue);
 			}
+		}
+	},
+
+	"resetProperty": function (aModel) {
+		var key = this.options.colorName;
+		var index = this.options.colorNameIndex;
+
+		if (aModel != null && key != null) {
+			var prop = aModel.defaultValues[key];
+			if (index != null && prop != null)
+				prop = prop[index];
+			this.setProperty(aModel, prop);
 		}
 	},
 

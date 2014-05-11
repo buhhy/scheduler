@@ -193,7 +193,7 @@
 
 		<script id="templateCalendar" type="text/template">
 			<div class="cl-horizontal-lines">
-				<table data-id="timeTable" class="cl-time-table">
+				<table data-id="timeTable" class="cl-time-table editable-property">
 					<thead>
 						<tr class="cl-header-row">
 							<th class="cl-header-cell cl-left-spacer">
@@ -206,7 +206,9 @@
 						<% for (var i = 0; i < timeLabels.length; i++) { %>
 							<tr data-id="timeLabel" class="cl-content-row">
 								<td class="cl-time-label"><%= timeLabels[i] %></td>
-								<td class="cl-time-divider"><hr data-id="timeDivider"></td>
+								<td class="cl-time-divider">
+									<hr data-id="timeDivider" class="editable-property">
+								</td>
 							</tr>
 						<% } %>
 					</tbody>
@@ -217,11 +219,11 @@
 					<thead>
 						<tr class="cl-header-row">
 							<th data-id="dayLabel" class="cl-header-cell cl-left-spacer">
-								<div data-id="dayLabelBackground" class="background">&nbsp;</div>
+								<div data-id="dayLabelBackground" class="background editable-property">&nbsp;</div>
 							</th>
 							<% for (var i = 0; i < dayLabels.length; i++) { %>
-								<th data-id="dayLabel" class="cl-header-cell">
-									<div data-id="dayLabelBackground" class="background">
+								<th data-id="dayLabel" class="cl-header-cell editable-property">
+									<div data-id="dayLabelBackground" class="background editable-property">
 										<%= dayLabels[i] %>
 									</div>
 								</th>
@@ -229,8 +231,8 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr data-id="calendarBackground" class="cl-content-row">
-							<td data-id="timeBackground"></td>
+						<tr data-id="calendarBackground" class="cl-content-row editable-property">
+							<td data-id="timeBackground" class="editable-property"></td>
 							<% for (var i = 0; i < dayLabels.length; i++) { %>
 								<td data-id="contentCell" class="cl-content-cell">
 									<div data-id="positionContainer" class="position-container"></div>
@@ -245,7 +247,7 @@
 
 
 		<script id="templateCalendarEntry" type="text/template">
-			<article class="cl-entry">
+			<article class="cl-entry editable-property">
 				<h1 class="cl-title"><%= name %></h1>
 				<h2 class="cl-desc"><%= subject %> <%= catalog %> - <%= section %> <%= type %></h2>
 				<h2 class="cl-loc"><%= building %> <%= room %></h2>

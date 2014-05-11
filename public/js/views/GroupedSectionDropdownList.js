@@ -70,7 +70,7 @@ Scheduler.views.GroupedSectionDropdownList = Scheduler.views.View.extend({
 			// If group is empty, we should remove the entire group
 			if (sectionGroup.size() === 0) {
 				sectionGroup.destroy();
-				this.addedEntryMap[courseKey] = undefined;
+				delete this.addedEntryMap[courseKey];
 			}
 		}
 		this.changeAddedClasses(this.options.sectionList.size());

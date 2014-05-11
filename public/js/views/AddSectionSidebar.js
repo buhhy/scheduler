@@ -16,6 +16,8 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 	"$searchBox": undefined,
 	"$searchButton": undefined,
 	"$searchResultList": undefined,
+	"$searchWarningLabel": undefined,
+	"$addedWarningLabel": undefined,
 
 	"initialize": function (aOpts) {
 		Scheduler.views.Sidebar.prototype.initialize.call(this, aOpts);
@@ -29,7 +31,9 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 
 		this.$searchBox = this.$el.find("#sectionSearchBox");
 		this.$searchButton = this.$el.find("#sectionSearchButton");
-		this.$searchResultList = this.$el.find("#searchResultList");
+		this.$searchResultList = this.$el.find("[data-id='searchResultList']");
+		this.$searchWarningLabel = this.$el.find("[data-id='searchWarningLabel']").fadeTo(0, 0).hide();
+		this.$addedWarningLabel = this.$el.find("[data-id='addedWarningLabel']").fadeTo(0, 0).hide();
 
 		this.userData.get("userClassList").each(function (aEntry) {
 			self.addAddedClassEntry(aEntry, false);
@@ -50,7 +54,7 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 
 				return $addedEntry;
 			},
-			"el": "#addedList"
+			"el": "[data-id='addedList']"
 		});
 
 		this.bindEvents();
@@ -82,48 +86,64 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 
 		if (input && input.length) {
 			this.courseData.search(input, function (aData) {
-				self.buildSearchResultList(aData);
+				self.buildSearchResultList(aData, input);
 			});
 		}
 	},
 
-	"buildSearchResultList": function (aSearchData) {
+	"buildSearchResultList": function (aSearchData, aSearchQuery) {
 		_.forEach(this.searchResultDropdowns, function (aView) {
 			aView.destroy();
 		});
 
 		var self = this;
 
-		this.searchResultDropdowns = _.map(aSearchData, function (aGroup, aIndex) {
-			var rootElem = self.getDropdownListEntryHtml();
-
-			var dropdown = new Common.Dropdown({
-				"el": rootElem,
-				"titleHtml": _.template($(self.SEARCH_RESULT_GROUP_HEADER_TEMPLATE).html(), {
-					"subject": aGroup.subject,
-					"catalog": aGroup.catalogNumber,
-					"title": aGroup.title
-				}),
-				"titleClass": "heading-1",
-				"optionList": _.map(aGroup.sections, function (aSection, aKey) {
-					return new Common.Dropdown({
-						"el": "<section></section>",
-						"titleHtml": aKey,
-						"titleClass": "heading-2",
-						"optionClass": "heading-3 clickable no-padding",
-						"optionList": aSection.map(function (aSection) {
-							return new Scheduler.views.SearchResultEntry({
-								"section": aSection
-							}).click($.proxy(self.addSection, self));
-						})
-					});
-				})
+		if (aSearchData.length > 0) {
+			// If the search returned results, then build the result list and hide the label
+			this.$searchWarningLabel.fadeTo(100, 0.0, function () {
+				self.$searchWarningLabel.hide();
 			});
 
-			self.$searchResultList.append(dropdown.$el);
+			this.$searchWarningLabel.removeClass("active");
 
-			return dropdown;
-		});
+			this.searchResultDropdowns = _.map(aSearchData, function (aGroup, aIndex) {
+				var rootElem = self.getDropdownListEntryHtml();
+
+				var dropdown = new Common.Dropdown({
+					"el": rootElem,
+					"titleHtml": _.template($(self.SEARCH_RESULT_GROUP_HEADER_TEMPLATE).html(), {
+						"subject": aGroup.subject,
+						"catalog": aGroup.catalogNumber,
+						"title": aGroup.title
+					}),
+					"titleClass": "heading-1",
+					"optionList": _.map(aGroup.sections, function (aSection, aKey) {
+						return new Common.Dropdown({
+							"el": "<section></section>",
+							"titleHtml": aKey,
+							"titleClass": "heading-2",
+							"optionClass": "heading-3 clickable no-padding",
+							"optionList": aSection.map(function (aSection) {
+								return new Scheduler.views.SearchResultEntry({
+									"section": aSection
+								}).click($.proxy(self.addSection, self));
+							})
+						});
+					})
+				});
+
+				self.$searchResultList.append(dropdown.$el);
+
+				return dropdown;
+			});
+		} else {
+			// Otherwise, show the no results label and the search query
+			self.$searchWarningLabel.show();
+			self.$searchWarningLabel.fadeTo(100, 1.0);
+			this.$searchWarningLabel.text(
+				sprintf("No results found for '%s', try searching by course code (STV 100) or by " +
+						"course name (Society, Technology and Values).", aSearchQuery));
+		}
 	},
 
 	"addSection": function (aSection) {

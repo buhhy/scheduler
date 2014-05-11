@@ -41,7 +41,7 @@
 										<input
 											id="sectionSearchBox"
 											class="searchbox"
-											placeholder="Search course code">
+											placeholder="Search by course code or name">
 										<input
 											id="sectionSearchButton"
 											class="searchbutton"
@@ -52,14 +52,14 @@
 
 								<article class="sidebar-section-group">
 									<h1>SEARCH RESULTS</h1>
-
-									<ul id="searchResultList" class="dropdown-list course-results-list"></ul>
+									<span data-id="searchWarningLabel" class="warning-label"></span>
+									<ul data-id="searchResultList" class="dropdown-list course-results-list"></ul>
 								</article>
 
 								<article class="sidebar-section-group">
 									<h1>ADDED COURSES</h1>
-
-									<ul id="addedList" class="dropdown-list class-added-list"></ul>
+									<span data-id="addedWarningLabel" class="warning-label"></span>
+									<ul data-id="addedList" class="dropdown-list class-added-list"></ul>
 								</article>
 
 								<article class="button-navigation-group clearfix">

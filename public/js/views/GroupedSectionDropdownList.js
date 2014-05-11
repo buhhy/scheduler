@@ -16,7 +16,6 @@ Scheduler.views.GroupedSectionDropdownList = Scheduler.views.View.extend({
 		aOpts.sectionList.each(function (aEntry) {
 			self.addEntry(aEntry);
 		});
-		this.changeAddedClasses(aOpts.sectionList.size());
 	},
 
 	"bindEvents": function () {
@@ -91,18 +90,21 @@ Scheduler.views.GroupedSectionDropdownList = Scheduler.views.View.extend({
 
 	"changeAddedClasses": function (aCount) {
 		if (this.options.$emptyWarningEl) {
+			var self = this;
+
 			if (aCount > 0) {
 				if (this.options.$emptyWarningEl.hasClass("active")) {
 					// If no classes have been added, display this message
-					var self = this;
 					this.options.$emptyWarningEl.fadeTo(100, 0.0, function () {
-						self.options.$emptyWarningEl.hide();
-					}).removeClass("active");
+						self.options.$emptyWarningEl.hide().removeClass("active");
+					});
 				}
 			} else {
 				if (!this.options.$emptyWarningEl.hasClass("active")) {
 					// Otherwise, hide the label
-					this.options.$emptyWarningEl.show().addClass("active").fadeTo(100, 1.0);
+					this.options.$emptyWarningEl.show().fadeTo(100, 1.0, function () {
+						self.options.$emptyWarningEl.addClass("active");
+					});
 				}
 			}
 		}

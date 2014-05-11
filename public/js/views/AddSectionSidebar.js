@@ -99,13 +99,14 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 			aView.destroy();
 		});
 
+		var self = this;
+
 		if (aSearchData.length > 0) {
 			// If the search returned results, then build the result list and hide the label
-			var self = this;
 			if (this.$searchWarningLabel.hasClass("active")) {
 				this.$searchWarningLabel.fadeTo(100, 0.0, function () {
-					self.$searchWarningLabel.hide();
-				}).removeClass("active");
+					self.$searchWarningLabel.hide().removeClass("active");
+				});
 			}
 
 			this.searchResultDropdowns = _.map(aSearchData, function (aGroup, aIndex) {
@@ -141,7 +142,9 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 		} else {
 			if (!this.$searchWarningLabel.hasClass("active")) {
 				// Otherwise, show the no results label and the search query
-				this.$searchWarningLabel.show().addClass("active").fadeTo(100, 1.0);
+				this.$searchWarningLabel.show().fadeTo(100, 1.0, function () {
+					self.$searchWarningLabel.addClass("active");
+				});
 			}
 			this.$searchWarningLabel.text(
 				sprintf("No results found for '%s', try searching by course code (STV 100) or by " +

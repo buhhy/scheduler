@@ -115,7 +115,7 @@ app.configure("production", function () {
 	}));
 
 
-	Log errors on exceptions and exit
+	// Log errors on exceptions and exit
 	process.on("uncaughtException", function (err) {
 		console.error("UncaughtException: ", err.message);
 		console.error(err.stack);

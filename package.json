@@ -9,6 +9,7 @@
     "cors": "2.1.x",
     "less-middleware": "0.2.x",
     "slang": ">=0.2",
-    "ejs": "1.0.x"
+    "ejs": "1.0.x",
+    "piler": "0.5.x"
   }
 }

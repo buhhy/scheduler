@@ -113,18 +113,23 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 			addTermEntry(aTermList["previousTerm"]);
 			addTermEntry(aTermList["currentTerm"]);
 			addTermEntry(aTermList["nextTerm"]);
-			console.log(aTermList);
 		});
 
 		this.courseData.on("change:selectedTermId", function (_, aTermId) {
 			self.changeSelectedTerm(aTermId);
+			console.log(aTermId);
 		});
 	},
 
 	"changeSelectedTerm": function (aTermId) {
 		if (aTermId != null) {
-			for (var i = 0; i < this.addedTermsList.length; i++)
-				this.termSelectorDropdown.setActive(i, this.addedTermsList[i].term.id === aTermId);
+			for (var i = 0; i < this.addedTermsList.length; i++) {
+				var curTerm = this.addedTermsList[i].term;
+				var comp = curTerm.id === aTermId;
+				this.termSelectorDropdown.setActive(i, comp);
+				if (comp)
+					this.termSelectorDropdown.setTitleHtml(curTerm.name);
+			}
 		}
 	},
 

@@ -37,7 +37,7 @@ Common.Dropdown = Backbone.View.extend({
 		}));
 
 		this.$header = this.$el.find("[data-id='header']");
-		this.$headerContent = this.$el.find("[data-id='header-content']");
+		this.$headerContent = this.$el.find("[data-id='headerContent']");
 		this.$optionList = this.$el.find("[data-id='optionList']");
 		this.$optionListContainer = this.$el.find("[data-id='optionListContainer']");
 

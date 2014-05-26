@@ -10,6 +10,7 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 	"courseData": undefined,
 	"userData": undefined,
 
+	"addedTermsList": undefined,
 	"addedSectionList": undefined,
 	"searchResultDropdowns": undefined,
 	"termSelectorDropdown": undefined,
@@ -30,6 +31,7 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 		this.userData = opts.userData;
 
 		this.searchResultDropdowns = [];
+		this.addedTermsList = [];
 
 		this.$searchBox = this.$el.find("#sectionSearchBox");
 		this.$searchButton = this.$el.find("#sectionSearchButton");
@@ -66,9 +68,10 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 			"titleClass": "heading-1",
 			"optionClass": "heading-2",
 			"optionList": []
-		})
+		});
 
 		this.bindEvents();
+		this.changeSelectedTerm(this.courseData.get("selectedTermId"));
 	},
 
 	"onShow": function () {
@@ -77,6 +80,11 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 
 	"bindEvents": function () {
 		var self = this;
+
+		// Close term dropdown on outside click
+		$("html").click(function () {
+			self.termSelectorDropdown.setOpen(false, true);
+		});
 
 		// Removing auto-search on type because of performance, and because that feature sucks
 		// this.$searchBox.keyup($.debounce(250, $.proxy(this.search, this)));
@@ -91,9 +99,14 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 		});
 
 		var addTermEntry = function (aTerm) {
-			self.termSelectorDropdown.add(new Scheduler.views.TermDropdownEntry({
+			var view = new Scheduler.views.TermDropdownEntry({
 				"term": aTerm
-			}));
+			});
+			self.termSelectorDropdown.add(view, null, function () {
+				self.courseData.set("selectedTermId", aTerm.id);
+				self.termSelectorDropdown.setOpen(false, true);
+			});
+			self.addedTermsList.push(view);
 		};
 
 		this.courseData.on("change:termList", function (_, aTermList) {
@@ -102,6 +115,17 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 			addTermEntry(aTermList["nextTerm"]);
 			console.log(aTermList);
 		});
+
+		this.courseData.on("change:selectedTermId", function (_, aTermId) {
+			self.changeSelectedTerm(aTermId);
+		});
+	},
+
+	"changeSelectedTerm": function (aTermId) {
+		if (aTermId != null) {
+			for (var i = 0; i < this.addedTermsList.length; i++)
+				this.termSelectorDropdown.setActive(i, this.addedTermsList[i].term.id === aTermId);
+		}
 	},
 
 	"search": function () {

@@ -7,6 +7,7 @@ Scheduler.views.TermDropdownEntry = Scheduler.views.View.extend({
 	},
 
 	"setUp": function (aOpts) {
+		this.term = aOpts.term;
 		this.setElement(sprintf("<span>%s</span>", aOpts.term.name));
 	}
 });

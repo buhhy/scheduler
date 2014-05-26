@@ -2,7 +2,7 @@ Scheduler.models.ClassData = Scheduler.models.Model.extend({
 	"defaults": {
 		"classList": undefined,
 		"termList": undefined,
-		"selectedTerm": "currentTerm"
+		"selectedTermId": undefined
 	},
 
 	"DOMAIN": "http://localhost:4888/%s",
@@ -15,40 +15,26 @@ Scheduler.models.ClassData = Scheduler.models.Model.extend({
 		Scheduler.models.Model.prototype.initialize.call(this);
 	},
 
-	// "fetchTermClassList": function (aOnFinish) {
-	// 	var self = this;
-
-	// 	$.ajax({
-	// 		"url": this.CLASS_DATA_URL
-	// 	}).done(function (aData) {
-	// 		self.set("classList", new Scheduler.models.SectionCollection(aData));
-	// 		if (aOnFinish)
-	// 			aOnFinish(self.get("classList"));
-	// 	})
-	// },
-
 	"fetchTermList": function () {
 		var self = this;
 
 		$.ajax({
 			"url": this.TERM_DATA_URL
 		}).done(function (aData) {
-			if (aData)
+			if (aData) {
 				self.set("termList", aData);
+				self.set("selectedTermId", aData["currentTerm"].id);
+			}
 		});
-	},
-
-	"getSelectedTerm": function () {
-		return this.get("termList")[this.get("selectedTerm")];
 	},
 
 	"search": function (aText, aOnResult) {
 		if (aText && aText.length) {
-			var selTerm = this.getSelectedTerm();
+			var selTerm = this.get("selectedTermId");
 
-			if (selTerm) {
+			if (selTerm != null) {
 				$.ajax({
-					"url": sprintf(this.SEARCH_URL, selTerm.id),
+					"url": sprintf(this.SEARCH_URL, selTerm),
 					"data": {
 						"search": aText
 					}

@@ -42,6 +42,7 @@ Common.Dropdown = Backbone.View.extend({
 		this.$optionListContainer = this.$el.find("[data-id='optionListContainer']");
 
 		this.$header.click(function (aEvent) {
+			aEvent.stopPropagation();
 			self.setOpen(!self.open, true);
 		});
 
@@ -79,10 +80,13 @@ Common.Dropdown = Backbone.View.extend({
 		};
 	},
 
-	"add": function (aView, aIndex, aAnimated) {
+	"add": function (aView, aIndex, aClickFn, aAnimated) {
 		var index = aIndex;
 		var animate = aAnimated == null? true : !!aAnimated;
 		var newEntry = this.createEntry(aView);
+
+		if (aClickFn)
+			newEntry.$wrapper.click(aClickFn);
 
 		if (index == null) {
 			this.optionList.push(newEntry);
@@ -105,6 +109,16 @@ Common.Dropdown = Backbone.View.extend({
 		this.optionList[aIndex].$wrapper.detach();
 		this.optionList.splice(aIndex, 1);
 		return this;
+	},
+
+	"setActive": function (aIndex, aActive) {
+		var item = this.optionList[aIndex];
+		if (item) {
+			if (aActive)
+				item.$wrapper.addClass("active");
+			else
+				item.$wrapper.removeClass("active");
+		}
 	},
 
 	"setOpen": function (aOpen, aAnimate) {

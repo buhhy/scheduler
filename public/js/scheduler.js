@@ -56,6 +56,14 @@ Scheduler.views.View = Backbone.View.extend({
 		aElemView.$el.append(this.$el);
 	},
 
+	"addClass": function (aClassName) {
+		this.$el.addClass(aClassName);
+	},
+
+	"removeClass": function (aClassName) {
+		this.$el.removeClass(aClassName);
+	},
+
 	/**
 	 * Converts a 1 argument function to a 2 argument function that passes on the second parameter.
 	 */

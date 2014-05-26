@@ -62,6 +62,16 @@
 			font-size: 80%;
 			padding: 0.65em;
 			font-weight: normal;
+
+			.transition(~"background-color 200ms ease");
+
+			&.active {
+				background-color: #eee;
+
+				&:hover {
+					background-color: #c6d9db;
+				}
+			}
 		}
 	}
 

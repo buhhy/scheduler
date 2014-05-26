@@ -39,7 +39,6 @@ Scheduler.views.PrintSidebar = Scheduler.views.Sidebar.extend({
 		});
 
 		this.$el.find("#shareButton").click(function () {
-			// TODO: add loading page here
 			var dialog = window.open("loading/img", "", dialogParams);
 
 			self.options.userData.imgify(function (aPath) {

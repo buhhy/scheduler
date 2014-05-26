@@ -4,7 +4,6 @@ var lessMiddleware = require("less-middleware");
 var path = require("path");
 var ejs = require("ejs");
 var fs = require("fs");
-var piler = require("piler");
 var http = require("http");
 var sprintf = require("./src/lib/sprintf").s;
 
@@ -13,6 +12,7 @@ var MongoStore = require("./src/MongoStore");
 var SearchIndex = require("./src/SearchIndex");
 
 var RouteUtils = require("./src/utils/RouteUtils");
+var JavascriptUtils = require("./src/utils/JavascriptUtils");
 
 var DataController = require("./src/controllers/DataController");
 var GenerationController = require("./src/controllers/GenerationController");
@@ -30,9 +30,9 @@ var viewPath = pathify("views");
 
 var app = express();
 var server = http.createServer(app);
-var clientJs = piler.createJSManager();
 var fbAppId = "1390085397942073";
 
+var clientJs = JavascriptUtils.createJsManager(assetPath);
 
 
 // Javascript includes for each page
@@ -80,21 +80,12 @@ app.engine(".html", ejs.__express);
 app.set("view engine", "ejs");
 app.set("views", viewPath);
 
-// Log errors on exceptions and exit
-process.on("uncaughtException", function (err) {
-	console.error("UncaughtException: ", err.message);
-	console.error(err.stack);
-	process.exit(1);
-});
-
 // Put other global configurations here:
 
-clientJs.bind(app, server);
-clientJs.addOb({ VERSION: "1.0.0" });
 // Add the Javascript includes for each page, server will minify and concat for release
 for (var key in jsIncludeList) {
 	jsIncludeList[key].forEach(function (aScript) {
-		clientJs.addFile(key, path.join(assetPath, aScript));
+		clientJs.addFile(key, aScript);
 	});
 }
 
@@ -115,12 +106,21 @@ app.configure("development", function () {
 
 app.configure("production", function () {
 	console.log("Server starting in production mode...");
+	clientJs.concatJs();
 	app.use(lessMiddleware("../less", {
 		"dest": "css",
 		"pathRoot": assetPath,
 		"once": true,
 		"compress": true
 	}));
+
+
+	Log errors on exceptions and exit
+	process.on("uncaughtException", function (err) {
+		console.error("UncaughtException: ", err.message);
+		console.error(err.stack);
+		process.exit(1);
+	});
 });
 
 
@@ -132,7 +132,7 @@ app.get("/", function (aReq, aRes) {
 	aRes.render("index.ejs", {
 		"hash": undefined,
 		"appId": fbAppId,
-		"js": clientJs.renderTags("index")
+		"js": clientJs.getJsPaths("index")
 	});
 });
 
@@ -140,7 +140,7 @@ app.get("/:hash", function (aReq, aRes) {
 	aRes.render("index.ejs", {
 		"hash": aReq.params.hash,
 		"appId": fbAppId,
-		"js": clientJs.renderTags("index")
+		"js": clientJs.getJsPaths("index")
 	});
 });
 

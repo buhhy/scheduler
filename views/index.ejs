@@ -284,6 +284,8 @@
 
 		<script type="text/javascript" src="http://connect.facebook.net/en_US/all.js"></script>
 
-		{{- js }}
+		{{ for (var i = 0; i < js.length; i++) { }}
+			<script type="text/javascript" src="{{= js[i] }}"></script>
+		{{ } }}
 	</body>
 </html>

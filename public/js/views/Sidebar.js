@@ -60,6 +60,6 @@ Scheduler.views.Sidebar = Scheduler.views.View.extend({
 	},
 
 	"getDropdownListEntryHtml": function () {
-		return _.template($("#templateDropdownListEntry").html());
+		return _.template($("#templateDropdownListEntry").html(), { "content": "" });
 	}
 });

@@ -12,12 +12,14 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 
 	"addedSectionList": undefined,
 	"searchResultDropdowns": undefined,
+	"termSelectorDropdown": undefined,
 
 	"$searchBox": undefined,
 	"$searchButton": undefined,
 	"$searchResultList": undefined,
 	"$searchWarningLabel": undefined,
 	"$addedWarningLabel": undefined,
+	"$termSelector": undefined,
 
 	"initialize": function (aOpts) {
 		Scheduler.views.Sidebar.prototype.initialize.call(this, aOpts);
@@ -58,6 +60,14 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 			"$emptyWarningEl": this.$addedWarningLabel
 		});
 
+		this.termSelectorDropdown = new Common.Dropdown({
+			"el": "[data-id='termSelector']",
+			"titleHtml": "Select a term",
+			"titleClass": "heading-1",
+			"optionClass": "heading-2",
+			"optionList": []
+		})
+
 		this.bindEvents();
 	},
 
@@ -80,7 +90,18 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 			self.search();
 		});
 
-		this.userData.get("")
+		var addTermEntry = function (aTerm) {
+			self.termSelectorDropdown.add(new Scheduler.views.TermDropdownEntry({
+				"term": aTerm
+			}));
+		};
+
+		this.courseData.on("change:termList", function (_, aTermList) {
+			addTermEntry(aTermList["previousTerm"]);
+			addTermEntry(aTermList["currentTerm"]);
+			addTermEntry(aTermList["nextTerm"]);
+			console.log(aTermList);
+		});
 	},
 
 	"search": function () {

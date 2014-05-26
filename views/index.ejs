@@ -27,15 +27,7 @@
 								<article class="sidebar-section-group class-search">
 									<p>
 										<h1>ADD A COURSE</h1>
-										<!-- <div class="dropdown">
-											<span>SELECT TERM</span>
-											<span class="arrow"></span>
-											<ul class="terms">
-												<li>WINTER 2014</li>
-												<li>SPRING 2014</li>
-												<li>FALL 2014</li>
-											</ul>
-										</div> -->
+										<div data-id="termSelector" class="term-selector"></div>
 									</p>
 									<p>
 										<input
@@ -135,12 +127,14 @@
 
 		<script id="templateDropdown" type="text/template">
 			<header data-id="header" class="dd-header <%- titleClass %>">
-				<%= titleHtml %>
-				<div class="indicator">
+				<div data-id="headerContent" class="dd-header-content">
+					<%= titleHtml %>
+				</div>
+				<div class="dd-indicator">
 					<% if (typeof(titleIndicatorHtml) !== "undefined") {
 						print(titleIndicatorHtml);
 					} else { %>
-						<span class="arrow"></span>
+						<span class="dd-arrow"></span>
 					<% } %>
 				</div>
 			</header>
@@ -161,7 +155,7 @@
 
 		<!-- A template that represents a list item that will be turned into a dropdown. -->
 		<script id="templateDropdownListEntry" type="text/template">
-			<li class="dropdown-list-entry"></li>
+			<li class="dropdown-list-entry"><%= content %></li>
 		</script>
 
 		<!-- Used to draw a color selection palette. -->
@@ -242,7 +236,6 @@
 					</tbody>
 				</table>
 			</div>
-
 		</script>
 
 

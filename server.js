@@ -59,6 +59,7 @@ var jsIncludeList = {
 		"js/views/CustomizeSidebar.js",
 		"js/views/PrintSidebar.js",
 		"js/views/SearchResultEntry.js",
+		"js/views/TermDropdownEntry.js",
 		"js/views/SearchResultList.js",
 		"js/views/GroupedSectionDropdownEntry.js",
 		"js/views/GroupedSectionDropdownList.js",
@@ -80,8 +81,6 @@ app.engine(".html", ejs.__express);
 app.set("view engine", "ejs");
 app.set("views", viewPath);
 
-// Put other global configurations here:
-
 // Add the Javascript includes for each page, server will minify and concat for release
 for (var key in jsIncludeList) {
 	jsIncludeList[key].forEach(function (aScript) {
@@ -89,9 +88,12 @@ for (var key in jsIncludeList) {
 	});
 }
 
-app.use(express.bodyParser());
-app.use(express.static(assetPath));
-app.use(cors());
+var commonConfigure = function () {
+	// Put other global configurations here:
+	app.use(express.bodyParser());
+	app.use(express.static(assetPath));
+	app.use(cors());
+};
 
 app.configure("development", function () {
 	console.log("Server starting in development mode...");
@@ -102,6 +104,8 @@ app.configure("development", function () {
 		"compress": false,
 		"debug": true
 	}));
+
+	commonConfigure();
 });
 
 app.configure("production", function () {
@@ -121,6 +125,8 @@ app.configure("production", function () {
 		console.error(err.stack);
 		process.exit(1);
 	});
+
+	commonConfigure();
 });
 
 

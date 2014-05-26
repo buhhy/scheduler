@@ -1,16 +1,5 @@
-// SEARCH BOX
-
 .sidebar.add {
-	section.searchbox {
-		background-color: #FFFFFF;
-		padding: 6px 9px;
-		width: 135px;
-		font-size: 0.85em;
-		letter-spacing: 1px;
-		font-weight: 300;
-		margin-left: 10px;
-		.box-sizing(border-box);
-	}
+	// SEARCH BOX
 
 	input.searchbox {
 		display: inline-block;
@@ -20,7 +9,7 @@
 		font-size: 0.85em;
 		letter-spacing: 0.5px;
 		padding-left: 10px;
-		width: 194px;
+		width: 17em;
 		margin-top: 15px;
 		.border-radius(2px);
 		color: #727272;
@@ -51,8 +40,33 @@
 		}
 	}
 
-
 	// END SEARCH BOX
+
+
+	// TERM DROPDOWN
+
+	.term-selector {
+		position: absolute;
+		top: 1.25em;
+		right: 1.35em;
+		margin: 0;
+		width: 9em;
+
+		.heading-1 {
+			font-size: 85%;
+			padding: 0.6em;
+			font-weight: bold;
+		}
+
+		.heading-2 {
+			font-size: 80%;
+			padding: 0.65em;
+			font-weight: normal;
+		}
+	}
+
+	// END TERM DROPDOWN
+
 	.group-container {
 		padding-top: 7.5em;
 	}
@@ -71,6 +85,7 @@
 		position: absolute;
 		top: 0;
 		left: 0;
+		overflow: visible;
 
 		.dropdown {
 			margin-left: 125px;

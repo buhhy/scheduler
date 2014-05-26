@@ -15,10 +15,11 @@ Common.Dropdown = Backbone.View.extend({
 		"optionList": []
 	},
 
-	"open": undefined,							// is the dropdown open?
+	"open": undefined,						// is the dropdown open?
 	"optionList": undefined,				// list of views & wrappers used for dropdown entries
 
 	"$header": undefined,
+	"$headerContent": undefined,
 	"$optionList": undefined,
 	"$optionListContainer": undefined,
 
@@ -36,6 +37,7 @@ Common.Dropdown = Backbone.View.extend({
 		}));
 
 		this.$header = this.$el.find("[data-id='header']");
+		this.$headerContent = this.$el.find("[data-id='header-content']");
 		this.$optionList = this.$el.find("[data-id='optionList']");
 		this.$optionListContainer = this.$el.find("[data-id='optionListContainer']");
 
@@ -50,6 +52,10 @@ Common.Dropdown = Backbone.View.extend({
 		});
 
 		this.setOpen(opts.open, false);
+	},
+
+	"setTitleHtml": function (aHtml) {
+		this.$headerContent.html(aHtml);
 	},
 
 	/**

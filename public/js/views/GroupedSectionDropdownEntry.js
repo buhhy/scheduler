@@ -33,7 +33,7 @@ Scheduler.views.GroupedSectionDropdownEntry = Scheduler.views.View.extend({
 		var opts = this.options;
 
 		return new Common.Dropdown({
-			"el": _.template($(this.DROPDOWN_TEMPLATE_ID).html()),
+			"el": _.template($(this.DROPDOWN_TEMPLATE_ID).html(), { "content": "" }),
 			"titleHtml": _.template($(this.HEADER_TEMPLATE_ID).html(), {
 				"subject": opts.subject,
 				"catalog": opts.catalogNumber,

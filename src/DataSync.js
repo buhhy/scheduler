@@ -45,7 +45,8 @@ var dataSync = function () {
 	console.log(sprintf("--- Starting data sync at %s ---", prevMoment.format()));
 	refreshDataCaches(function () {
 		var curMoment = moment();
-		var waitMillis = getNextSyncTime().diff(curMoment, "millisecond");
+		var nextSyncTime = getNextSyncTime(12);
+		var waitMillis = nextSyncTime.diff(curMoment, "millisecond");
 		console.log(sprintf(
 			"--- Data sync complete at %s, took %s seconds ---",
 			curMoment.format(),
@@ -53,7 +54,7 @@ var dataSync = function () {
 		dataSyncTimeout = setTimeout(dataSync, waitMillis);
 		console.log(sprintf(
 			"Next data sync in %d minutes",
-			getNextSyncTime().diff(curMoment, "minute")));
+			nextSyncTime.diff(curMoment, "minute")));
 	});
 };
 

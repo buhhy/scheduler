@@ -7,9 +7,7 @@ var fs = require("fs");
 var http = require("http");
 var sprintf = require("./src/lib/sprintf").s;
 
-var ClassData = require("./src/ClassData");
-var MongoStore = require("./src/MongoStore");
-var SearchIndex = require("./src/SearchIndex");
+var DataSync = require("./src/DataSync");
 
 var RouteUtils = require("./src/utils/RouteUtils");
 var JavascriptUtils = require("./src/utils/JavascriptUtils");
@@ -181,30 +179,4 @@ app.listen(RouteUtils.port);
 
 console.log("Starting server on port " +  RouteUtils.port);
 
-
-var refreshMongoCache = function (aTerm) {
-	ClassData.reloadClassData(aTerm, function (aTerm, aData) {
-		console.log("Fetched " + aData.length + " entries.");
-		MongoStore.storeClasses(aTerm, aData);
-		SearchIndex.rebuildIndex(aTerm, aData);
-	});
-}
-
-var refreshDataCaches = function () {
-	ClassData.currentTerms(function (aTerms) {
-		Object.keys(aTerms).forEach(function (aKey) {
-			var termId = aTerms[aKey].id;
-			console.log(sprintf("Verifying data for term %d.", termId));
-			MongoStore.findClasses(termId, function (aClasses) {
-				if (!aClasses || !aClasses.length) {
-					refreshMongoCache(termId);
-				} else {
-					SearchIndex.rebuildIndex(termId, aClasses);
-				}
-			});
-		});
-	});
-}
-
-// TODO: In the future, we probably want to refresh the class list once every few days.
-refreshDataCaches();
+DataSync.startPeriodicDataSync();

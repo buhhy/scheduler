@@ -85,7 +85,7 @@ function charRange(aStart, aStop) {
 	return result;
 };
 
-var storeClasses = function (aTerm, aClasses) {
+var storeClasses = function (aTerm, aClasses, aCallback) {
 	findClasses(aTerm, function (existingSet) {
 		var data = {
 			"term": aTerm,
@@ -98,11 +98,13 @@ var storeClasses = function (aTerm, aClasses) {
 				"_id": existingSet._id
 			}, data, function (aError) {
 				if (aError) console.log(aError);
+				aCallback(false, aError);
 			});
 			console.log(sprintf.s("Updated %s entries in database.", aClasses.length));
 		} else {
 			classData.insert(data, function (aError) {
 				if (aError) console.log(aError);
+				aCallback(true, aError);
 			});
 			console.log(sprintf.s("Inserted %s entries into database.", aClasses.length));
 		}

@@ -1,7 +1,6 @@
 window.CalendarUtils = {
-	"findIntersection": function (aSectionList) {
+	"aggregateTimes": function (aSectionList) {
 		var aggregateTimes = {};
-		var timesCount = {};
 
 		// Aggregate all classes by weekday
 		for (var i = 0; i < aSectionList.length; i++) {
@@ -32,11 +31,17 @@ window.CalendarUtils = {
 			}
 		}
 
-		// Sort and consolidate
-		for (var day in aggregateTimes){
-			var aggregate = aggregateTimes[day];
+		return aggregateTimes;
+	},
 
-			aggregateTimes[day].sort(function (c1, c2) {
+	"findIntersection": function (aAggregateTimes) {
+		var timesCount = {};
+
+		// Sort and consolidate
+		for (var day in aAggregateTimes){
+			var aggregate = aAggregateTimes[day];
+
+			aAggregateTimes[day].sort(function (c1, c2) {
 				// End blocks are always parsed before start blocks if time is equal
 				return c1.time - c2.time || c1.isStart - c2.isStart;
 			});

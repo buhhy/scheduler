@@ -107,7 +107,7 @@ app.configure("development", function () {
 	commonConfigure();
 
 
-	DataSync.startPeriodicDataSync();
+	DataSync.rebuildSearchIndex();
 });
 
 app.configure("production", function () {

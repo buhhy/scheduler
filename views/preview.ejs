@@ -46,7 +46,9 @@
 						<tr style="{{= tableStyles.backgroundColor }}" class="cl-content-row">
 							<td style="{{= timeStyles.backgroundColor }}"></td>
 							{{ for (var i = 0; i < dayData.length; i++) { }}
-								<td style="{{= tableStyles.borderColor }}" class="cl-content-cell">
+								<td
+										style="{{= tableStyles.borderColor }}"
+										class="cl-content-cell">
 									<div class="position-container">
 										{{ for (var j = 0; j < dayData[i].entries.length; j++) {
 											var en = dayData[i].entries[j];
@@ -55,6 +57,10 @@
 													data-id="item"
 													data-start="{{= en.startTimeBracket }}"
 													data-end="{{= en.endTimeBracket }}"
+													data-startTime="{{= en.startTime }}"
+													data-classIndex="{{= en.classIndex }}"
+													data-uid="{{= en.uid }}"
+													data-day="{{= i }}"
 													class="cl-entry {{= en.classDuration}}"
 													style="
 														{{= en.styles.fontColor}}
@@ -76,11 +82,44 @@
 			</div>
 		</article>
 
+		<script type="text/javascript" src="/js/common/CalendarUtils.js"></script>
 		<script>
 			var EPSILON = 1E-5;
+			var sectionList = {{-JSON.stringify(sectionList)}};
 
 			window.onload = function () {
 				realignClassItems();
+				handleConflicts();
+			};
+
+			var handleConflicts = function () {
+				var items = document.querySelectorAll("[data-id='item']");
+				var timesCount = CalendarUtils.findIntersection(CalendarUtils.aggregateTimes(sectionList));
+
+				for (var i = 0; i < items.length; ++i) {
+					var item = items[i];
+					var timeData = timesCount[item.dataset.day][item.dataset.starttime];
+					var numConflicts = timeData.count;
+					var classIndex = parseInt(item.dataset.classindex);
+					var sectionUid = item.dataset.uid;
+
+					var position = undefined;
+					for (var j = 0; j < timeData.classes.length; j++) {
+						var clazz = timeData.classes[j];
+						if (clazz.classIndex === classIndex && clazz.sectionUid === sectionUid) {
+							position = clazz.position;
+							break;
+						}
+					}
+
+					if (numConflicts > 1) {
+						item.classList.add("conflict");
+						item.classList.add("c" + numConflicts);
+					}
+
+					item.style.width = 100.0 / numConflicts + "%";
+					item.style.left = 1.0 / numConflicts * position * 100 + "%";
+				}
 			};
 
 			var realignClassItems = function () {
@@ -139,7 +178,7 @@
 					item.style.top = startPx + "px";
 					item.style.height = heightPx + "px";
 				}
-			}
+			};
 		</script>
 	</body>
 </html>

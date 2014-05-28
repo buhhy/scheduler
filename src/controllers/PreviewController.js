@@ -96,7 +96,10 @@ exports.htmlPreview = function (aReq, aRes) {
 							"classDuration": classDurationClass,
 							"styles": themeToStyle(aSection.theme),
 							"startTimeBracket": calculateBracketPosition(aClass.startTime),
-							"endTimeBracket": calculateBracketPosition(aClass.endTime)
+							"endTimeBracket": calculateBracketPosition(aClass.endTime),
+							"startTime": aClass.startTime,
+							"classIndex": aClass.classIndex,
+							"uid": aSection.uid
 						});
 
 						classesByDays[aIndex] = classesByDay;
@@ -120,6 +123,7 @@ exports.htmlPreview = function (aReq, aRes) {
 			var renderParams = {
 				"timeLabels": timeLabels,
 				"dayData": dayData,
+				"sectionList": userClassList,
 				"pageSizeStyle": pageSizeStyle,
 				"dayStyles": themeToStyle(globalTheme.daysTheme),
 				"timeStyles": themeToStyle(globalTheme.timeTheme),

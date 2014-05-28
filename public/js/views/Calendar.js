@@ -171,7 +171,7 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 		});
 
 		// For conflicting courses
-		var timesCount = CalendarUtils.findIntersection(sectionList.toJSON());
+		var timesCount = CalendarUtils.findIntersection(CalendarUtils.aggregateTimes(sectionList.toJSON()));
 
 		_.each(this.sectionViewList, function (aView) {
 			aView.attachElementsToView(timesCount);

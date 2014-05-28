@@ -41,12 +41,12 @@ Scheduler.views.CalendarEntryGroup = Scheduler.views.View.extend({
 		}));
 	},
 
-	"attachElementsToView": function () {
+	"attachElementsToView": function (aTimesCount) {
 		var self = this;
 
 		_.forEach(this.elementList, function (aElem) {
 			var target = self.options.calendarColumns[aElem.weekday];
-			aElem.reposition();
+			aElem.reposition(aTimesCount || {});
 			target.append(aElem.$el);
 		});
 	},

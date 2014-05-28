@@ -117,7 +117,6 @@ Scheduler.views.AddSectionSidebar = Scheduler.views.Sidebar.extend({
 
 		this.courseData.on("change:selectedTermId", function (_, aTermId) {
 			self.changeSelectedTerm(aTermId);
-			console.log(aTermId);
 		});
 	},
 

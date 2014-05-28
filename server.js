@@ -44,6 +44,7 @@ var jsIncludeList = {
 		"lib/jquery.print-preview.js",
 		"js/common/Dropdown.js",
 		"js/common/TimeUtils.js",
+		"js/common/CalendarUtils.js",
 		"js/scheduler.js",
 		"js/models/RestModels.js",
 		"js/models/ThemeModels.js",
@@ -104,6 +105,9 @@ app.configure("development", function () {
 	}));
 
 	commonConfigure();
+
+
+	DataSync.startPeriodicDataSync();
 });
 
 app.configure("production", function () {
@@ -116,7 +120,6 @@ app.configure("production", function () {
 		"compress": true
 	}));
 
-
 	// Log errors on exceptions and exit
 	process.on("uncaughtException", function (err) {
 		console.error("UncaughtException: ", err.message);
@@ -125,6 +128,9 @@ app.configure("production", function () {
 	});
 
 	commonConfigure();
+
+
+	DataSync.startPeriodicDataSync();
 });
 
 
@@ -178,5 +184,3 @@ app.post("/api/imgify/:hash", GenerationController.genImg);
 app.listen(RouteUtils.port);
 
 console.log("Starting server on port " +  RouteUtils.port);
-
-DataSync.startPeriodicDataSync();

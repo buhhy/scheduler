@@ -246,7 +246,9 @@
 		<script id="templateCalendarEntry" type="text/template">
 			<article class="cl-entry editable-property">
 				<h1 class="cl-title"><%= name %></h1>
-				<h2 class="cl-desc"><%= subject %> <%= catalog %> - <%= section %> <%= type %></h2>
+				<h2 class="cl-desc"><%= subject %> <%= catalog %> -
+					<span class="section"><%= section %> <%= type %></span>
+				</h2>
 				<h2 class="cl-loc"><%= building %> <%= room %></h2>
 			</article>
 		</script>

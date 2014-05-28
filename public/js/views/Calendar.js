@@ -1,7 +1,6 @@
 Scheduler.views.Calendar = Scheduler.views.View.extend({
 	"defaults": {
-		"userData": undefined,				// Default data model
-		"selectedSectionList": undefined 	// List of selected sections on the calendar
+		"userData": undefined				// Default data model
 	},
 
 	"options": undefined,
@@ -84,7 +83,6 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 		this.bindEvents();
 		this.setUpInitialStyles();
 		this.refreshData();
-		this.refreshSelection();
 	},
 
 	"bindEvents": function () {
@@ -95,7 +93,6 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 		// Sets event listener for data collection.
 		userClassList.on("all", function (aModel, aResponse) {
 			self.refreshData();
-			self.refreshSelection();
 		});
 
 		globalTheme.get("tableTheme").on({
@@ -113,10 +110,6 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 		globalTheme.get("timeTheme").on({
 			"change:backgroundColor": this.fn2(this.setTimeBg),
 			"change:fontColor": this.fn2(this.setTimeFont)
-		});
-
-		this.options.selectedSectionList.on("all", function () {
-			self.refreshSelection();
 		});
 	},
 
@@ -165,47 +158,23 @@ Scheduler.views.Calendar = Scheduler.views.View.extend({
 			aView.detachElements();
 		});
 
+		var sectionList = this.options.userData.get("userClassList");
 		this.sectionViewList = {};
-		this.options.userData.get("userClassList").map(function (aSectionModel) {
+		sectionList.map(function (aSectionModel) {
 			var newEntryGroup = new Scheduler.views.CalendarEntryGroup({
 				"sectionModel": aSectionModel,
 				"calendarColumns": self.columnList,
 				"calendarSettings": self.options.userData.get("calendarSettings")
 			});
 
-			newEntryGroup.click(function (aSection, aCalendarGroup) {
-				// self.selectSection(aSection);
-			});
-
 			self.sectionViewList[aSectionModel.id] = newEntryGroup;
 		});
 
+		// For conflicting courses
+		var timesCount = CalendarUtils.findIntersection(sectionList.toJSON());
+
 		_.each(this.sectionViewList, function (aView) {
-			aView.attachElementsToView();
+			aView.attachElementsToView(timesCount);
 		});
-	},
-
-	"refreshSelection": function () {
-		var self = this;
-		var changed = {};
-
-		self.options.selectedSectionList.forEach(function (aSection) {
-			changed[aSection.id] = true;
-		});
-
-		_.forEach(self.sectionViewList, function (aElem, aKey) {
-			aElem.setSelected(!!changed[aKey]);
-		});
-	},
-
-	// "selectSection": function (aSection) {
-	// 	// Currently, only one item can be selected at a time. Clicking on a selected item will
-	// 	// deselect it, while clicking on another item will deselect all previous items and select
-	// 	// the newly clicked entry.
-	// 	if (this.options.selectedSectionList.get(aSection)) {
-	// 		this.options.selectedSectionList.remove(aSection)
-	// 	} else {
-	// 		this.options.selectedSectionList.reset(aSection);
-	// 	}
-	// }
+	}
 });

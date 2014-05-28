@@ -19,7 +19,6 @@ Scheduler.views.CalendarEntry = Scheduler.views.View.extend({
 		this.weekday = opts.weekday;
 
 		this.setElement(this.buildElement(opts.sectionModel, opts.classModel));
-		this.reposition();
 		this.bindEvents();
 		this.setStyles();
 	},
@@ -40,7 +39,7 @@ Scheduler.views.CalendarEntry = Scheduler.views.View.extend({
 	 * Repositions the view relative to the top of the table cell. This reposition acts relatively,
 	 * meaning resizing the window should result in instantly updated positions.
 	 */
-	"reposition": function () {
+	"reposition": function (aTimesCount) {
 		var cst = this.options.calendarSettings.get("startTime");
 		var cet = this.options.calendarSettings.get("endTime");
 		var thresholds = this.options.calendarSettings.get("thresholds");
@@ -60,8 +59,25 @@ Scheduler.views.CalendarEntry = Scheduler.views.View.extend({
 			}
 		}
 
+		// Accomodate conflicts
+		var timeData = aTimesCount[this.weekday][classStartTime];
+		var numConflicts = timeData.count;
+		var classIndex = this.options.classModel.get("classIndex");
+		var sectionUid = this.options.sectionModel.get("uid");
+
+		var position = _.find(timeData.classes, function (aClazz) {
+			return aClazz.classIndex === classIndex && aClazz.sectionUid === sectionUid;
+		}).position;
+
+		if (numConflicts > 1) {
+			this.$el.addClass("conflict");
+			this.$el.addClass("c" + numConflicts);
+		}
+
 		this.$el.css("top", top + "%");
 		this.$el.css("height", height + "%");
+		this.$el.css("width", 100.0 / numConflicts + "%");
+		this.$el.css("left", 1.0 / numConflicts * position * 100 + "%");
 	},
 
 	"bindEvents": function () {

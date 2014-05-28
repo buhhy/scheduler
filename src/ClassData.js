@@ -116,7 +116,7 @@ var processSections = function (aSections) {
 };
 
 var processClasses = function (aClasses) {
-	return aClasses.map(function (aClass) {
+	return aClasses.map(function (aClass, aIndex) {
 		/*
 		This will return a list of matched strings using regex in this format, assuming the
 		following input string "TThF":
@@ -136,6 +136,7 @@ var processClasses = function (aClasses) {
 		}
 
 		return {
+			"classIndex": aIndex,
 			"indexedWeekdays": indexedWeekdays,
 			"startTime": parseTimeToMinutes(aClass.date.start_time),
 			"endTime": parseTimeToMinutes(aClass.date.end_time),

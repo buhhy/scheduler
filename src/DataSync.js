@@ -61,3 +61,17 @@ var dataSync = function () {
 exports.startPeriodicDataSync = function () {
 	dataSync();
 };
+
+exports.rebuildSearchIndex = function () {
+	ClassData.currentTerms(function (aTerms) {
+		var keys = Object.keys(aTerms);
+		var counter = keys.length;
+
+		keys.forEach(function (aKey) {
+			var termId = aTerms[aKey].id;
+			MongoStore.findClasses(termId, function (aClasses) {
+				SearchIndex.rebuildIndex(termId, aClasses);
+			});
+		});
+	});
+};
